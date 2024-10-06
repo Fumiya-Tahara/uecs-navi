@@ -38,7 +38,14 @@ func NewDeviceRepository(queries *mysqlc.Queries) *DeviceRepository {
 	}
 }
 
-func (dr DeviceRepository) CreateDevice(newDevice domain.Device) (int64, error) {
+type CreateDeviceStruct struct {
+	HouseID       int
+	ClimateDataID int
+	SetPoint      int
+	Duration      int
+}
+
+func (dr DeviceRepository) CreateDevice(newDevice CreateDeviceStruct) (int64, error) {
 	ctx := context.Background()
 
 	arg := mysqlc.CreateDeviceParams{
