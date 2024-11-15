@@ -34,12 +34,14 @@ func initHandler() (*Handler, error) {
 	hs := service.NewHouseService(hr)
 	cds := service.NewClimateDataService(cdr)
 
-	h := NewHandler(ds, hs, cds)
+	h := NewHandler(ds, hs, cds, query)
 
 	return h, nil
 }
 
 func initMockHandler() (*Handler, error) {
+	query := mysqlc.Queries{}
+
 	dr := mocks.NewMockDeviceRepository()
 	hr := mocks.NewMockHouseRepository()
 	cdr := mocks.NewMockClimateDataRepository()
@@ -48,7 +50,7 @@ func initMockHandler() (*Handler, error) {
 	hs := service.NewHouseService(hr)
 	cds := service.NewClimateDataService(cdr)
 
-	h := NewHandler(ds, hs, cds)
+	h := NewHandler(ds, hs, cds, &query)
 
 	return h, nil
 }

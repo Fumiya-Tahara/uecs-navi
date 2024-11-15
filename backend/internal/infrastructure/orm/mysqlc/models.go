@@ -86,7 +86,7 @@ type Node struct {
 	ID             int32
 	WorkflowID     int32
 	WorkflowNodeID string
-	Type           string
+	NodeType       string
 	Data           json.RawMessage
 	PositionX      float64
 	PositionY      float64

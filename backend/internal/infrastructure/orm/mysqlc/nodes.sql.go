@@ -11,22 +11,24 @@ import (
 )
 
 const createNode = `-- name: CreateNode :execlastid
-INSERT INTO nodes (workflow_id, type, data, position_x, position_y) 
-VALUES (?, ?, ?, ?, ?)
+INSERT INTO nodes (workflow_id, workflow_node_id, node_type, data, position_x, position_y) 
+VALUES (?, ?, ?, ?, ?, ?)
 `
 
 type CreateNodeParams struct {
-	WorkflowID int32
-	Type       string
-	Data       json.RawMessage
-	PositionX  float64
-	PositionY  float64
+	WorkflowID     int32
+	WorkflowNodeID string
+	NodeType       string
+	Data           json.RawMessage
+	PositionX      float64
+	PositionY      float64
 }
 
 func (q *Queries) CreateNode(ctx context.Context, arg CreateNodeParams) (int64, error) {
 	result, err := q.db.ExecContext(ctx, createNode,
 		arg.WorkflowID,
-		arg.Type,
+		arg.WorkflowNodeID,
+		arg.NodeType,
 		arg.Data,
 		arg.PositionX,
 		arg.PositionY,
@@ -39,18 +41,19 @@ func (q *Queries) CreateNode(ctx context.Context, arg CreateNodeParams) (int64, 
 
 const getNodesFromWorkflow = `-- name: GetNodesFromWorkflow :many
 SELECT 
-    id, workflow_id, type, data, position_x, position_y
+    id, workflow_id, workflow_node_id, node_type, data, position_x, position_y
 FROM nodes
 WHERE workflow_id = ?
 `
 
 type GetNodesFromWorkflowRow struct {
-	ID         int32
-	WorkflowID int32
-	Type       string
-	Data       json.RawMessage
-	PositionX  float64
-	PositionY  float64
+	ID             int32
+	WorkflowID     int32
+	WorkflowNodeID string
+	NodeType       string
+	Data           json.RawMessage
+	PositionX      float64
+	PositionY      float64
 }
 
 func (q *Queries) GetNodesFromWorkflow(ctx context.Context, workflowID int32) ([]GetNodesFromWorkflowRow, error) {
@@ -65,7 +68,8 @@ func (q *Queries) GetNodesFromWorkflow(ctx context.Context, workflowID int32) ([
 		if err := rows.Scan(
 			&i.ID,
 			&i.WorkflowID,
-			&i.Type,
+			&i.WorkflowNodeID,
+			&i.NodeType,
 			&i.Data,
 			&i.PositionX,
 			&i.PositionY,

@@ -1,9 +1,9 @@
 -- name: GetNodesFromWorkflow :many
 SELECT 
-    id, workflow_id, type, data, position_x, position_y
+    id, workflow_id, workflow_node_id, node_type, data, position_x, position_y
 FROM nodes
 WHERE workflow_id = ?;
 
 -- name: CreateNode :execlastid
-INSERT INTO nodes (workflow_id, type, data, position_x, position_y) 
-VALUES (?, ?, ?, ?, ?);
+INSERT INTO nodes (workflow_id, workflow_node_id, node_type, data, position_x, position_y) 
+VALUES (?, ?, ?, ?, ?, ?);

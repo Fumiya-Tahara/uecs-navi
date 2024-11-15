@@ -18,13 +18,15 @@ type Handler struct {
 	deviceService      *service.DeviceService
 	houseService       *service.HouseService
 	climateDataService *service.ClimateDataService
+	query              *mysqlc.Queries
 }
 
-func NewHandler(ds *service.DeviceService, hs *service.HouseService, cds *service.ClimateDataService) *Handler {
+func NewHandler(ds *service.DeviceService, hs *service.HouseService, cds *service.ClimateDataService, q *mysqlc.Queries) *Handler {
 	return &Handler{
 		deviceService:      ds,
 		houseService:       hs,
 		climateDataService: cds,
+		query:              q,
 	}
 }
 
@@ -212,7 +214,7 @@ func (h Handler) CreateAndBuildTimeSchedule(c *gin.Context) {
 func (h Handler) GetWorkflows(c *gin.Context) {
 	ctx := context.Background()
 
-	workFlows, err := mysqlc.GetAllWorkflows(ctx)
+	workFlows, err := h.query.GetAllWorkflows(ctx)
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "InternalSeverError"})
@@ -230,7 +232,7 @@ func (h Handler) GetWorkflows(c *gin.Context) {
 func (h Handler) GetWorkflowsWithUI(c *gin.Context) {
 	ctx := context.Background()
 
-	workFlows, err := mysqlc.GetAllWorkflows(ctx)
+	workFlows, err := h.query.GetAllWorkflows(ctx)
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "InternalSeverError"})
@@ -239,7 +241,7 @@ func (h Handler) GetWorkflowsWithUI(c *gin.Context) {
 
 	workFlowsUIRes := make([]*WorkflowWithUIResponse, len(workFlows))
 	for i, v := range workFlows {
-		edges, err := mysqlc.GetEdgesFromWorkflow(ctx, int32(v.ID))
+		edges, err := h.query.GetEdgesFromWorkflow(ctx, int32(v.ID))
 		if err != nil {
 			log.Println(err)
 			c.JSON(http.StatusInternalServerError, gin.H{"status": "InternalSeverError"})
@@ -247,9 +249,9 @@ func (h Handler) GetWorkflowsWithUI(c *gin.Context) {
 		}
 		edgeRes := make([]EdgeResponse, len(edges))
 		for j, w := range edges {
-			edgeRes[j] = *NewEdgeResponse(w.Id, w.SourceNodeID, w.TargetNodeID, int(w.WorkflowId))
+			edgeRes[j] = *NewEdgeResponse(int(w.ID), w.SourceNodeID, w.TargetNodeID, int(w.WorkflowID))
 		}
-		nodes, err := mysqlc.GetNodesFromWorkflow(ctx, int32(v.ID))
+		nodes, err := h.query.GetNodesFromWorkflow(ctx, int32(v.ID))
 		if err != nil {
 			log.Println(err)
 			c.JSON(http.StatusInternalServerError, gin.H{"status": "InternalSeverError"})
@@ -257,10 +259,19 @@ func (h Handler) GetWorkflowsWithUI(c *gin.Context) {
 		}
 		nodeRes := make([]NodeResponse, len(nodes))
 		for j, w := range nodes {
-			nodeRes[j] = *NewNodeResponse(w.Data, w.Id, w.PositionX, w.PositionY, w.NodeType, int(w.WorkflowId), w.WorkflowNodeID)
+			var dataMap map[string]interface{}
+			err := json.Unmarshal(w.Data, &dataMap)
+			if err != nil {
+				fmt.Println("Error unmarshaling data:", err)
+				return
+			}
+
+			nodeRes[j] = *NewNodeResponse(dataMap, int(w.ID), float32(w.PositionX), float32(w.PositionY), w.NodeType, int(w.WorkflowID), w.WorkflowNodeID)
 		}
+		workFlow := NewWorkflowResponse(int(v.ID), v.Name)
 		workFlowUI := NewWorkFlowUIResponse(edgeRes, nodeRes)
-		workFlowsUIRes[i] = NewWorkFlowWithUIResponse(v, *workFlowUI)
+
+		workFlowsUIRes[i] = NewWorkFlowWithUIResponse(*workFlow, *workFlowUI)
 	}
 
 	c.JSON(http.StatusOK, workFlowsUIRes)
@@ -275,8 +286,8 @@ func (h Handler) CreateWorkflowWithUI(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{"status": "BadRequest"})
 		return
 	}
-	workFlowName := jsonWorkflow.Workflow
-	workFlowID, err := mysqlc.CreateWorkflow(ctx, workFlowName)
+	workFlow := jsonWorkflow.Workflow
+	workFlowID, err := h.query.CreateWorkflow(ctx, workFlow.Name)
 	if err != nil {
 		log.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"status": "BadRequest"})
@@ -290,7 +301,7 @@ func (h Handler) CreateWorkflowWithUI(c *gin.Context) {
 			SourceNodeID: v.SourceNodeId,
 			TargetNodeID: v.TargetNodeId,
 		}
-		_, err := mysqlc.CreateEdge(ctx, edgeReq)
+		_, err := h.query.CreateEdge(ctx, edgeReq)
 		if err != nil {
 			log.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{"status": "BadRequest"})
@@ -306,12 +317,12 @@ func (h Handler) CreateWorkflowWithUI(c *gin.Context) {
 		}
 		nodeReq := mysqlc.CreateNodeParams{
 			WorkflowID: int32(workFlowID),
-			Type:       v.Type,
+			NodeType:   v.Type,
 			Data:       json.RawMessage(rawData),
 			PositionX:  float64(v.PositionX),
 			PositionY:  float64(v.PositionY),
 		}
-		_, err = mysqlc.CreateNode(ctx, nodeReq)
+		_, err = h.query.CreateNode(ctx, nodeReq)
 		if err != nil {
 			log.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{"status": "BadRequest"})
