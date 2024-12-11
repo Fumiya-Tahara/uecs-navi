@@ -17,11 +17,6 @@ import {
   SelectDeviceNode,
   SelectDeviceNodeData,
 } from "./custom-nodes/select-device";
-import { ConditionNode, ConditionNodeData } from "./custom-nodes/condition";
-import {
-  DeviceOperationNode,
-  DeviceOperationNodeData,
-} from "./custom-nodes/device-operation";
 import { Sidebar } from "./sidebar";
 import { useDnD } from "@/hooks/dnd-context";
 import { useWorkflowInfo } from "@/hooks/workflow-info-context";
@@ -33,8 +28,6 @@ import { OperationNode, OperationNodeData } from "./custom-nodes/operation";
 
 type CustomNodeData =
   | SelectDeviceNodeData
-  | ConditionNodeData
-  | DeviceOperationNodeData
   | WorkflowNameNodeData
   | OperationNodeData;
 
@@ -60,8 +53,6 @@ export function WorkflowEditor() {
   const nodeTypes = useMemo(
     () => ({
       select_device: SelectDeviceNode,
-      condition: ConditionNode,
-      device_operation: DeviceOperationNode,
       workflow_name: WorkflowNameNode,
       operation: OperationNode,
     }),
