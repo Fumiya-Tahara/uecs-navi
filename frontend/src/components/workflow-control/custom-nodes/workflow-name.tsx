@@ -44,6 +44,11 @@ export const WorkflowNameNode = ({ id, data }: WorkflowNameNodeProps) => {
           id={`workflow-name-node-textfield-${id}`}
           label="ワークフロー名"
           size="small"
+          slotProps={{
+            inputLabel: {
+              shrink: true,
+            },
+          }}
         />
       </Box>
       <Handle

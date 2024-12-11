@@ -2,33 +2,21 @@ import { useDnD } from "@/hooks/dnd-context";
 import { DragEvent } from "react";
 import { Box, Divider, Typography } from "@mui/material";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
-import RuleIcon from "@mui/icons-material/Rule";
 import { useState, useEffect } from "react";
-import { ClimateDataResponse, OperationResponse } from "@/types/api";
-import { getClimateDatas, getOperations } from "@/mocks/workflow-api";
+import { DeviceResponse } from "@/types/api";
+import { getDevices } from "@/mocks/workflow-api";
 
 export const Sidebar = () => {
   const [, setType] = useDnD();
-  const [fetchedClimateDatas, setFetchedClimateDatas] = useState<
-    ClimateDataResponse[]
-  >([]);
-  const [fetchedOperations, setFetchedOperations] = useState<
-    OperationResponse[]
-  >([]);
+  const [fetchedDevices, setFetchedDevices] = useState<DeviceResponse[]>([]);
 
   useEffect(() => {
-    const fetchClimateDatas = async () => {
-      const climateDataRes: ClimateDataResponse[] = await getClimateDatas();
-      setFetchedClimateDatas(climateDataRes);
+    const fetchDevices = async () => {
+      const devicesRes: DeviceResponse[] = await getDevices();
+      setFetchedDevices(devicesRes);
     };
 
-    const fetchOperations = async () => {
-      const operationsRes: OperationResponse[] = await getOperations();
-      setFetchedOperations(operationsRes);
-    };
-
-    fetchClimateDatas();
-    fetchOperations();
+    fetchDevices();
   }, []);
 
   const onDragStart = (
@@ -57,40 +45,8 @@ export const Sidebar = () => {
             backgroundColor: "#FFF",
           }}
           onDragStart={(event) =>
-            onDragStart(event, "condition", {
-              climateDataList: fetchedClimateDatas,
-            })
-          }
-          draggable
-        >
-          <Box
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              gap: 1,
-              borderRadius: "10px 10px 0 0",
-              color: "#FFF",
-              backgroundColor: "#F57C00",
-              padding: "4px 8px 4px 8px",
-            }}
-          >
-            <RuleIcon />
-            <Typography variant="body1">If</Typography>
-          </Box>
-          <Divider />
-          <Box sx={{ padding: 1, textAlign: "center" }}>条件</Box>
-        </Box>
-        <Box
-          sx={{
-            mx: 4,
-            my: 2,
-            border: "1px solid #000",
-            borderRadius: "10px",
-            backgroundColor: "#FFF",
-          }}
-          onDragStart={(event) =>
-            onDragStart(event, "device_operation", {
-              operationsList: fetchedOperations,
+            onDragStart(event, "operation", {
+              devicesList: fetchedDevices,
             })
           }
           draggable
