@@ -13,10 +13,6 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { useMemo, useEffect, useCallback, DragEvent } from "react";
-import {
-  SelectDeviceNode,
-  SelectDeviceNodeData,
-} from "./custom-nodes/select-device";
 import { Sidebar } from "./sidebar";
 import { useDnD } from "@/hooks/dnd-context";
 import { useWorkflowInfo } from "@/hooks/workflow-info-context";
@@ -26,10 +22,7 @@ import {
 } from "./custom-nodes/workflow-name";
 import { OperationNode, OperationNodeData } from "./custom-nodes/operation";
 
-type CustomNodeData =
-  | SelectDeviceNodeData
-  | WorkflowNameNodeData
-  | OperationNodeData;
+type CustomNodeData = WorkflowNameNodeData | OperationNodeData;
 
 export type AddNodeFunction = (parentNodeId: string) => void;
 export type UpdateNodeFunction = (
@@ -52,7 +45,6 @@ export function WorkflowEditor() {
 
   const nodeTypes = useMemo(
     () => ({
-      select_device: SelectDeviceNode,
       workflow_name: WorkflowNameNode,
       operation: OperationNode,
     }),
