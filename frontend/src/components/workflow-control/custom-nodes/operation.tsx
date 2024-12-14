@@ -52,6 +52,11 @@ export const OperationNode = ({ id, data }: OperationNodeProps) => {
         width: "350px",
       }}
     >
+      <Handle
+        position={Position.Left}
+        type="target"
+        style={{ width: 12, height: 12 }}
+      />
       <Box>
         <Box
           sx={{
