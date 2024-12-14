@@ -11,9 +11,9 @@ interface WorkflowSelectProps {
 }
 
 export const WorkflowSelect = (props: WorkflowSelectProps) => {
-  const { initialWorkflow, workflows, index, onSelectChange } = props;
+  const { initialWorkflow, workflows } = props;
 
-  const [options, setOption] = useState<WorkflowResponse[]>(workflows);
+  const [options] = useState<WorkflowResponse[]>(workflows);
   const [selectedWorkflow, setSelectedWorkflow] =
     useState<WorkflowResponse | null>(initialWorkflow);
 
@@ -27,15 +27,17 @@ export const WorkflowSelect = (props: WorkflowSelectProps) => {
   };
 
   return (
-    <FormControl fullWidth>
-      <InputLabel id="workflow-select-label">ワークフロー</InputLabel>
+    <FormControl fullWidth size="small" variant="outlined">
+      <InputLabel shrink id="workflow-select-label">
+        ワークフロー
+      </InputLabel>
       <Select
         labelId="workflow-select-label"
         id="workflow-select"
         value={selectedWorkflow ? String(selectedWorkflow.id) : ""}
-        label="ワークフロー"
-        size="small"
         onChange={handleWorkflowChange}
+        label="ワークフロー"
+        notched
       >
         {options.map((data, index) => (
           <MenuItem key={index} value={data.id}>
