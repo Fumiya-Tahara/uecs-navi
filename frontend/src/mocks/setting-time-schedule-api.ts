@@ -1,4 +1,8 @@
-import { TimeScheduleResponse, WorkflowResponse } from "@/types/api";
+import {
+  TimeScheduleResponse,
+  WorkflowResponse,
+  ClimateDataResponse,
+} from "@/types/api";
 
 export function getTimeSchedules(houseID: number): TimeScheduleResponse[] {
   const nasuTimeSchedules: TimeScheduleResponse[] = [
@@ -196,4 +200,15 @@ export function getWorkflows(): WorkflowResponse[] {
   ];
 
   return workflows;
+}
+
+export function getClimateDatas(): ClimateDataResponse[] {
+  const climateDatas: ClimateDataResponse[] = [
+    { id: 1, climate_data: "気温", unit: "℃" },
+    { id: 2, climate_data: "湿度", unit: "%" },
+    { id: 3, climate_data: "二酸化炭素量", unit: "ppm" },
+    { id: 4, climate_data: "照度", unit: "lx" },
+  ];
+
+  return climateDatas;
 }
