@@ -15,7 +15,7 @@ import { useCallback, useState } from "react";
 import { DeviceResponse } from "@/types/api";
 import { useNodeInfo } from "@/hooks/node-info-context";
 
-export interface SelectDeviceNodeData {
+export interface OperationNodeData {
   [key: string]: unknown;
   devicesList: DeviceResponse[];
   addNode: AddNodeFunction;
@@ -23,11 +23,11 @@ export interface SelectDeviceNodeData {
   device_id: number;
 }
 
-type SelectDeviceNodePropsType = Node<SelectDeviceNodeData>;
+type OperationNodePropsType = Node<OperationNodeData>;
 
-type SelectDeviceNodeProps = NodeProps<SelectDeviceNodePropsType>;
+type OperationNodeProps = NodeProps<OperationNodePropsType>;
 
-export const SelectDeviceNode = ({ id, data }: SelectDeviceNodeProps) => {
+export const OperationNode = ({ id, data }: OperationNodeProps) => {
   const { devicesList, addNode, updateNode } = data;
   const [selectedDevice, setSelectedDevice] = useState<string>("");
   const [nodeInfo, setNodeInfo] = useNodeInfo();
@@ -52,6 +52,11 @@ export const SelectDeviceNode = ({ id, data }: SelectDeviceNodeProps) => {
         width: "350px",
       }}
     >
+      <Handle
+        position={Position.Left}
+        type="target"
+        style={{ width: 12, height: 12 }}
+      />
       <Box>
         <Box
           sx={{
@@ -60,12 +65,12 @@ export const SelectDeviceNode = ({ id, data }: SelectDeviceNodeProps) => {
             gap: 1,
             borderRadius: "10px 10px 0 0",
             color: "#FFF",
-            backgroundColor: "#42A5F5",
+            backgroundColor: "#66BB6A",
             padding: "4px 8px 4px 8px",
           }}
         >
           <DevicesIcon />
-          <Typography variant="h6">Select Device</Typography>
+          <Typography variant="h6">Operation</Typography>
         </Box>
         <Divider />
         <Box sx={{ padding: 2, display: "flex", justifyContent: "center" }}>

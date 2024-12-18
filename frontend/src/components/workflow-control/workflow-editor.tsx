@@ -13,23 +13,16 @@ import {
 } from "@xyflow/react";
 import "@xyflow/react/dist/style.css";
 import { useMemo, useEffect, useCallback, DragEvent } from "react";
-import {
-  SelectDeviceNode,
-  SelectDeviceNodeData,
-} from "./custom-nodes/select-device";
-import { ConditionNode, ConditionNodeData } from "./custom-nodes/condition";
-import {
-  DeviceOperationNode,
-  DeviceOperationNodeData,
-} from "./custom-nodes/device-operation";
 import { Sidebar } from "./sidebar";
 import { useDnD } from "@/hooks/dnd-context";
 import { useWorkflowInfo } from "@/hooks/workflow-info-context";
+import {
+  WorkflowNameNode,
+  WorkflowNameNodeData,
+} from "./custom-nodes/workflow-name";
+import { OperationNode, OperationNodeData } from "./custom-nodes/operation";
 
-type CustomNodeData =
-  | SelectDeviceNodeData
-  | ConditionNodeData
-  | DeviceOperationNodeData;
+type CustomNodeData = WorkflowNameNodeData | OperationNodeData;
 
 export type AddNodeFunction = (parentNodeId: string) => void;
 export type UpdateNodeFunction = (
@@ -52,9 +45,8 @@ export function WorkflowEditor() {
 
   const nodeTypes = useMemo(
     () => ({
-      select_device: SelectDeviceNode,
-      condition: ConditionNode,
-      device_operation: DeviceOperationNode,
+      workflow_name: WorkflowNameNode,
+      operation: OperationNode,
     }),
     []
   );
@@ -123,8 +115,8 @@ export function WorkflowEditor() {
     // }
 
     const initialNode: Node = {
-      id: "select_device_1",
-      type: "select_device",
+      id: "workflow_name_1",
+      type: "workflow_name",
       position: { x: 0, y: 300 },
       data: {
         devicesList: workflowInfo.devices,

@@ -3,15 +3,18 @@ import { TimeTable } from "./time-table";
 import { Navigation } from "@/layouts/navigation";
 import { useState, useEffect } from "react";
 import {
+  ClimateDataResponse,
   HouseResponse,
   TimeScheduleResponse,
   WorkflowResponse,
 } from "@/types/api";
 import { getHouses } from "@/mocks/setting-device-api";
 import {
+  getClimateDatas,
   getTimeSchedules,
   getWorkflows,
 } from "@/mocks/setting-time-schedule-api";
+import { useTimeScheduleInfo } from "@/hooks/time-schedule-info-context";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -51,6 +54,7 @@ export function TimeSchedule() {
   const [selectBoxWorkflows, setSelectBoxWorkflows] = useState<
     WorkflowResponse[]
   >([]);
+  const [timeScheduleInfo, setTimeScheduleInfo] = useTimeScheduleInfo();
 
   useEffect(() => {
     const fetchInitData = async () => {
@@ -70,6 +74,17 @@ export function TimeSchedule() {
     };
 
     fetchInitData();
+  }, []);
+
+  useEffect(() => {
+    const fetchClimateData = async () => {
+      const climateDataRes: ClimateDataResponse[] = await getClimateDatas();
+      timeScheduleInfo.climate_data = climateDataRes;
+
+      setTimeScheduleInfo(timeScheduleInfo);
+    };
+
+    fetchClimateData();
   }, []);
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
