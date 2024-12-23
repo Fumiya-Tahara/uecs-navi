@@ -8,12 +8,12 @@ import {
   TimeScheduleResponse,
   WorkflowResponse,
 } from "@/types/api";
-import { getHouses } from "@/mocks/setting-device-api";
+import { getHouses } from "@/features/api/mocks/setting-device-api";
 import {
   getClimateDatas,
   getTimeSchedules,
   getWorkflows,
-} from "@/mocks/setting-time-schedule-api";
+} from "@/features/api/mocks/setting-time-schedule-api";
 import { useTimeScheduleInfo } from "@/hooks/time-schedule-info-context";
 
 interface TabPanelProps {
