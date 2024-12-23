@@ -12,7 +12,7 @@ import {
   getClimateDatas,
   getDevices,
   getOperations,
-} from "@/mocks/workflow-api";
+} from "@/features/api/mocks/workflow-api";
 import { WorkflowEditor } from "./workflow-editor";
 import { ReactFlowProvider } from "@xyflow/react";
 import { NodeInfoProvider } from "@/hooks/node-info-context";
