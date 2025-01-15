@@ -1,4 +1,4 @@
-CREATE TABLE time_schedules (
+CREATE TABLE time_schedule_rows (
     id INT AUTO_INCREMENT PRIMARY KEY,
     time_schedule_id INT NOT NULL,
     start_time TIME NOT NULL,
