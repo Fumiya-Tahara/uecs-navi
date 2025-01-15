@@ -1,4 +1,4 @@
-CREATE TABLE nodes (
+CREATE TABLE edges (
     id INT AUTO_INCREMENT PRIMARY KEY,
     workflow_id INT NOT NULL,
     source_node_id VARCHAR(255) NOT NULL,
