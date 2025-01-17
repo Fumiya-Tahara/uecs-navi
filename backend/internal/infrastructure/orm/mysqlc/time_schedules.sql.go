@@ -10,86 +10,32 @@ import (
 )
 
 const createTimeSchedule = `-- name: CreateTimeSchedule :execlastid
-INSERT INTO time_schedules (device_condition_id, start_time, end_time)
-VALUES (?, ?, ?)
+INSERT INTO time_schedules (m304_id)
+VALUES (?)
 `
 
-type CreateTimeScheduleParams struct {
-	DeviceConditionID int32
-	StartTime         string
-	EndTime           string
-}
-
-func (q *Queries) CreateTimeSchedule(ctx context.Context, arg CreateTimeScheduleParams) (int64, error) {
-	result, err := q.db.ExecContext(ctx, createTimeSchedule, arg.DeviceConditionID, arg.StartTime, arg.EndTime)
+func (q *Queries) CreateTimeSchedule(ctx context.Context, m304ID int32) (int64, error) {
+	result, err := q.db.ExecContext(ctx, createTimeSchedule, m304ID)
 	if err != nil {
 		return 0, err
 	}
 	return result.LastInsertId()
 }
 
-const getTimeScheduleFromID = `-- name: GetTimeScheduleFromID :one
-SELECT id, device_condition_id, start_time, end_time
+const getTimeScheduleFromM304 = `-- name: GetTimeScheduleFromM304 :one
+SELECT id, m304_id
 FROM time_schedules
-WHERE id = ?
+WHERE m304_id = ?
 `
 
-type GetTimeScheduleFromIDRow struct {
-	ID                int32
-	DeviceConditionID int32
-	StartTime         string
-	EndTime           string
+type GetTimeScheduleFromM304Row struct {
+	ID     int32
+	M304ID int32
 }
 
-func (q *Queries) GetTimeScheduleFromID(ctx context.Context, id int32) (GetTimeScheduleFromIDRow, error) {
-	row := q.db.QueryRowContext(ctx, getTimeScheduleFromID, id)
-	var i GetTimeScheduleFromIDRow
-	err := row.Scan(
-		&i.ID,
-		&i.DeviceConditionID,
-		&i.StartTime,
-		&i.EndTime,
-	)
+func (q *Queries) GetTimeScheduleFromM304(ctx context.Context, m304ID int32) (GetTimeScheduleFromM304Row, error) {
+	row := q.db.QueryRowContext(ctx, getTimeScheduleFromM304, m304ID)
+	var i GetTimeScheduleFromM304Row
+	err := row.Scan(&i.ID, &i.M304ID)
 	return i, err
-}
-
-const getTimeSchedulesFromDeviceCondition = `-- name: GetTimeSchedulesFromDeviceCondition :many
-SELECT id, device_condition_id, start_time, end_time
-FROM time_schedules
-WHERE device_condition_id = ?
-`
-
-type GetTimeSchedulesFromDeviceConditionRow struct {
-	ID                int32
-	DeviceConditionID int32
-	StartTime         string
-	EndTime           string
-}
-
-func (q *Queries) GetTimeSchedulesFromDeviceCondition(ctx context.Context, deviceConditionID int32) ([]GetTimeSchedulesFromDeviceConditionRow, error) {
-	rows, err := q.db.QueryContext(ctx, getTimeSchedulesFromDeviceCondition, deviceConditionID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []GetTimeSchedulesFromDeviceConditionRow
-	for rows.Next() {
-		var i GetTimeSchedulesFromDeviceConditionRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.DeviceConditionID,
-			&i.StartTime,
-			&i.EndTime,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
 }

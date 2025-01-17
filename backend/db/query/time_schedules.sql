@@ -1,13 +1,9 @@
--- name: GetTimeSchedulesFromDeviceCondition :many
-SELECT id, device_condition_id, start_time, end_time
-FROM time_schedules
-WHERE device_condition_id = ?;
-
--- name: GetTimeScheduleFromID :one
-SELECT id, device_condition_id, start_time, end_time
-FROM time_schedules
-WHERE id = ?;
-
 -- name: CreateTimeSchedule :execlastid
-INSERT INTO time_schedules (device_condition_id, start_time, end_time)
-VALUES (?, ?, ?);
+INSERT INTO time_schedules (m304_id)
+VALUES (?);
+
+-- name: GetTimeScheduleFromM304 :one
+SELECT id, m304_id
+FROM time_schedules
+WHERE m304_id = ?;
+

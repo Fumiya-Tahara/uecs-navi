@@ -10,38 +10,45 @@ import (
 )
 
 const createWorkflow = `-- name: CreateWorkflow :execlastid
-INSERT INTO workflows (name) 
-VALUES (?)
+INSERT INTO workflows (m304_id, name) 
+VALUES (?, ?)
 `
 
-func (q *Queries) CreateWorkflow(ctx context.Context, name string) (int64, error) {
-	result, err := q.db.ExecContext(ctx, createWorkflow, name)
+type CreateWorkflowParams struct {
+	M304ID int32
+	Name   string
+}
+
+func (q *Queries) CreateWorkflow(ctx context.Context, arg CreateWorkflowParams) (int64, error) {
+	result, err := q.db.ExecContext(ctx, createWorkflow, arg.M304ID, arg.Name)
 	if err != nil {
 		return 0, err
 	}
 	return result.LastInsertId()
 }
 
-const getAllWorkflows = `-- name: GetAllWorkflows :many
-SELECT id, name
+const getWorkflowsFromM304 = `-- name: GetWorkflowsFromM304 :many
+SELECT id, m304_id, name
 FROM workflows
+WHERE m304_id = ?
 `
 
-type GetAllWorkflowsRow struct {
-	ID   int32
-	Name string
+type GetWorkflowsFromM304Row struct {
+	ID     int32
+	M304ID int32
+	Name   string
 }
 
-func (q *Queries) GetAllWorkflows(ctx context.Context) ([]GetAllWorkflowsRow, error) {
-	rows, err := q.db.QueryContext(ctx, getAllWorkflows)
+func (q *Queries) GetWorkflowsFromM304(ctx context.Context, m304ID int32) ([]GetWorkflowsFromM304Row, error) {
+	rows, err := q.db.QueryContext(ctx, getWorkflowsFromM304, m304ID)
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
-	var items []GetAllWorkflowsRow
+	var items []GetWorkflowsFromM304Row
 	for rows.Next() {
-		var i GetAllWorkflowsRow
-		if err := rows.Scan(&i.ID, &i.Name); err != nil {
+		var i GetWorkflowsFromM304Row
+		if err := rows.Scan(&i.ID, &i.M304ID, &i.Name); err != nil {
 			return nil, err
 		}
 		items = append(items, i)
