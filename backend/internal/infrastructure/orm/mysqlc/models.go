@@ -16,28 +16,31 @@ type ClimateData struct {
 	Unit string
 }
 
+type ComparisonOperator struct {
+	ID                 int32
+	ComparisonOperator string
+	CreatedAt          time.Time
+	UpdatedAt          time.Time
+}
+
+type Condition struct {
+	ID                   int32
+	ClimateDataID        int32
+	TimeScheduleRowID    int32
+	ComparisonOperatorID int32
+	SetPoint             int32
+	CreatedAt            time.Time
+	UpdatedAt            time.Time
+}
+
 type Device struct {
 	ID            int32
-	HouseID       int32
 	ClimateDataID int32
 	M304ID        int32
-	SensorID      int32
-	DeviceName    sql.NullString
+	Name          string
 	Rly           sql.NullInt32
 	CreatedAt     time.Time
 	UpdatedAt     time.Time
-}
-
-type DeviceCondition struct {
-	ID          int32
-	DeviceID    int32
-	OperationID int32
-	Valid       bool
-	SetPoint    sql.NullFloat64
-	Duration    sql.NullInt32
-	Operator    sql.NullInt32
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
 }
 
 type Edge struct {
@@ -58,7 +61,7 @@ type House struct {
 
 type M304 struct {
 	ID         int32
-	UecsID     string
+	HouseID    int32
 	MacAddr    string
 	DhcpFlg    bool
 	IpAddr     sql.NullString
@@ -69,17 +72,6 @@ type M304 struct {
 	NodeName   sql.NullString
 	CreatedAt  time.Time
 	UpdatedAt  time.Time
-}
-
-type M304Record struct {
-	ID                int32
-	M304ID            int32
-	DeviceConditionID int32
-	Block             string
-	Valid             bool
-	Position          int32
-	CreatedAt         time.Time
-	UpdatedAt         time.Time
 }
 
 type Node struct {
@@ -94,46 +86,42 @@ type Node struct {
 	UpdatedAt      time.Time
 }
 
-type Operation struct {
-	ID        int32
-	DeviceID  int32
-	Name      string
-	RlyOn     int32
-	CreatedAt time.Time
-	UpdatedAt time.Time
-}
-
-type Sensor struct {
-	ID        int32
-	CcmType   string
-	Room      int32
-	Region    int32
-	Order     int32
-	Priority  int32
-	CreatedAt time.Time
-	UpdatedAt time.Time
-}
-
 type TimeSchedule struct {
-	ID                int32
-	DeviceConditionID int32
-	StartTime         string
-	EndTime           string
-	CreatedAt         time.Time
-	UpdatedAt         time.Time
+	ID        int32
+	M304ID    int32
+	CreatedAt time.Time
+	UpdatedAt time.Time
 }
 
-type TimeScheduleWorkflow struct {
+type TimeScheduleRow struct {
 	ID             int32
-	WorkflowID     int32
 	TimeScheduleID int32
+	StartTime      time.Time
+	EndTime        time.Time
+	WorkflowID     int32
 	CreatedAt      time.Time
 	UpdatedAt      time.Time
 }
 
 type Workflow struct {
 	ID        int32
+	M304ID    int32
 	Name      string
 	CreatedAt time.Time
 	UpdatedAt time.Time
+}
+
+type WorkflowOperation struct {
+	ID         int32
+	WorkflowID int32
+	Relay1     sql.NullBool
+	Relay2     sql.NullBool
+	Relay3     sql.NullBool
+	Relay4     sql.NullBool
+	Relay5     sql.NullBool
+	Relay6     sql.NullBool
+	Relay7     sql.NullBool
+	Relay8     sql.NullBool
+	CreatedAt  time.Time
+	UpdatedAt  time.Time
 }
