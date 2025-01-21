@@ -28,7 +28,7 @@ type Condition struct {
 	ClimateDataID        int32
 	TimeScheduleRowID    int32
 	ComparisonOperatorID int32
-	SetPoint             int32
+	SetPoint             float64
 	CreatedAt            time.Time
 	UpdatedAt            time.Time
 }
