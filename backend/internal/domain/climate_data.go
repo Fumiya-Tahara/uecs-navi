@@ -1,15 +1,15 @@
 package domain
 
 type ClimateData struct {
-	ID          int
-	ClimateData string
-	Unit        string
+	ID   int
+	Name string
+	Unit string
 }
 
-func NewClimateData(id int, climateData, unit string) *ClimateData {
+func NewClimateData(id int, name, unit string) *ClimateData {
 	return &ClimateData{
-		ID:          id,
-		ClimateData: climateData,
-		Unit:        unit,
+		ID:   id,
+		Name: name,
+		Unit: unit,
 	}
 }
