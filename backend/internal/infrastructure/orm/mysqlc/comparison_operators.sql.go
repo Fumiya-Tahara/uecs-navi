@@ -41,3 +41,21 @@ func (q *Queries) GetAllComparisonOperators(ctx context.Context) ([]GetAllCompar
 	}
 	return items, nil
 }
+
+const getComparisonOperatorFromID = `-- name: GetComparisonOperatorFromID :one
+SELECT id, comparison_operator
+FROM comparison_operators
+WHERE id = ?
+`
+
+type GetComparisonOperatorFromIDRow struct {
+	ID                 int32
+	ComparisonOperator string
+}
+
+func (q *Queries) GetComparisonOperatorFromID(ctx context.Context, id int32) (GetComparisonOperatorFromIDRow, error) {
+	row := q.db.QueryRowContext(ctx, getComparisonOperatorFromID, id)
+	var i GetComparisonOperatorFromIDRow
+	err := row.Scan(&i.ID, &i.ComparisonOperator)
+	return i, err
+}
