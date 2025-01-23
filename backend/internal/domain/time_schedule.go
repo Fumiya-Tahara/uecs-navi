@@ -3,10 +3,11 @@ package domain
 import "time"
 
 type TimeScheduleRow struct {
-	ID         int
-	StartTime  time.Time
-	EndTime    time.Time
-	WorkflowID int
+	ID             int
+	TimeScheduleID int
+	StartTime      time.Time
+	EndTime        time.Time
+	WorkflowID     int
 }
 
 type TimeSchedule struct {
@@ -15,20 +16,22 @@ type TimeSchedule struct {
 	Rows   []TimeScheduleRow
 }
 
-func NewTimeScheduleRowWithID(id int, startTime time.Time, endTime time.Time, workflowID int) *TimeScheduleRow {
+func NewTimeScheduleRowWithID(id, timeScheduleID int, startTime time.Time, endTime time.Time, workflowID int) *TimeScheduleRow {
 	return &TimeScheduleRow{
-		ID:         id,
-		StartTime:  startTime,
-		EndTime:    endTime,
-		WorkflowID: workflowID,
+		ID:             id,
+		TimeScheduleID: timeScheduleID,
+		StartTime:      startTime,
+		EndTime:        endTime,
+		WorkflowID:     workflowID,
 	}
 }
 
-func NewTimeScheduleRow(startTime time.Time, endTime time.Time, workflowID int) *TimeScheduleRow {
+func NewTimeScheduleRow(timeScheduleID int, startTime time.Time, endTime time.Time, workflowID int) *TimeScheduleRow {
 	return &TimeScheduleRow{
-		StartTime:  startTime,
-		EndTime:    endTime,
-		WorkflowID: workflowID,
+		TimeScheduleID: timeScheduleID,
+		StartTime:      startTime,
+		EndTime:        endTime,
+		WorkflowID:     workflowID,
 	}
 }
 
