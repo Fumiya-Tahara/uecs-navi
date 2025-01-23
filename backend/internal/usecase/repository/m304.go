@@ -21,7 +21,7 @@ func (mr M304Repository) CreateM304(newM304 domain.M304) (int64, error) {
 	ctx := context.Background()
 
 	arg := mysqlc.CreateM304Params{
-		UecsID:     newM304.UecsID,
+		HouseID:    int32(newM304.HouseID),
 		MacAddr:    newM304.MacAddr,
 		DhcpFlg:    newM304.DhcpFlg,
 		IpAddr:     PointerToNullString(newM304.IpAddr),
@@ -42,22 +42,22 @@ func (mr M304Repository) CreateM304(newM304 domain.M304) (int64, error) {
 func (mr M304Repository) GetM304FromID(ID int) (*domain.M304, error) {
 	ctx := context.Background()
 
-	m304, err := mr.queries.GetM304FromID(ctx, int32(ID))
+	m304Row, err := mr.queries.GetM304FromID(ctx, int32(ID))
 	if err != nil {
 		return nil, err
 	}
 
-	getM304 := domain.NewM304(
-		m304.UecsID,
-		m304.MacAddr,
-		m304.DhcpFlg,
-		NullStringToPointer(m304.IpAddr),
-		NullStringToPointer(m304.NetMask),
-		NullStringToPointer(m304.Defgw),
-		NullStringToPointer(m304.Dns),
-		m304.VenderName,
-		NullStringToPointer(m304.NodeName),
+	m304 := domain.NewM304(
+		int(m304Row.HouseID),
+		m304Row.MacAddr,
+		m304Row.DhcpFlg,
+		NullStringToPointer(m304Row.IpAddr),
+		NullStringToPointer(m304Row.NetMask),
+		NullStringToPointer(m304Row.Defgw),
+		NullStringToPointer(m304Row.Dns),
+		m304Row.VenderName,
+		NullStringToPointer(m304Row.NodeName),
 	)
 
-	return getM304, nil
+	return m304, nil
 }
