@@ -17,7 +17,7 @@ func NewHouseRepository(queries *mysqlc.Queries) *HouseRepository {
 	}
 }
 
-func (hr HouseRepository) CreateHouse(name string) (int64, error) {
+func (hr HouseRepository) CreateHouse(name string) (int, error) {
 	ctx := context.Background()
 
 	id, err := hr.queries.CreateHouse(ctx, name)
@@ -25,7 +25,7 @@ func (hr HouseRepository) CreateHouse(name string) (int64, error) {
 		return 0, err
 	}
 
-	return id, nil
+	return int(id), nil
 }
 
 func (hr HouseRepository) GetAllHouses() ([]*domain.House, error) {

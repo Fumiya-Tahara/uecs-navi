@@ -17,7 +17,7 @@ func NewM304Repository(queries *mysqlc.Queries) *M304Repository {
 	}
 }
 
-func (mr M304Repository) CreateM304(newM304 domain.M304) (int64, error) {
+func (mr M304Repository) CreateM304(newM304 domain.M304) (int, error) {
 	ctx := context.Background()
 
 	arg := mysqlc.CreateM304Params{
@@ -36,7 +36,7 @@ func (mr M304Repository) CreateM304(newM304 domain.M304) (int64, error) {
 	if err != nil {
 		return 0, err
 	}
-	return id, nil
+	return int(id), nil
 }
 
 func (mr M304Repository) GetM304FromID(ID int) (*domain.M304, error) {
