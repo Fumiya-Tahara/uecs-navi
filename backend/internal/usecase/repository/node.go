@@ -5,6 +5,7 @@ import (
 
 	"github.com/Fumiya-Tahara/uecs-navi.git/internal/domain"
 	"github.com/Fumiya-Tahara/uecs-navi.git/internal/infrastructure/orm/mysqlc"
+	"github.com/Fumiya-Tahara/uecs-navi.git/internal/utils"
 )
 
 type NodeRepository struct {
@@ -20,7 +21,7 @@ func NewNodeRepository(queries *mysqlc.Queries) *NodeRepository {
 func (nr *NodeRepository) CreateNode(newNode domain.Node) (int, error) {
 	ctx := context.Background()
 
-	jsonData, err := MapToRawMessage(newNode.Data)
+	jsonData, err := utils.MapToRawMessage(newNode.Data)
 	if err != nil {
 		return 0, err
 	}
@@ -50,7 +51,7 @@ func (nr *NodeRepository) GetNodesFromWorkflow(workflowID int) ([]*domain.Node, 
 
 	nodes := make([]*domain.Node, len(nodeRows))
 	for i, v := range nodeRows {
-		data, err := RawMessageToMap(v.Data)
+		data, err := utils.RawMessageToMap(v.Data)
 		if err != nil {
 			continue
 		}

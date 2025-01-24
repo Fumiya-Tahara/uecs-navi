@@ -5,6 +5,7 @@ import (
 
 	"github.com/Fumiya-Tahara/uecs-navi.git/internal/domain"
 	"github.com/Fumiya-Tahara/uecs-navi.git/internal/infrastructure/orm/mysqlc"
+	"github.com/Fumiya-Tahara/uecs-navi.git/internal/utils"
 )
 
 type DeviceRepository struct {
@@ -24,7 +25,7 @@ func (dr *DeviceRepository) CreateDevice(newDevice domain.Device) (int, error) {
 		ClimateDataID: int32(newDevice.ClimateDataID),
 		M304ID:        int32(newDevice.M304ID),
 		Name:          *newDevice.Name,
-		Rly:           PointerToNullInt32(newDevice.Rly),
+		Rly:           utils.PointerToNullInt32(newDevice.Rly),
 	}
 
 	id, err := dr.queries.CreateDevice(ctx, arg)
@@ -45,7 +46,7 @@ func (dr *DeviceRepository) GetDevicesFromM304(m304ID int) ([]*domain.Device, er
 
 	devices := make([]*domain.Device, len(deviceRows))
 	for i, v := range deviceRows {
-		rly := NullInt32ToPointer(v.Rly)
+		rly := utils.NullInt32ToPointer(v.Rly)
 
 		devices[i] = domain.NewDeviceWithID(
 			int(v.ID),
