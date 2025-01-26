@@ -41,7 +41,7 @@ func (nr *NodeRepository) CreateNode(newNode domain.Node) (int, error) {
 	return int(id), nil
 }
 
-func (nr *NodeRepository) GetNodesFromWorkflow(workflowID int) ([]*domain.Node, error) {
+func (nr *NodeRepository) GetNodesFromWorkflow(workflowID int) (*[]domain.Node, error) {
 	ctx := context.Background()
 
 	nodeRows, err := nr.queries.GetNodesFromWorkflow(ctx, int32(workflowID))
@@ -49,7 +49,7 @@ func (nr *NodeRepository) GetNodesFromWorkflow(workflowID int) ([]*domain.Node, 
 		return nil, err
 	}
 
-	nodes := make([]*domain.Node, len(nodeRows))
+	nodes := make([]domain.Node, len(nodeRows))
 	for i, v := range nodeRows {
 		data, err := utils.RawMessageToMap(v.Data)
 		if err != nil {
@@ -58,7 +58,7 @@ func (nr *NodeRepository) GetNodesFromWorkflow(workflowID int) ([]*domain.Node, 
 
 		position := domain.NewPosition(v.PositionX, v.PositionY)
 
-		nodes[i] = domain.NewNode(
+		nodes[i] = *domain.NewNode(
 			int(v.WorkflowID),
 			v.WorkflowNodeID,
 			v.Type,
@@ -67,5 +67,5 @@ func (nr *NodeRepository) GetNodesFromWorkflow(workflowID int) ([]*domain.Node, 
 		)
 	}
 
-	return nodes, nil
+	return &nodes, nil
 }

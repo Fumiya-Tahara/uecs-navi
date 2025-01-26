@@ -33,7 +33,7 @@ func (wr *WorkflowRepository) CreateWorkflow(newWorkflow domain.Workflow) (int, 
 	return int(id), nil
 }
 
-func (wr *WorkflowRepository) GetWorkflowsFromM304(m304ID int) ([]*domain.Workflow, error) {
+func (wr *WorkflowRepository) GetWorkflowsFromM304(m304ID int) (*[]domain.Workflow, error) {
 	ctx := context.Background()
 
 	workflowRows, err := wr.queries.GetWorkflowsFromM304(ctx, int32(m304ID))
@@ -41,14 +41,14 @@ func (wr *WorkflowRepository) GetWorkflowsFromM304(m304ID int) ([]*domain.Workfl
 		return nil, err
 	}
 
-	workflows := make([]*domain.Workflow, len(workflowRows))
+	workflows := make([]domain.Workflow, len(workflowRows))
 	for i, v := range workflowRows {
-		workflows[i] = domain.NewWorkflowWithBasicInfo(
+		workflows[i] = *domain.NewWorkflowWithBasicInfo(
 			int(v.ID),
 			int(v.M304ID),
 			v.Name,
 		)
 	}
 
-	return workflows, nil
+	return &workflows, nil
 }

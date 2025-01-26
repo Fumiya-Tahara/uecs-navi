@@ -36,7 +36,7 @@ func (dr *DeviceRepository) CreateDevice(newDevice domain.Device) (int, error) {
 	return int(id), nil
 }
 
-func (dr *DeviceRepository) GetDevicesFromM304(m304ID int) ([]*domain.Device, error) {
+func (dr *DeviceRepository) GetDevicesFromM304(m304ID int) (*[]domain.Device, error) {
 	ctx := context.Background()
 
 	deviceRows, err := dr.queries.GetDevicesFromM304(ctx, int32(m304ID))
@@ -44,11 +44,11 @@ func (dr *DeviceRepository) GetDevicesFromM304(m304ID int) ([]*domain.Device, er
 		return nil, err
 	}
 
-	devices := make([]*domain.Device, len(deviceRows))
+	devices := make([]domain.Device, len(deviceRows))
 	for i, v := range deviceRows {
 		rly := utils.NullInt32ToPointer(v.Rly)
 
-		devices[i] = domain.NewDeviceWithID(
+		devices[i] = *domain.NewDeviceWithID(
 			int(v.ID),
 			int(v.ClimateDataID),
 			int(v.M304ID),
@@ -57,5 +57,5 @@ func (dr *DeviceRepository) GetDevicesFromM304(m304ID int) ([]*domain.Device, er
 		)
 	}
 
-	return devices, nil
+	return &devices, nil
 }

@@ -34,7 +34,7 @@ func (er *EdgeRepository) CreateEdge(newEdge domain.Edge) (int, error) {
 	return int(id), nil
 }
 
-func (er *EdgeRepository) GetEdgesFromWorkflow(workflowID int) ([]*domain.Edge, error) {
+func (er *EdgeRepository) GetEdgesFromWorkflow(workflowID int) (*[]domain.Edge, error) {
 	ctx := context.Background()
 
 	edgeRows, err := er.queries.GetEdgesFromWorkflow(ctx, int32(workflowID))
@@ -42,9 +42,9 @@ func (er *EdgeRepository) GetEdgesFromWorkflow(workflowID int) ([]*domain.Edge, 
 		return nil, err
 	}
 
-	edges := make([]*domain.Edge, len(edgeRows))
+	edges := make([]domain.Edge, len(edgeRows))
 	for i, v := range edgeRows {
-		edges[i] = domain.NewEdgeWithID(
+		edges[i] = *domain.NewEdgeWithID(
 			int(v.ID),
 			int(v.WorkflowID),
 			v.SourceNodeID,
@@ -52,5 +52,5 @@ func (er *EdgeRepository) GetEdgesFromWorkflow(workflowID int) ([]*domain.Edge, 
 		)
 	}
 
-	return edges, nil
+	return &edges, nil
 }

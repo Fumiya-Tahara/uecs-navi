@@ -35,7 +35,7 @@ func (tsrr *TimeScheduleRowRepository) CreateTimeScheduleRow(newTimeScheduleRow 
 	return int(id), nil
 }
 
-func (tsrr *TimeScheduleRowRepository) GetTimeScheduleRowsFromTimeSchedule(timeScheduleID int) ([]*domain.TimeScheduleRow, error) {
+func (tsrr *TimeScheduleRowRepository) GetTimeScheduleRowsFromTimeSchedule(timeScheduleID int) (*[]domain.TimeScheduleRow, error) {
 	ctx := context.Background()
 
 	timeScheduleRowRows, err := tsrr.queries.GetTimeScheduleRowsFromTimeSchedule(ctx, int32(timeScheduleID))
@@ -43,9 +43,9 @@ func (tsrr *TimeScheduleRowRepository) GetTimeScheduleRowsFromTimeSchedule(timeS
 		return nil, err
 	}
 
-	timeScheduleRows := make([]*domain.TimeScheduleRow, len(timeScheduleRowRows))
+	timeScheduleRows := make([]domain.TimeScheduleRow, len(timeScheduleRowRows))
 	for i, v := range timeScheduleRowRows {
-		timeScheduleRows[i] = domain.NewTimeScheduleRowWithID(
+		timeScheduleRows[i] = *domain.NewTimeScheduleRowWithID(
 			int(v.ID),
 			int(v.TimeScheduleID),
 			v.StartTime,
@@ -54,5 +54,5 @@ func (tsrr *TimeScheduleRowRepository) GetTimeScheduleRowsFromTimeSchedule(timeS
 		)
 	}
 
-	return timeScheduleRows, nil
+	return &timeScheduleRows, nil
 }
