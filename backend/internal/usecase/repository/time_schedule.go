@@ -28,7 +28,7 @@ func (tsr TimeScheduleRepository) CreateTimeSchedule(m304ID int) (int, error) {
 	return int(id), nil
 }
 
-func (tsr TimeScheduleRepository) GetTimeScheduleFromM304(m304ID int, rows []domain.TimeScheduleRow) (*domain.TimeSchedule, error) {
+func (tsr TimeScheduleRepository) GetTimeScheduleFromM304(m304ID int) (*domain.TimeSchedule, error) {
 	ctx := context.Background()
 
 	timeScheduleRow, err := tsr.queries.GetTimeScheduleFromM304(ctx, int32(m304ID))
@@ -36,9 +36,11 @@ func (tsr TimeScheduleRepository) GetTimeScheduleFromM304(m304ID int, rows []dom
 		return nil, err
 	}
 
+	emptyRows := []domain.TimeScheduleRow{}
+
 	timeSchedule := domain.NewTimeSchedule(
 		int(timeScheduleRow.M304ID),
-		rows,
+		emptyRows,
 	)
 
 	return timeSchedule, nil
