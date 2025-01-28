@@ -1,203 +1,132 @@
 package controller
 
-type CreateHouseController struct {
-	Name string `json:"name" binding:"required,min=1,max=12,alphanum"`
+// General schemas
+type ClimateData struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+	Unit string `unit:"unit"`
 }
 
-type CreateDeviceController struct {
-	ClimateDataID int     `json:"climate_data_id" binding:"required,number"`
-	DeviceName    string  `json:"device_name" binding:"required,min=1,max=12"`
-	SetPoint      float64 `json:"set_point" binding:"number"`
-	Duration      int     `json:"duration" binding:"number"`
+type Relays struct {
+	Relay1 bool `json:"relay_1"`
+	Relay2 bool `json:"relay_2"`
+	Relay3 bool `json:"relay_3"`
+	Relay4 bool `json:"relay_4"`
+	Relay5 bool `json:"relay_5"`
+	Relay6 bool `json:"relay_6"`
+	Relay7 bool `json:"relay_7"`
+	Relay8 bool `json:"relay_8"`
 }
 
-type HouseResponse struct {
-	ID   int    `json:"id,omitempty"`
-	Name string `json:"name,omitempty"`
+type Workflow struct {
+	Name     string `json:"name"`
+	M304ID   int    `json:"m304_id"`
+	DeviceID int    `json:"device_id"`
 }
 
-type DeviceResponse struct {
-	ID          int     `json:"id,omitempty"`
-	HouseID     int     `json:"house_id,omitempty"`
-	Name        string  `json:"name,omitempty"`
-	SetPoint    float64 `json:"set_point,omitempty"`
-	Duration    int     `json:"duration,omitempty"`
-	ClimateData string  `json:"climate_data,omitempty"`
-	Unit        string  `json:"unit,omitempty"`
+type Condition struct {
+	SelectedClimateDataID        int     `json:"selected_climate_data_id"`
+	SelectedComparisonOperatorID int     `json:"selected_comparison_operator_id"`
+	SetPoint                     float32 `json:"set_point"`
 }
 
-type ClimateDataResponse struct {
-	ID          int    `json:"id,omitempty"`
-	ClimateData string `json:"climate_data,omitempty"`
-	Unit        string `json:"unit,omitempty"`
-}
-
-// EdgeRequest defines model for EdgeRequest.
-type EdgeRequest struct {
-	SourceNodeId string `json:"source_node_id,omitempty"`
-	TargetNodeId string `json:"target_node_id,omitempty"`
-}
-
-// EdgeResponse defines model for EdgeResponse.
-type EdgeResponse struct {
-	Id           int    `json:"id,omitempty"`
-	SourceNodeId string `json:"source_node_id,omitempty"`
-	TargetNodeId string `json:"target_node_id,omitempty"`
-	WorkflowId   int    `json:"workflow_id,omitempty"`
-}
-
-// NodeRequest defines model for NodeRequest.
-type NodeRequest struct {
-	Data           map[string]interface{} `json:"data,omitempty"`
-	PositionX      float32                `json:"position_x,omitempty"`
-	PositionY      float32                `json:"position_y,omitempty"`
-	Type           string                 `json:"type,omitempty"`
-	WorkflowNodeId string                 `json:"workflow_node_id,omitempty"`
-}
-
-// NodeResponse defines model for NodeResponse.
-type NodeResponse struct {
-	Data           map[string]interface{} `json:"data,omitempty"`
-	Id             int                    `json:"id,omitempty"`
-	PositionX      float32                `json:"position_x,omitempty"`
-	PositionY      float32                `json:"position_y,omitempty"`
-	NodeType       string                 `json:"type,omitempty"`
-	WorkflowId     int                    `json:"workflow_id,omitempty"`
-	WorkflowNodeId string                 `json:"workflow_node_id,omitempty"`
-}
-
-// TimeSchedule defines model for TimeSchedule.
 type TimeSchedule struct {
-	// EndTime 終了時刻（HH:mm形式）
-	EndTime string `json:"end_time,omitempty"`
-
-	// StartTime 開始時刻（HH:mm形式）
-	StartTime string            `json:"start_time,omitempty"`
-	Workflows []WorkflowRequest `json:"workflows,omitempty"`
+	StartTime          string    `json:"start_time"`
+	EndTime            string    `json:"end_time"`
+	SelectedWorkflowID int       `json:"selected_workflow_id"`
+	Condition          Condition `json:"condition"`
 }
 
-// TimeScheduleRequest defines model for TimeScheduleRequest.
-type TimeScheduleRequest struct {
-	IpAddress    string         `json:"ip_address,omitempty"`
-	TimeSchedule []TimeSchedule `json:"time_schedule,omitempty"`
+// Request schemas
+type HouseRequest string
+
+// type DeviceRequest struct {
+// 	DeviceName    string  `json:"device_name"`
+// 	ClimateDataID int     `json:"climate_data_id"`
+// 	Unit          string  `json:"unit"`
+// 	SetPoint      float32 `json:"set_point"`
+// 	Duration      int     `json:"duration"`
+// }
+
+type NodeRequest struct {
+	WorkflowNodeID string                 `json:"workflow_node_id"`
+	Type           string                 `json:"type"`
+	Data           map[string]interface{} `json:"data"`
+	PositionX      float32                `json:"position_x"`
+	PositionY      float32                `json:"position_y"`
 }
 
-// WorkflowRequest defines model for WorkflowRequest.
-type WorkflowRequest struct {
-	DeviceId int    `json:"device_id,omitempty"`
-	Name     string `json:"name,omitempty"`
+type EdgeRequest struct {
+	SourceNodeID string `json:"source_node_id"`
+	TargetNodeID string `json:"target_node_id"`
 }
 
-// WorkflowResponse defines model for WorkflowResponse.
-type WorkflowResponse struct {
-	Id   int    `json:"id,omitempty"`
-	Name string `json:"name,omitempty"`
-}
-
-// WorkflowUIRequest defines model for WorkflowUIRequest.
 type WorkflowUIRequest struct {
-	Edges []EdgeRequest `json:"edges,omitempty"`
-	Nodes []NodeRequest `json:"nodes,omitempty"`
+	Nodes []NodeRequest `json:"nodes"`
+	Edges []EdgeRequest `json:"edges"`
 }
 
-// WorkflowUIResponse defines model for WorkflowUIResponse.
-type WorkflowUIResponse struct {
-	Edges []EdgeResponse `json:"edges,omitempty"`
-	Nodes []NodeResponse `json:"nodes,omitempty"`
-}
-
-// WorkflowWithUIRequest defines model for WorkflowWithUIRequest.
 type WorkflowWithUIRequest struct {
-	Workflow   WorkflowRequest   `json:"workflow,omitempty"`
-	WorkflowUI WorkflowUIRequest `json:"workflow_ui,omitempty"`
+	Workflow   Workflow          `json:"workflow"`
+	WorkflowUI WorkflowUIRequest `json:"workflow_ui"`
+	Relays     Relays            `json:"relays"`
 }
 
-// WorkflowWithUIResponse defines model for WorkflowWithUIResponse.
+type TimeScheduleRequest struct {
+	M304ID       int            `json:"m304_id"`
+	TimeSchedule []TimeSchedule `json:"time_schedule"`
+}
+
+// Response schemas
+type HousesResponse struct {
+	ID   int    `json:"id"`
+	Name string `json:"name"`
+}
+
+// type DeviceResponse struct {
+// 	ID          int     `json:"id"`
+// 	DeviceName  string  `json:"device_name"`
+// 	ClimateData string  `json:"climate_data"`
+// 	Unit        string  `json:"unit"`
+// 	SetPoint    float64 `json:"set_point"`
+// 	Duration    int     `json:"duration"`
+// }
+
+type WorkflowResponse struct {
+	ID     int    `json:"id"`
+	M304ID int    `json:"m304_id"`
+	Name   string `json:"name"`
+}
+
+type NodeResponse struct {
+	ID             int                    `json:"id"`
+	WorkflowID     int                    `json:"workflow_id"`
+	WorkflowNodeID string                 `json:"workflow_node_id"`
+	Type           string                 `json:"type"`
+	Data           map[string]interface{} `json:"data"`
+	PositionX      float32                `json:"position_x"`
+	PositionY      float32                `json:"position_y"`
+}
+
+type EdgeResponse struct {
+	ID           int    `json:"id"`
+	WorkflowID   int    `json:"workflow_id"`
+	SourceNodeID string `json:"source_node_id"`
+	TargetNodeID string `json:"target_node_id"`
+}
+
+type WorkflowUIResponse struct {
+	Nodes []NodeResponse `json:"nodes"`
+	Edges []EdgeResponse `json:"edges"`
+}
+
 type WorkflowWithUIResponse struct {
-	Workflow   WorkflowResponse   `json:"workflow,omitempty"`
-	WorkflowUI WorkflowUIResponse `json:"workflow_ui,omitempty"`
+	Workflow   WorkflowResponse   `json:"workflow"`
+	WorkflowUI WorkflowUIResponse `json:"workflowUI"`
 }
 
-func NewHouseResponse(id int, name string) *HouseResponse {
-	return &HouseResponse{
-		ID:   id,
-		Name: name,
-	}
-}
-
-func NewDeviceResponse(
-	id int,
-	houseID int,
-	deviceName string,
-	setPoint float64,
-	duration int,
-	climateData string,
-	unit string,
-) *DeviceResponse {
-	return &DeviceResponse{
-		ID:          id,
-		HouseID:     houseID,
-		Name:        deviceName,
-		SetPoint:    setPoint,
-		Duration:    duration,
-		ClimateData: climateData,
-		Unit:        unit,
-	}
-}
-
-func NewClimateDataResponse(id int, climateData, unit string) *ClimateDataResponse {
-	return &ClimateDataResponse{
-		ID:          id,
-		ClimateData: climateData,
-		Unit:        unit,
-	}
-}
-
-func NewWorkflowResponse(id int, name string) *WorkflowResponse {
-	return &WorkflowResponse{
-		Id:   id,
-		Name: name,
-	}
-}
-
-func NewWorkFlowWithUIResponse(workFlow WorkflowResponse, workFlowUI WorkflowUIResponse) *WorkflowWithUIResponse {
-	return &WorkflowWithUIResponse{
-		Workflow:   workFlow,
-		WorkflowUI: workFlowUI,
-	}
-}
-
-func NewWorkFlowUIResponse(edges []EdgeResponse, nodes []NodeResponse) *WorkflowUIResponse {
-	return &WorkflowUIResponse{
-		Edges: edges,
-		Nodes: nodes,
-	}
-}
-
-func NewEdgeResponse(id int, sourceNodeID string, targetNodeID string, workFlowID int) *EdgeResponse {
-	return &EdgeResponse{
-		Id:           id,
-		SourceNodeId: sourceNodeID,
-		TargetNodeId: targetNodeID,
-		WorkflowId:   workFlowID,
-	}
-}
-
-func NewNodeResponse(
-	data map[string]interface{},
-	id int, positionX float32,
-	positionY float32,
-	nodeType string,
-	workFlowID int,
-	workFlowNodeID string,
-) *NodeResponse {
-	return &NodeResponse{
-		Data:           data,
-		Id:             id,
-		PositionX:      positionX,
-		PositionY:      positionY,
-		NodeType:       nodeType,
-		WorkflowId:     workFlowID,
-		WorkflowNodeId: workFlowNodeID,
-	}
+type TimeScheduleResponse struct {
+	M304ID        int            `json:"m304_id"`
+	Workflows     []Workflow     `json:"Workflows"`
+	TimeSchedules []TimeSchedule `json:"time_schedules"`
 }

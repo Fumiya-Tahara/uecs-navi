@@ -175,12 +175,13 @@ components:
         type: integer
 
   schemas:
+    # General schemas
     ClimateData:
       type: object
       properties:
         id:
           type: integer
-        climate_data:
+        name:
           type: string
         unit:
           type: string
@@ -242,8 +243,8 @@ components:
         condition:
             $ref: "#/components/schemas/Condition"
 
-    # Requests
-    HousesRequest:
+    # Request Schemas
+    HouseRequest:
       type: string
 
     DeviceRequest:
@@ -313,14 +314,14 @@ components:
     TimeScheduleRequest:
       type: object
       properties:
+        m304_id:
+          type: integer
         time_schedule:
           type: array
           items: 
             $ref: "#/components/schemas/TimeSchedule"
-        m304_id:
-          type: integer
 
-    # Responses
+    # Response schemas
     HousesResponse:
       type: object
       properties:
