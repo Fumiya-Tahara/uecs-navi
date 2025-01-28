@@ -13,6 +13,14 @@ type WorkflowPageService struct {
 	edgeRepository     interfaces.EdgeRepositoryInterface
 }
 
+func NewWorkflowPageService(wr interfaces.WorkflowRepositoryInterface, nr interfaces.NodeRepositoryInterface, er interfaces.EdgeRepositoryInterface) *WorkflowPageService {
+	return &WorkflowPageService{
+		workflowRepository: wr,
+		nodeRepository:     nr,
+		edgeRepository:     er,
+	}
+}
+
 func (wps WorkflowPageService) GetWorkflowsWithUI(m304ID int) (*[]domain.Workflow, error) {
 	workflows, err := wps.workflowRepository.GetWorkflowsFromM304(m304ID)
 	if err != nil {

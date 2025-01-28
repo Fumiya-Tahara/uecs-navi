@@ -13,6 +13,14 @@ type TimeSchedulePageService struct {
 	workflowRepository        interfaces.WorkflowRepositoryInterface
 }
 
+func NewTimeSchedulePageService(tsr interfaces.TimeScheduleRepositoryInterface, tsrr interfaces.TimeScheduleRowRepositoryInterface, wr interfaces.WorkflowRepositoryInterface) *TimeSchedulePageService {
+	return &TimeSchedulePageService{
+		timeScheduleRepository:    tsr,
+		timeScheduleRowRepository: tsrr,
+		workflowRepository:        wr,
+	}
+}
+
 func (tsps TimeSchedulePageService) GetTimeSchedule(m304ID int) (*domain.TimeSchedule, error) {
 	timeSchedule, err := tsps.timeScheduleRepository.GetTimeScheduleFromM304(m304ID)
 	if err != nil {
