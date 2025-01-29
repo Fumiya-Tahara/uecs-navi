@@ -18,7 +18,7 @@ func NewWorkflowOperationRepository(queries *mysqlc.Queries) *WorkflowOperationR
 	}
 }
 
-func (wor *WorkflowOperationRepository) CreateWorkflowOperation(newWorkflowOperation domain.WorkflowOperation) (int, error) {
+func (wor WorkflowOperationRepository) CreateWorkflowOperation(newWorkflowOperation domain.WorkflowOperation) (int, error) {
 	ctx := context.Background()
 
 	arg := mysqlc.CreateWorkflowOperationParams{
@@ -41,7 +41,7 @@ func (wor *WorkflowOperationRepository) CreateWorkflowOperation(newWorkflowOpera
 	return int(id), nil
 }
 
-func (wor *WorkflowOperationRepository) GetWorkflowOperationsFromWorkflow(workflowID int) (*domain.WorkflowOperation, error) {
+func (wor WorkflowOperationRepository) GetWorkflowOperationsFromWorkflow(workflowID int) (*domain.WorkflowOperation, error) {
 	ctx := context.Background()
 
 	workflowOperationRow, err := wor.queries.GetWorkflowOperationsFromWorkflow(ctx, int32(workflowID))

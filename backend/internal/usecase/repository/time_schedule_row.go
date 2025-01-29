@@ -17,7 +17,7 @@ func NewTimeScheduleRowRepository(queries *mysqlc.Queries) *TimeScheduleRowRepos
 	}
 }
 
-func (tsrr *TimeScheduleRowRepository) CreateTimeScheduleRow(newTimeScheduleRow domain.TimeScheduleRow) (int, error) {
+func (tsrr TimeScheduleRowRepository) CreateTimeScheduleRow(newTimeScheduleRow domain.TimeScheduleRow) (int, error) {
 	ctx := context.Background()
 
 	arg := mysqlc.CreateTimeScheduleRowParams{
@@ -35,7 +35,7 @@ func (tsrr *TimeScheduleRowRepository) CreateTimeScheduleRow(newTimeScheduleRow 
 	return int(id), nil
 }
 
-func (tsrr *TimeScheduleRowRepository) GetTimeScheduleRowsFromTimeSchedule(timeScheduleID int) (*[]domain.TimeScheduleRow, error) {
+func (tsrr TimeScheduleRowRepository) GetTimeScheduleRowsFromTimeSchedule(timeScheduleID int) (*[]domain.TimeScheduleRow, error) {
 	ctx := context.Background()
 
 	timeScheduleRowRows, err := tsrr.queries.GetTimeScheduleRowsFromTimeSchedule(ctx, int32(timeScheduleID))

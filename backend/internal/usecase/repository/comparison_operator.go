@@ -17,7 +17,7 @@ func NewComparisonOperatorRepository(queries *mysqlc.Queries) *ComparisonOperato
 	}
 }
 
-func (cor *ComparisonOperatorRepository) GetAllComparisonOperators() (*[]domain.ComparisonOperator, error) {
+func (cor ComparisonOperatorRepository) GetAllComparisonOperators() (*[]domain.ComparisonOperator, error) {
 	ctx := context.Background()
 
 	comparisonOperatorRows, err := cor.queries.GetAllComparisonOperators(ctx)
@@ -36,7 +36,7 @@ func (cor *ComparisonOperatorRepository) GetAllComparisonOperators() (*[]domain.
 	return &comparisonOperators, nil
 }
 
-func (cor *ComparisonOperatorRepository) GetAllComparisonOperatorFromID(id int) (*domain.ComparisonOperator, error) {
+func (cor ComparisonOperatorRepository) GetAllComparisonOperatorFromID(id int) (*domain.ComparisonOperator, error) {
 	ctx := context.Background()
 
 	comparisonOperatorRow, err := cor.queries.GetComparisonOperatorFromID(ctx, int32(id))

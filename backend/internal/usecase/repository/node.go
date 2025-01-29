@@ -18,7 +18,7 @@ func NewNodeRepository(queries *mysqlc.Queries) *NodeRepository {
 	}
 }
 
-func (nr *NodeRepository) CreateNode(newNode domain.Node) (int, error) {
+func (nr NodeRepository) CreateNode(newNode domain.Node) (int, error) {
 	ctx := context.Background()
 
 	jsonData, err := utils.MapToRawMessage(newNode.Data)
@@ -41,7 +41,7 @@ func (nr *NodeRepository) CreateNode(newNode domain.Node) (int, error) {
 	return int(id), nil
 }
 
-func (nr *NodeRepository) GetNodesFromWorkflow(workflowID int) (*[]domain.Node, error) {
+func (nr NodeRepository) GetNodesFromWorkflow(workflowID int) (*[]domain.Node, error) {
 	ctx := context.Background()
 
 	nodeRows, err := nr.queries.GetNodesFromWorkflow(ctx, int32(workflowID))

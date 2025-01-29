@@ -17,7 +17,7 @@ func NewWorkflowRepository(queries *mysqlc.Queries) *ClimateDataRepository {
 	}
 }
 
-func (wr *WorkflowRepository) CreateWorkflow(newWorkflow domain.Workflow) (int, error) {
+func (wr WorkflowRepository) CreateWorkflow(newWorkflow domain.Workflow) (int, error) {
 	ctx := context.Background()
 
 	arg := mysqlc.CreateWorkflowParams{
@@ -33,7 +33,7 @@ func (wr *WorkflowRepository) CreateWorkflow(newWorkflow domain.Workflow) (int, 
 	return int(id), nil
 }
 
-func (wr *WorkflowRepository) GetWorkflowsFromM304(m304ID int) (*[]domain.Workflow, error) {
+func (wr WorkflowRepository) GetWorkflowsFromM304(m304ID int) (*[]domain.Workflow, error) {
 	ctx := context.Background()
 
 	workflowRows, err := wr.queries.GetWorkflowsFromM304(ctx, int32(m304ID))

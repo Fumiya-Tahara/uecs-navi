@@ -17,7 +17,7 @@ func NewConditionRepository(queries *mysqlc.Queries) *ConditionRepository {
 	}
 }
 
-func (cr *ConditionRepository) CreateCondition(newCondition *domain.Condition) (int, error) {
+func (cr ConditionRepository) CreateCondition(newCondition *domain.Condition) (int, error) {
 	ctx := context.Background()
 
 	arg := mysqlc.CreateConditionParams{
@@ -35,7 +35,7 @@ func (cr *ConditionRepository) CreateCondition(newCondition *domain.Condition) (
 	return int(id), nil
 }
 
-func (cr *ConditionRepository) GetConditionFromTimeScheduleRow(timeScheduleRowID int) (*domain.Condition, error) {
+func (cr ConditionRepository) GetConditionFromTimeScheduleRow(timeScheduleRowID int) (*domain.Condition, error) {
 	ctx := context.Background()
 
 	conditionRow, err := cr.queries.GetConditionFromTimeScheduleRow(ctx, int32(timeScheduleRowID))

@@ -17,7 +17,7 @@ func NewEdgeRepository(queries *mysqlc.Queries) *EdgeRepository {
 	}
 }
 
-func (er *EdgeRepository) CreateEdge(newEdge domain.Edge) (int, error) {
+func (er EdgeRepository) CreateEdge(newEdge domain.Edge) (int, error) {
 	ctx := context.Background()
 
 	arg := mysqlc.CreateEdgeParams{
@@ -34,7 +34,7 @@ func (er *EdgeRepository) CreateEdge(newEdge domain.Edge) (int, error) {
 	return int(id), nil
 }
 
-func (er *EdgeRepository) GetEdgesFromWorkflow(workflowID int) (*[]domain.Edge, error) {
+func (er EdgeRepository) GetEdgesFromWorkflow(workflowID int) (*[]domain.Edge, error) {
 	ctx := context.Background()
 
 	edgeRows, err := er.queries.GetEdgesFromWorkflow(ctx, int32(workflowID))

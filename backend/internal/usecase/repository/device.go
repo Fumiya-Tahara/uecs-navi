@@ -18,7 +18,7 @@ func NewDeviceRepository(queries *mysqlc.Queries) *DeviceRepository {
 	}
 }
 
-func (dr *DeviceRepository) CreateDevice(newDevice domain.Device) (int, error) {
+func (dr DeviceRepository) CreateDevice(newDevice domain.Device) (int, error) {
 	ctx := context.Background()
 
 	arg := mysqlc.CreateDeviceParams{
@@ -36,7 +36,7 @@ func (dr *DeviceRepository) CreateDevice(newDevice domain.Device) (int, error) {
 	return int(id), nil
 }
 
-func (dr *DeviceRepository) GetDevicesFromM304(m304ID int) (*[]domain.Device, error) {
+func (dr DeviceRepository) GetDevicesFromM304(m304ID int) (*[]domain.Device, error) {
 	ctx := context.Background()
 
 	deviceRows, err := dr.queries.GetDevicesFromM304(ctx, int32(m304ID))

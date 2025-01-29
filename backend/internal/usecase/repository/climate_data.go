@@ -17,7 +17,7 @@ func NewClimateDataRepository(queries *mysqlc.Queries) *ClimateDataRepository {
 	}
 }
 
-func (cdr *ClimateDataRepository) GetAllClimateData() (*[]domain.ClimateData, error) {
+func (cdr ClimateDataRepository) GetAllClimateData() (*[]domain.ClimateData, error) {
 	ctx := context.Background()
 
 	climateDataRows, err := cdr.queries.GetAllClimateData(ctx)
@@ -37,7 +37,7 @@ func (cdr *ClimateDataRepository) GetAllClimateData() (*[]domain.ClimateData, er
 	return &climateData, nil
 }
 
-func (cdr *ClimateDataRepository) GetClimateDataFromID(id int) (*domain.ClimateData, error) {
+func (cdr ClimateDataRepository) GetClimateDataFromID(id int) (*domain.ClimateData, error) {
 	ctx := context.Background()
 
 	climateData, err := cdr.queries.GetClimateDataFromID(ctx, int32(id))
