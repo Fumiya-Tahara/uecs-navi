@@ -1,5 +1,6 @@
 package controller
 
+// Schemas
 // General schemas
 type ClimateData struct {
 	ID   int    `json:"id"`
@@ -129,4 +130,177 @@ type TimeScheduleResponse struct {
 	M304ID        int            `json:"m304_id"`
 	Workflows     []Workflow     `json:"Workflows"`
 	TimeSchedules []TimeSchedule `json:"time_schedules"`
+}
+
+// Constructors
+// General schema constructors
+func NewClimateData(id int, name, unit string) *ClimateData {
+	return &ClimateData{
+		ID:   id,
+		Name: name,
+		Unit: unit,
+	}
+}
+
+func NewRelays(relay1, relay2, relay3, relay4, relay5, relay6, relay7, relay8 bool) *Relays {
+	return &Relays{
+		Relay1: relay1,
+		Relay2: relay2,
+		Relay3: relay3,
+		Relay4: relay4,
+		Relay5: relay5,
+		Relay6: relay6,
+		Relay7: relay7,
+		Relay8: relay8,
+	}
+}
+
+func NewWorkflow(name string, m304ID, deviceID int) *Workflow {
+	return &Workflow{
+		Name:     name,
+		M304ID:   m304ID,
+		DeviceID: deviceID,
+	}
+}
+
+func NewCondition(selectedClimateDataID, selectedComparisonOperatorID int, setPoint float32) *Condition {
+	return &Condition{
+		SelectedClimateDataID:        selectedClimateDataID,
+		SelectedComparisonOperatorID: selectedComparisonOperatorID,
+		SetPoint:                     setPoint,
+	}
+}
+
+func NewTimeSchedule(startTime, endTime string, selectedWorkflowID int, condition Condition) *TimeSchedule {
+	return &TimeSchedule{
+		StartTime:          startTime,
+		EndTime:            endTime,
+		SelectedWorkflowID: selectedWorkflowID,
+		Condition:          condition,
+	}
+}
+
+// Request schema constructors
+func NewHouseRequest(name string) *HouseRequest {
+	request := HouseRequest(name)
+	return &request
+}
+
+// func NewDeviceRequest(deviceName string, climateDataID int, unit string, setPoint float32, duration int) *DeviceRequest {
+// 	return &DeviceRequest{
+// 		DeviceName:    deviceName,
+// 		ClimateDataID: climateDataID,
+// 		Unit:          unit,
+// 		SetPoint:      setPoint,
+// 		Duration:      duration,
+// 	}
+// }
+
+func NewNodeRequest(workflowNodeID, nodeType string, data map[string]interface{}, positionX, positionY float32) *NodeRequest {
+	return &NodeRequest{
+		WorkflowNodeID: workflowNodeID,
+		Type:           nodeType,
+		Data:           data,
+		PositionX:      positionX,
+		PositionY:      positionY,
+	}
+}
+
+func NewEdgeRequest(sourceNodeID, targetNodeID string) *EdgeRequest {
+	return &EdgeRequest{
+		SourceNodeID: sourceNodeID,
+		TargetNodeID: targetNodeID,
+	}
+}
+
+func NewWorkflowUIRequest(nodes []NodeRequest, edges []EdgeRequest) *WorkflowUIRequest {
+	return &WorkflowUIRequest{
+		Nodes: nodes,
+		Edges: edges,
+	}
+}
+
+func NewWorkflowWithUIRequest(workflow Workflow, workflowUI WorkflowUIRequest, relays Relays) *WorkflowWithUIRequest {
+	return &WorkflowWithUIRequest{
+		Workflow:   workflow,
+		WorkflowUI: workflowUI,
+		Relays:     relays,
+	}
+}
+
+func NewTimeScheduleRequest(m304ID int, timeSchedules []TimeSchedule) *TimeScheduleRequest {
+	return &TimeScheduleRequest{
+		M304ID:       m304ID,
+		TimeSchedule: timeSchedules,
+	}
+}
+
+// Response schema constructors
+func NewHousesResponse(id int, name string) *HousesResponse {
+	return &HousesResponse{
+		ID:   id,
+		Name: name,
+	}
+}
+
+// func NewDeviceResponse(id int, deviceName, climateData, unit string, setPoint float64, duration int) *DeviceResponse {
+// 	return &DeviceResponse{
+// 		ID:          id,
+// 		DeviceName:  deviceName,
+// 		ClimateData: climateData,
+// 		Unit:        unit,
+// 		SetPoint:    setPoint,
+// 		Duration:    duration,
+// 	}
+// }
+
+func NewWorkflowResponse(id, m304ID int, name string) *WorkflowResponse {
+	return &WorkflowResponse{
+		ID:     id,
+		M304ID: m304ID,
+		Name:   name,
+	}
+}
+
+func NewNodeResponse(id, workflowID int, workflowNodeID, nodeType string, data map[string]interface{}, positionX, positionY float32) *NodeResponse {
+	return &NodeResponse{
+		ID:             id,
+		WorkflowID:     workflowID,
+		WorkflowNodeID: workflowNodeID,
+		Type:           nodeType,
+		Data:           data,
+		PositionX:      positionX,
+		PositionY:      positionY,
+	}
+}
+
+func NewEdgeResponse(id, workflowID int, sourceNodeID, targetNodeID string) *EdgeResponse {
+	return &EdgeResponse{
+		ID:           id,
+		WorkflowID:   workflowID,
+		SourceNodeID: sourceNodeID,
+		TargetNodeID: targetNodeID,
+	}
+}
+
+func NewWorkflowUIResponse(nodes []NodeResponse, edges []EdgeResponse) *WorkflowUIResponse {
+	return &WorkflowUIResponse{
+		Nodes: nodes,
+		Edges: edges,
+	}
+}
+
+func NewWorkflowWithUIResponse(workflow WorkflowResponse, workflowUI WorkflowUIResponse) *WorkflowWithUIResponse {
+	return &WorkflowWithUIResponse{
+		Workflow:   workflow,
+		WorkflowUI: workflowUI,
+	}
+}
+
+func NewTimeScheduleResponse(m304ID int, workflows []Workflow, timeSchedules []TimeSchedule) *TimeScheduleResponse {
+	return &TimeScheduleResponse{
+		M304ID:        m304ID,
+		Workflows:     workflows,
+		TimeSchedules: timeSchedules,
+	}
 }
