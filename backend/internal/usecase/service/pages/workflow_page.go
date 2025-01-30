@@ -47,7 +47,7 @@ func (wps WorkflowPageService) GetWorkflowsWithUI(m304ID int) (*[]domain.Workflo
 	return workflows, nil
 }
 
-func (wps WorkflowPageService) CreateWorkflowsWithUI(workflow *domain.Workflow) error {
+func (wps WorkflowPageService) CreateWorkflowWithUI(workflow *domain.Workflow) error {
 	nodes := workflow.Node
 	for _, v := range nodes {
 		_, err := wps.nodeRepository.CreateNode(v)
