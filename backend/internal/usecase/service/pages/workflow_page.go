@@ -49,33 +49,36 @@ func (wps WorkflowPageService) GetWorkflowsWithUI(m304ID int) (*[]domain.Workflo
 }
 
 func (wps WorkflowPageService) CreateWorkflowWithUI(workflow *domain.Workflow) error {
-	nodes := workflow.Node
-	for _, v := range nodes {
-		_, err := wps.nodeRepository.CreateNode(v)
-		if err != nil {
-			log.Printf("Error creating node: %v", err)
-		}
-	}
-
-	edges := workflow.Edge
-	for _, v := range edges {
-		_, err := wps.edgeRepository.CreateEdge(v)
-		if err != nil {
-			log.Printf("Error creating node: %v", err)
-		}
-	}
-
-	_, err := wps.workflowRepository.CreateWorkflow(*workflow)
+	workflowID, err := wps.workflowRepository.CreateWorkflow(*workflow)
 	if err != nil {
 		log.Printf("Error creating workflow: %v", err)
 		return err
 	}
 
 	workflowOperation := workflow.Operations
+	workflowOperation.WorkflowID = workflowID
 	_, err = wps.workflowOperationRepository.CreateWorkflowOperation(workflowOperation)
 	if err != nil {
 		log.Printf("Error creating workflow operation: %v", err)
 		return err
+	}
+
+	nodes := workflow.Node
+	for _, node := range nodes {
+		node.WorkflowID = workflowID
+		_, err := wps.nodeRepository.CreateNode(node)
+		if err != nil {
+			log.Printf("Error creating node: %v", err)
+		}
+	}
+
+	edges := workflow.Edge
+	for _, edge := range edges {
+		edge.WorkflowID = workflowID
+		_, err := wps.edgeRepository.CreateEdge(edge)
+		if err != nil {
+			log.Printf("Error creating node: %v", err)
+		}
 	}
 
 	return nil
