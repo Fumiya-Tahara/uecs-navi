@@ -8,9 +8,10 @@ import (
 )
 
 type WorkflowPageService struct {
-	workflowRepository interfaces.WorkflowRepositoryInterface
-	nodeRepository     interfaces.NodeRepositoryInterface
-	edgeRepository     interfaces.EdgeRepositoryInterface
+	workflowRepository          interfaces.WorkflowRepositoryInterface
+	workflowOperationRepository interfaces.WorkflowOperationRepositoryInterface
+	nodeRepository              interfaces.NodeRepositoryInterface
+	edgeRepository              interfaces.EdgeRepositoryInterface
 }
 
 func NewWorkflowPageService(wr interfaces.WorkflowRepositoryInterface, nr interfaces.NodeRepositoryInterface, er interfaces.EdgeRepositoryInterface) *WorkflowPageService {
@@ -67,9 +68,15 @@ func (wps WorkflowPageService) CreateWorkflowWithUI(workflow *domain.Workflow) e
 	_, err := wps.workflowRepository.CreateWorkflow(*workflow)
 	if err != nil {
 		log.Printf("Error creating workflow: %v", err)
+		return err
 	}
 
-	// operationの追加を考える
+	workflowOperation := workflow.Operations
+	_, err = wps.workflowOperationRepository.CreateWorkflowOperation(workflowOperation)
+	if err != nil {
+		log.Printf("Error creating workflow operation: %v", err)
+		return err
+	}
 
 	return nil
 }
