@@ -47,7 +47,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/HousesRequest"
+              $ref: "#/components/schemas/HouseRequest"
       responses:
         "200":
           description: OK
@@ -157,7 +157,7 @@ paths:
                 schema:
                   type: array
                   items:
-                    $ref: "#/components/schemas/WorkflowResponse"
+                    $ref: "#/components/schemas/Workflow"
 
 components:
   parameters:
@@ -209,12 +209,12 @@ components:
     Workflow:
       type: object
       properties:
-        name:
-          type: string
+        id:
+          type: integer
         m304_id:
           type: integer
-        device_id:
-          type: integer
+        name:
+          type: string
     
     Condition:
       type: object
@@ -346,16 +346,6 @@ components:
         duration:
           type: integer
 
-    WorkflowResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-        m304_id:
-          type: integer
-        name:
-          type: string
-
     NodeResponse: 
       type: object
       properties:
@@ -405,7 +395,7 @@ components:
       type: object
       properties:
         workflow:
-          $ref: "#/components/schemas/WorkflowResponse"
+          $ref: "#/components/schemas/Workflow"
         workflowUI:
           $ref: "#/components/schemas/WorkflowUIResponse"
 
