@@ -1,15 +1,15 @@
 package dto
 
 type Workflow struct {
-	Name     string `json:"name"`
-	M304ID   int    `json:"m304_id"`
-	DeviceID int    `json:"device_id"`
+	ID     int    `json:"id"`
+	M304ID int    `json:"m304_id"`
+	Name   string `json:"name"`
 }
 
-func NewWorkflow(name string, m304ID, deviceID int) *Workflow {
+func NewWorkflow(id, m304ID int, name string) *Workflow {
 	return &Workflow{
-		Name:     name,
-		M304ID:   m304ID,
-		DeviceID: deviceID,
+		ID:     id,
+		Name:   name,
+		M304ID: m304ID,
 	}
 }
