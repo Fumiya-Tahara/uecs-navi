@@ -91,6 +91,11 @@ paths:
       tags:
         - CreateWorkflowPage
       summary: Get workflows with the state of React Flow.
+      requestBody:
+          content:
+            application/json:
+              schema:
+                 $ref: "#/components/schemas/M304IDRequest"
       responses:
         "200":
           description: OK
@@ -119,7 +124,12 @@ paths:
       operationId: getWorkflows
       tags:
         - TimeSchedulePage
-      summary: Get workflow to embed in time schedule
+      summary: Get time schedule
+      requestBody:
+          content:
+            application/json:
+              schema:
+                type: integer
       responses:
         "200":
           description: OK
@@ -142,22 +152,6 @@ paths:
       responses:
         "200":
           description: OK
-  
-  /workflows:
-    get:
-        operationId: getWorkflows
-        tags:
-          - TimeSchedulePage
-        summary: Get workflows list
-        responses:
-          "200":
-            description: OK
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/Workflow"
 
 components:
   parameters:
@@ -227,7 +221,7 @@ components:
           type: number
           format: float
     
-    TimeSchedule:
+    TimeScheduleRow:
       type: object
       properties:
         start_time:
@@ -246,6 +240,9 @@ components:
     # Request Schemas
     HouseRequest:
       type: string
+    
+    M304IDRequest:
+      type: integer
 
     DeviceRequest:
       type: object
@@ -319,7 +316,7 @@ components:
         time_schedule:
           type: array
           items: 
-            $ref: "#/components/schemas/TimeSchedule"
+            $ref: "#/components/schemas/TimeScheduleRow"
 
     # Response schemas
     HousesResponse:
@@ -402,13 +399,15 @@ components:
     TimeScheduleResponse:
       type: object
       properties:
+        id: 
+          type: integer
         m304_id:
           type: integer
-        Workflows:
+        workflows:
           type: array
           items:
             $ref: "#/components/schemas/Workflow"
         time_schedules:
           type: array
           items:
-            $ref: "#/components/schemas/TimeSchedule"
+            $ref: "#/components/schemas/TimeScheduleRow"
