@@ -21,6 +21,7 @@ func NewTimeSchedulePageService(tsr interfaces.TimeScheduleRepositoryInterface, 
 	}
 }
 
+// users table作成後はuser_idから各M304に登録されているtime_scheduleを全取得する
 func (tsps TimeSchedulePageService) GetTimeSchedule(m304ID int) (*domain.TimeSchedule, error) {
 	timeSchedule, err := tsps.timeScheduleRepository.GetTimeScheduleFromM304(m304ID)
 	if err != nil {
