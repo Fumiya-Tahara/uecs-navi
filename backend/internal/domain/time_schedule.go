@@ -8,6 +8,7 @@ type TimeScheduleRow struct {
 	StartTime      time.Time
 	EndTime        time.Time
 	WorkflowID     int
+	Condition      Condition
 }
 
 type TimeSchedule struct {
@@ -16,22 +17,24 @@ type TimeSchedule struct {
 	Rows   []TimeScheduleRow
 }
 
-func NewTimeScheduleRowWithID(id, timeScheduleID int, startTime time.Time, endTime time.Time, workflowID int) *TimeScheduleRow {
+func NewTimeScheduleRowWithID(id, timeScheduleID int, startTime time.Time, endTime time.Time, workflowID int, condition Condition) *TimeScheduleRow {
 	return &TimeScheduleRow{
 		ID:             id,
 		TimeScheduleID: timeScheduleID,
 		StartTime:      startTime,
 		EndTime:        endTime,
 		WorkflowID:     workflowID,
+		Condition:      condition,
 	}
 }
 
-func NewTimeScheduleRow(timeScheduleID int, startTime time.Time, endTime time.Time, workflowID int) *TimeScheduleRow {
+func NewTimeScheduleRow(timeScheduleID int, startTime time.Time, endTime time.Time, workflowID int, condition Condition) *TimeScheduleRow {
 	return &TimeScheduleRow{
 		TimeScheduleID: timeScheduleID,
 		StartTime:      startTime,
 		EndTime:        endTime,
 		WorkflowID:     workflowID,
+		Condition:      condition,
 	}
 }
 
