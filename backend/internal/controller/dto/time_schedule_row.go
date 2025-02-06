@@ -1,14 +1,14 @@
 package dto
 
-type TimeSchedule struct {
+type TimeScheduleRow struct {
 	StartTime          string    `json:"start_time"`
 	EndTime            string    `json:"end_time"`
 	SelectedWorkflowID int       `json:"selected_workflow_id"`
 	Condition          Condition `json:"condition"`
 }
 
-func NewTimeSchedule(startTime, endTime string, selectedWorkflowID int, condition Condition) *TimeSchedule {
-	return &TimeSchedule{
+func NewTimeScheduleRow(startTime, endTime string, selectedWorkflowID int, condition Condition) *TimeScheduleRow {
+	return &TimeScheduleRow{
 		StartTime:          startTime,
 		EndTime:            endTime,
 		SelectedWorkflowID: selectedWorkflowID,
