@@ -45,12 +45,14 @@ func (tsrr TimeScheduleRowRepository) GetTimeScheduleRowsFromTimeSchedule(timeSc
 
 	timeScheduleRows := make([]domain.TimeScheduleRow, len(timeScheduleRowRows))
 	for i, v := range timeScheduleRowRows {
+		undefinedCondition := domain.Condition{}
 		timeScheduleRows[i] = *domain.NewTimeScheduleRowWithID(
 			int(v.ID),
 			int(v.TimeScheduleID),
 			v.StartTime,
 			v.EndTime,
 			int(v.WorkflowID),
+			undefinedCondition,
 		)
 	}
 
