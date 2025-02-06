@@ -13,3 +13,19 @@ func ToDtoNodeResponse(nodes []domain.Node) *[]dto.NodeResponse {
 
 	return &nodesRes
 }
+
+func ToDomainNode(nodesReq []dto.NodeRequest) *[]domain.Node {
+	nodes := make([]domain.Node, len(nodesReq))
+	for i, nodeReq := range nodesReq {
+		undefinedWorkflowID := 0
+
+		nodePosition := domain.Position{
+			X: float64(nodeReq.PositionX),
+			Y: float64(nodeReq.PositionY),
+		}
+
+		nodes[i] = *domain.NewNode(undefinedWorkflowID, nodeReq.WorkflowNodeID, nodeReq.Type, nodeReq.Data, nodePosition)
+	}
+
+	return &nodes
+}

@@ -13,3 +13,14 @@ func ToDtoEdgeResponse(edges []domain.Edge) *[]dto.EdgeResponse {
 
 	return &edgesResponse
 }
+
+func ToDomainEdge(edgesReq []dto.EdgeRequest) *[]domain.Edge {
+	edges := make([]domain.Edge, len(edgesReq))
+	for i, edgeReq := range edgesReq {
+		undefinedWorkflowID := 0
+
+		edges[i] = *domain.NewEdge(undefinedWorkflowID, edgeReq.SourceNodeID, edgeReq.TargetNodeID)
+	}
+
+	return &edges
+}
