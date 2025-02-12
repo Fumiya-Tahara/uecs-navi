@@ -45,7 +45,7 @@ func (q *Queries) CreateWorkflowOperation(ctx context.Context, arg CreateWorkflo
 	return result.LastInsertId()
 }
 
-const getWorkflowOperationsFromWorkflow = `-- name: GetWorkflowOperationsFromWorkflow :many
+const getWorkflowOperationsFromWorkflow = `-- name: GetWorkflowOperationsFromWorkflow :one
 SELECT id, workflow_id, relay_1, relay_2, relay_3, relay_4, relay_5, relay_6, relay_7, relay_8
 FROM workflow_operations
 WHERE workflow_id = ?
@@ -64,36 +64,20 @@ type GetWorkflowOperationsFromWorkflowRow struct {
 	Relay8     sql.NullBool
 }
 
-func (q *Queries) GetWorkflowOperationsFromWorkflow(ctx context.Context, workflowID int32) ([]GetWorkflowOperationsFromWorkflowRow, error) {
-	rows, err := q.db.QueryContext(ctx, getWorkflowOperationsFromWorkflow, workflowID)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
-	var items []GetWorkflowOperationsFromWorkflowRow
-	for rows.Next() {
-		var i GetWorkflowOperationsFromWorkflowRow
-		if err := rows.Scan(
-			&i.ID,
-			&i.WorkflowID,
-			&i.Relay1,
-			&i.Relay2,
-			&i.Relay3,
-			&i.Relay4,
-			&i.Relay5,
-			&i.Relay6,
-			&i.Relay7,
-			&i.Relay8,
-		); err != nil {
-			return nil, err
-		}
-		items = append(items, i)
-	}
-	if err := rows.Close(); err != nil {
-		return nil, err
-	}
-	if err := rows.Err(); err != nil {
-		return nil, err
-	}
-	return items, nil
+func (q *Queries) GetWorkflowOperationsFromWorkflow(ctx context.Context, workflowID int32) (GetWorkflowOperationsFromWorkflowRow, error) {
+	row := q.db.QueryRowContext(ctx, getWorkflowOperationsFromWorkflow, workflowID)
+	var i GetWorkflowOperationsFromWorkflowRow
+	err := row.Scan(
+		&i.ID,
+		&i.WorkflowID,
+		&i.Relay1,
+		&i.Relay2,
+		&i.Relay3,
+		&i.Relay4,
+		&i.Relay5,
+		&i.Relay6,
+		&i.Relay7,
+		&i.Relay8,
+	)
+	return i, err
 }

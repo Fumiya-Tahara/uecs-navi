@@ -18,7 +18,7 @@ type CreateConditionParams struct {
 	ClimateDataID        int32
 	TimeScheduleRowID    int32
 	ComparisonOperatorID int32
-	SetPoint             int32
+	SetPoint             float64
 }
 
 func (q *Queries) CreateCondition(ctx context.Context, arg CreateConditionParams) (int64, error) {
@@ -45,7 +45,7 @@ type GetConditionFromTimeScheduleRowRow struct {
 	ClimateDataID        int32
 	TimeScheduleRowID    int32
 	ComparisonOperatorID int32
-	SetPoint             int32
+	SetPoint             float64
 }
 
 func (q *Queries) GetConditionFromTimeScheduleRow(ctx context.Context, timeScheduleRowID int32) (GetConditionFromTimeScheduleRowRow, error) {
