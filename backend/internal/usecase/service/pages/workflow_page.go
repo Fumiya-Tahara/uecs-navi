@@ -14,7 +14,7 @@ type WorkflowPageService struct {
 	edgeRepository              interfaces.EdgeRepositoryInterface
 }
 
-func NewWorkflowPageService(wr interfaces.WorkflowRepositoryInterface, nr interfaces.NodeRepositoryInterface, er interfaces.EdgeRepositoryInterface) *WorkflowPageService {
+func NewWorkflowPageService(wr interfaces.WorkflowRepositoryInterface, wor interfaces.WorkflowOperationRepositoryInterface, nr interfaces.NodeRepositoryInterface, er interfaces.EdgeRepositoryInterface) *WorkflowPageService {
 	return &WorkflowPageService{
 		workflowRepository: wr,
 		nodeRepository:     nr,
