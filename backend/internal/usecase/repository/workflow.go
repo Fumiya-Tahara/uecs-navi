@@ -11,8 +11,8 @@ type WorkflowRepository struct {
 	queries *mysqlc.Queries
 }
 
-func NewWorkflowRepository(queries *mysqlc.Queries) *ClimateDataRepository {
-	return &ClimateDataRepository{
+func NewWorkflowRepository(queries *mysqlc.Queries) *WorkflowRepository {
+	return &WorkflowRepository{
 		queries: queries,
 	}
 }
