@@ -121,7 +121,7 @@ paths:
 
   /time-schedule:
     get:
-      operationId: getWorkflows
+      operationId: getTimeSchedules
       tags:
         - TimeSchedulePage
       summary: Get time schedule
