@@ -17,7 +17,7 @@ import { WorkflowEditor } from "./workflow-editor";
 import { ReactFlowProvider } from "@xyflow/react";
 import { NodeInfoProvider } from "@/hooks/node-info-context";
 import { DnDProvider } from "@/hooks/dnd-context";
-import { SaveWorkflowButton } from "./save-button";
+import { SelectToolbar } from "./toolbar";
 
 function Workflow() {
   const [, setWorkflowInfo] = useWorkflowInfo();
@@ -41,10 +41,8 @@ function Workflow() {
   return (
     <Navigation>
       <Box sx={{ padding: "16px" }}>
+        <SelectToolbar />
         <WorkflowEditor />
-        <Box sx={{ pt: 1 }}>
-          <SaveWorkflowButton />
-        </Box>
       </Box>
     </Navigation>
   );
