@@ -249,18 +249,14 @@ components:
     DeviceRequest:
       type: object
       properties:
-        device_name:
-          type: string
         climate_data_id:
           type: integer
-        unit:
-          type: string
-        set_point:
-          type: number
-          format: float
-        duration:
+        m304_id:
           type: integer
-          nullable: true
+        name:
+          type: string
+        rly:
+          type: integer
 
     NodeRequest: 
       type: object
@@ -333,16 +329,13 @@ components:
       properties:
         id:
           type: integer
-        device_name:
+        climate_data_id:
+          type: integer
+        m304_id:
+          type: integer
+        name:
           type: string
-        climate_data:
-          type: string
-        unit:
-          type: string
-        set_point:
-          type: number
-          format: double
-        duration:
+        rly:
           type: integer
 
     WorkflowResponse:
