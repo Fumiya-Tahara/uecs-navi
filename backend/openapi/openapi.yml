@@ -64,7 +64,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/HousesRequest"
+              $ref: "#/components/schemas/HouseRequest"
       responses:
         "200":
           description: OK
@@ -108,6 +108,11 @@ paths:
       tags:
         - CreateWorkflowPage
       summary: Get workflows with the state of React Flow.
+      requestBody:
+          content:
+            application/json:
+              schema:
+                 $ref: "#/components/schemas/M304IDRequest"
       responses:
         "200":
           description: OK
@@ -133,10 +138,15 @@ paths:
 
   /time-schedule:
     get:
-      operationId: getWorkflows
+      operationId: getTimeSchedules
       tags:
         - TimeSchedulePage
-      summary: Get workflow to embed in time schedule
+      summary: Get time schedule
+      requestBody:
+          content:
+            application/json:
+              schema:
+                type: integer
       responses:
         "200":
           description: OK
@@ -159,22 +169,6 @@ paths:
       responses:
         "200":
           description: OK
-  
-  /workflows:
-    get:
-        operationId: getWorkflows
-        tags:
-          - TimeSchedulePage
-        summary: Get workflows list
-        responses:
-          "200":
-            description: OK
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/WorkflowResponse"
 
 components:
   parameters:
@@ -192,12 +186,13 @@ components:
         type: integer
 
   schemas:
+    # General schemas
     ClimateData:
       type: object
       properties:
         id:
           type: integer
-        climate_data:
+        name:
           type: string
         unit:
           type: string
@@ -225,12 +220,12 @@ components:
     Workflow:
       type: object
       properties:
-        name:
-          type: string
+        id:
+          type: integer
         m304_id:
           type: integer
-        device_id:
-          type: integer
+        name:
+          type: string
     
     Condition:
       type: object
@@ -243,7 +238,7 @@ components:
           type: number
           format: float
     
-    TimeSchedule:
+    TimeScheduleRow:
       type: object
       properties:
         start_time:
@@ -265,6 +260,9 @@ components:
     # Requests
     HousesRequest:
       type: string
+    
+    M304IDRequest:
+      type: integer
 
     DeviceRequest:
       type: object
@@ -329,14 +327,14 @@ components:
     TimeScheduleRequest:
       type: object
       properties:
+        m304_id:
+          type: integer
         time_schedule:
           type: array
           items: 
-            $ref: "#/components/schemas/TimeSchedule"
-        m304_id:
-          type: integer
+            $ref: "#/components/schemas/TimeScheduleRow"
 
-    # Responses
+    # Response schemas
     HousesResponse:
       type: object
       properties:
@@ -357,16 +355,6 @@ components:
           type: string
         rly:
           type: integer
-
-    WorkflowResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-        m304_id:
-          type: integer
-        name:
-          type: string
 
     NodeResponse: 
       type: object
@@ -417,20 +405,22 @@ components:
       type: object
       properties:
         workflow:
-          $ref: "#/components/schemas/WorkflowResponse"
+          $ref: "#/components/schemas/Workflow"
         workflowUI:
           $ref: "#/components/schemas/WorkflowUIResponse"
 
     TimeScheduleResponse:
       type: object
       properties:
+        id: 
+          type: integer
         m304_id:
           type: integer
-        Workflows:
+        workflows:
           type: array
           items:
             $ref: "#/components/schemas/Workflow"
         time_schedules:
           type: array
           items:
-            $ref: "#/components/schemas/TimeSchedule"
+            $ref: "#/components/schemas/TimeScheduleRow"
