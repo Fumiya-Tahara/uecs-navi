@@ -13,7 +13,7 @@ import { Handle, Position, Node, NodeProps } from "@xyflow/react";
 import { AddNodeFunction, UpdateNodeFunction } from "../workflow-editor";
 import { useCallback, useState } from "react";
 import { DeviceResponse } from "@/types/api";
-import { useNodeInfo } from "@/hooks/node-info-context";
+import { useNodeInfo } from "@/pages/create-workflow/context/node-info-context";
 
 export interface OperationNodeData {
   [key: string]: unknown;

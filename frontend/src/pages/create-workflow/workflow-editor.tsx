@@ -14,8 +14,8 @@ import {
 import "@xyflow/react/dist/style.css";
 import { useMemo, useEffect, useCallback, DragEvent } from "react";
 import { Sidebar } from "./sidebar";
-import { useDnD } from "@/hooks/dnd-context";
-import { useWorkflowInfo } from "@/hooks/workflow-info-context";
+import { useDnD } from "@/pages/create-workflow/context/dnd-context";
+import { useWorkflowInfo } from "@/pages/create-workflow/context/workflow-info-context";
 import {
   WorkflowNameNode,
   WorkflowNameNodeData,

@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { Navigation } from "@/layouts/navigation";
-import { WorkflowInfoProvider } from "@/hooks/workflow-info-context";
-import { useWorkflowInfo } from "@/hooks/workflow-info-context";
+import { WorkflowInfoProvider } from "@/pages/create-workflow/context/workflow-info-context";
+import { useWorkflowInfo } from "@/pages/create-workflow/context/workflow-info-context";
 import { useEffect } from "react";
 import { DeviceResponse, WorkflowWithUIResponse } from "@/types/api";
 import {
@@ -11,8 +11,8 @@ import {
 import { getM304s } from "@/features/api/mocks/utility-api";
 import { WorkflowEditor } from "./workflow-editor";
 import { ReactFlowProvider } from "@xyflow/react";
-import { NodeInfoProvider } from "@/hooks/node-info-context";
-import { DnDProvider } from "@/hooks/dnd-context";
+import { NodeInfoProvider } from "@/pages/create-workflow/context/node-info-context";
+import { DnDProvider } from "@/pages/create-workflow/context/dnd-context";
 import { SelectToolbar } from "./toolbar";
 
 function Workflow() {
