@@ -23,6 +23,23 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ClimateData"
+
+  /m304s:
+    get:
+      operationId: getM304s
+      tags:
+        - Utilities
+      summary: Get M304 ID list
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/M304ID"
+
   /houses:
     get:
       operationId: getHouses
@@ -241,6 +258,9 @@ components:
           type: integer
         condition:
             $ref: "#/components/schemas/Condition"
+
+    M304ID: 
+      type: integer
 
     # Requests
     HousesRequest:
