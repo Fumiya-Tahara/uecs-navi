@@ -93,7 +93,7 @@ export const OperationNode = ({ id, data }: OperationNodeProps) => {
               >
                 {devicesList.map((data) => (
                   <MenuItem key={data.id} value={data.id}>
-                    {data.device_name}
+                    {data.name}
                   </MenuItem>
                 ))}
               </Select>
