@@ -37,7 +37,12 @@ const getId = (type: string) => {
   return `${type}_${currentId}`;
 };
 
-export function WorkflowEditor() {
+interface WorkflowEditorProps {
+  m304ID: number;
+}
+
+export function WorkflowEditor(props: WorkflowEditorProps) {
+  const { m304ID } = props;
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const [type] = useDnD();
@@ -119,7 +124,7 @@ export function WorkflowEditor() {
       type: "workflow_name",
       position: { x: 0, y: 300 },
       data: {
-        devicesList: workflowInfo.devices,
+        devicesList: workflowInfo.m304DeviceMap.get(m304ID),
         updateNode: updateNodeData,
       },
     };
