@@ -13,6 +13,7 @@ import { WorkflowEditor } from "./workflow-editor";
 import { ReactFlowProvider } from "@xyflow/react";
 import { NodeInfoProvider } from "@/pages/create-workflow/context/node-info-context";
 import { DnDProvider } from "@/pages/create-workflow/context/dnd-context";
+import { SelectedDataProvider } from "./context/selected-data-context";
 import { SelectToolbar } from "./toolbar";
 
 function Workflow() {
@@ -64,7 +65,9 @@ export default function WorkflowWrapper() {
       <ReactFlowProvider>
         <NodeInfoProvider>
           <DnDProvider>
-            <Workflow />
+            <SelectedDataProvider>
+              <Workflow />
+            </SelectedDataProvider>
           </DnDProvider>
         </NodeInfoProvider>
       </ReactFlowProvider>
