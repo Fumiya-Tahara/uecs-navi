@@ -29,7 +29,9 @@ type OperationNodeProps = NodeProps<OperationNodePropsType>;
 
 export const OperationNode = ({ id, data }: OperationNodeProps) => {
   const { devicesList, addNode, updateNode } = data;
-  const [selectedDevice, setSelectedDevice] = useState<string>("");
+  const [selectedDevice, setSelectedDevice] = useState<string>(
+    data.device_id ? String(data.device_id) : ""
+  );
   const [nodeInfo, setNodeInfo] = useNodeInfo();
   const handleSelectedDeviceChange = useCallback(
     (event: SelectChangeEvent) => {
