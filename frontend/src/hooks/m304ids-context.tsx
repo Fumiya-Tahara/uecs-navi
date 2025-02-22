@@ -22,7 +22,7 @@ const M304IDsContext = createContext<m304IDsContextType>([
   () => {},
 ]);
 
-export const WorkflowInfoProvider = ({
+export const M304IDsProvider = ({
   children,
 }: {
   children: React.ReactNode;
