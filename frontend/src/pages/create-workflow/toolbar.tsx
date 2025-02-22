@@ -134,6 +134,9 @@ function SelectWorkflow() {
         }
         onChange={handleSelectedWorkflowChange}
       >
+        <MenuItem value={String(0)} sx={{ color: "green" }}>
+          ＋新規作成
+        </MenuItem>
         {workflows.map((workflow, index) => (
           <MenuItem key={index} value={String(workflow.workflow.id)}>
             {workflow.workflow.name}
