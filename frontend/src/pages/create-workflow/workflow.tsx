@@ -8,24 +8,24 @@ import {
   getDevices,
   getWorkflowsWithUI,
 } from "@/features/api/mocks/workflow-api";
-import { getM304s } from "@/features/api/mocks/utility-api";
 import { WorkflowEditor } from "./workflow-editor";
 import { ReactFlowProvider } from "@xyflow/react";
 import { NodeInfoProvider } from "@/pages/create-workflow/context/node-info-context";
 import { DnDProvider } from "@/pages/create-workflow/context/dnd-context";
 import { SelectedDataProvider } from "./context/selected-data-context";
 import { SelectToolbar } from "./toolbar";
+import { useM304IDs } from "@/hooks/m304ids-context";
 
 function Workflow() {
   const [, setWorkflowInfo] = useWorkflowInfo();
+  const [m304IDs] = useM304IDs();
 
   useEffect(() => {
     const fetchWorkflowData = async () => {
-      const m304Res: number[] = await getM304s();
       const m304DeviceMap = new Map<number, DeviceResponse[]>();
       const m304WorkflowMap = new Map<number, WorkflowWithUIResponse[]>();
 
-      for (const m304ID of m304Res) {
+      for (const m304ID of m304IDs.m304IDs) {
         const devicesRes: DeviceResponse[] | undefined = await getDevices(
           m304ID
         );
