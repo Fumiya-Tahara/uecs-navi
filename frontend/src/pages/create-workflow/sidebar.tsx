@@ -5,19 +5,28 @@ import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import { useState, useEffect } from "react";
 import { DeviceResponse } from "@/types/api";
 import { getDevices } from "@/features/api/mocks/workflow-api";
+import { useSelectedData } from "./context/selected-data-context";
 
 export const Sidebar = () => {
   const [, setType] = useDnD();
   const [fetchedDevices, setFetchedDevices] = useState<DeviceResponse[]>([]);
+  const [selectedData] = useSelectedData();
 
   useEffect(() => {
     const fetchDevices = async () => {
-      const devicesRes: DeviceResponse[] = await getDevices();
-      setFetchedDevices(devicesRes);
+      if (selectedData.selectedM304ID) {
+        const devicesRes: DeviceResponse[] | undefined = await getDevices(
+          selectedData.selectedM304ID
+        );
+
+        if (devicesRes) {
+          setFetchedDevices(devicesRes);
+        }
+      }
     };
 
     fetchDevices();
-  }, []);
+  }, [selectedData.selectedM304ID]);
 
   const onDragStart = (
     event: DragEvent,
