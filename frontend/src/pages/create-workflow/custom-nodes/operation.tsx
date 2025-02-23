@@ -10,18 +10,9 @@ import {
 } from "@mui/material";
 import DevicesIcon from "@mui/icons-material/Devices";
 import { Handle, Position, Node, NodeProps } from "@xyflow/react";
-import { AddNodeFunction, UpdateNodeFunction } from "../workflow-editor";
 import { useCallback, useState } from "react";
-import { DeviceResponse } from "@/types/api";
 import { useNodeInfo } from "@/pages/create-workflow/context/node-info-context";
-
-export interface OperationNodeData {
-  [key: string]: unknown;
-  devicesList: DeviceResponse[];
-  addNode: AddNodeFunction;
-  updateNode: UpdateNodeFunction;
-  device_id: number;
-}
+import { OperationNodeData } from "@/types/workflow";
 
 type OperationNodePropsType = Node<OperationNodeData>;
 

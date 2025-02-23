@@ -16,21 +16,11 @@ import { useMemo, useEffect, useCallback, DragEvent } from "react";
 import { Sidebar } from "./sidebar";
 import { useDnD } from "@/pages/create-workflow/context/dnd-context";
 import { useWorkflowInfo } from "@/pages/create-workflow/context/workflow-info-context";
-import {
-  WorkflowNameNode,
-  WorkflowNameNodeData,
-} from "./custom-nodes/workflow-name";
-import { OperationNode, OperationNodeData } from "./custom-nodes/operation";
+import { WorkflowNameNode } from "./custom-nodes/workflow-name";
+import { OperationNode } from "./custom-nodes/operation";
 import { useSelectedData } from "./context/selected-data-context";
 import { WorkflowWithUIResponse } from "@/types/api";
-
-type CustomNodeData = WorkflowNameNodeData | OperationNodeData;
-
-export type AddNodeFunction = (parentNodeId: string) => void;
-export type UpdateNodeFunction = (
-  id: string,
-  updatedData: CustomNodeData
-) => void;
+import { CustomNodeData } from "@/types/workflow";
 
 const nodeIdMap: Map<string, number> = new Map();
 const getId = (type: string) => {

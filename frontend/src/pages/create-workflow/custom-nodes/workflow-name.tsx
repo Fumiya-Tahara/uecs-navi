@@ -1,13 +1,7 @@
 import { Box, Divider, Typography, TextField } from "@mui/material";
 import TimelineIcon from "@mui/icons-material/Timeline";
 import { Handle, Position, Node, NodeProps } from "@xyflow/react";
-import { AddNodeFunction, UpdateNodeFunction } from "../workflow-editor";
-
-export interface WorkflowNameNodeData {
-  [key: string]: unknown;
-  addNode: AddNodeFunction;
-  updateNode: UpdateNodeFunction;
-}
+import { WorkflowNameNodeData } from "@/types/workflow";
 
 type WorkflowNameNodePropsType = Node<WorkflowNameNodeData>;
 

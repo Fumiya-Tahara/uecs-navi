@@ -1,15 +1,23 @@
-export interface Condition {
-  climate_data_id: number;
-  comp_ope_id: number;
-  set_point: number;
+import { DeviceResponse } from "./api";
+
+export type CustomNodeData = WorkflowNameNodeData | OperationNodeData;
+
+export type AddNodeFunction = (parentNodeId: string) => void;
+export type UpdateNodeFunction = (
+  id: string,
+  updatedData: CustomNodeData
+) => void;
+
+export interface WorkflowNameNodeData {
+  [key: string]: unknown;
+  addNode: AddNodeFunction;
+  updateNode: UpdateNodeFunction;
 }
 
-export interface ConditionOperation {
-  condition: Condition;
-  operation_id: number;
-}
-
-export interface WorkflowData {
+export interface OperationNodeData {
+  [key: string]: unknown;
+  devicesList: DeviceResponse[];
+  addNode: AddNodeFunction;
+  updateNode: UpdateNodeFunction;
   device_id: number;
-  condition_operations: ConditionOperation[];
 }
