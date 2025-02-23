@@ -21,17 +21,17 @@ type OperationNodeProps = NodeProps<OperationNodePropsType>;
 export const OperationNode = ({ id, data }: OperationNodeProps) => {
   const { devicesList, addNode, updateNode } = data;
   const [selectedDevice, setSelectedDevice] = useState<string>(
-    data.device_id ? String(data.device_id) : ""
+    data.deviceID ? String(data.deviceID) : ""
   );
   const [nodeInfo, setNodeInfo] = useNodeInfo();
   const handleSelectedDeviceChange = useCallback(
     (event: SelectChangeEvent) => {
       const selectedDeviceID: number = parseInt(event.target.value, 10);
-      nodeInfo.device_id = selectedDeviceID;
+      nodeInfo.deviceID = selectedDeviceID;
 
       setSelectedDevice(event.target.value);
       setNodeInfo(nodeInfo);
-      updateNode(id, { ...data, device_id: selectedDeviceID });
+      updateNode(id, { ...data, deviceID: selectedDeviceID });
     },
     [id, updateNode, data, setSelectedDevice]
   );

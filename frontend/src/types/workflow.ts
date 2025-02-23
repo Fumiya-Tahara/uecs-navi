@@ -12,6 +12,7 @@ export interface WorkflowNameNodeData {
   [key: string]: unknown;
   addNode: AddNodeFunction;
   updateNode: UpdateNodeFunction;
+  workflowName: string;
 }
 
 export interface OperationNodeData {
@@ -19,5 +20,5 @@ export interface OperationNodeData {
   devicesList: DeviceResponse[];
   addNode: AddNodeFunction;
   updateNode: UpdateNodeFunction;
-  device_id: number;
+  deviceID: number;
 }
