@@ -21,6 +21,7 @@ import { OperationNode } from "./custom-nodes/operation";
 import { useSelectedData } from "./context/selected-data-context";
 import { WorkflowWithUIResponse } from "@/types/api";
 import { CustomNodeData } from "@/types/workflow";
+import { useNodesAndEdges } from "@/lib/nodes-and-edges-store";
 
 const nodeIdMap: Map<string, number> = new Map();
 const getId = (type: string) => {
@@ -40,6 +41,17 @@ export function WorkflowEditor(props: WorkflowEditorProps) {
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const [type] = useDnD();
   const [workflowInfo] = useWorkflowInfo();
+
+  const setGlobalNodes = useNodesAndEdges((state) => state.setNodes);
+  const setGlobalEdges = useNodesAndEdges((state) => state.setEdges);
+
+  useEffect(() => {
+    setGlobalNodes(nodes);
+  }, [nodes, setGlobalNodes]);
+
+  useEffect(() => {
+    setGlobalEdges(edges);
+  }, [edges, setGlobalEdges]);
 
   const nodeTypes = useMemo(
     () => ({
@@ -80,6 +92,7 @@ export function WorkflowEditor(props: WorkflowEditorProps) {
                   data: {
                     ...(node.data as Record<string, unknown>),
                     // 必要なデータ
+                    updateNode: updateNodeData,
                     devicesList: workflowInfo.m304DeviceMap.get(
                       selectedData.selectedM304ID
                     ),
@@ -89,40 +102,6 @@ export function WorkflowEditor(props: WorkflowEditorProps) {
 
               return undefined;
           }
-          // if (node.node_type === "select_device") {
-          //   return {
-          //     id: node.workflow_node_id,
-          //     type: node.node_type,
-          //     position: { x: node.position_x, y: node.position_y },
-          //     data: {
-          //       ...(node.data as Record<string, unknown>),
-          //       devicesList: workflowInfo.devices,
-          //       updateNode: updateNodeData,
-          //     },
-          //   };
-          // } else if (node.node_type === "condition") {
-          //   return {
-          //     id: node.workflow_node_id,
-          //     type: node.node_type,
-          //     position: { x: node.position_x, y: node.position_y },
-          //     data: {
-          //       ...(node.data as Record<string, unknown>),
-          //       climateDataList: workflowInfo.climate_data,
-          //       updateNode: updateNodeData,
-          //     },
-          //   };
-          // } else if (node.node_type === "device_operation") {
-          //   return {
-          //     id: node.workflow_node_id,
-          //     type: node.node_type,
-          //     position: { x: node.position_x, y: node.position_y },
-          //     data: {
-          //       ...(node.data as Record<string, unknown>),
-          //       operationsList: workflowInfo.operations,
-          //       updateNode: updateNodeData,
-          //     },
-          //   };
-          // }
 
           return undefined;
         })
