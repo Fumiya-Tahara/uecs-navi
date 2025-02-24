@@ -14,8 +14,14 @@ import { useSelectedData } from "./context/selected-data-context";
 import { SelectChangeEvent } from "@mui/material";
 import { useWorkflowInfo } from "./context/workflow-info-context";
 import { useEffect, useState } from "react";
-import { WorkflowWithUIResponse } from "@/types/api";
+import {
+  DeviceResponse,
+  WorkflowWithUIRequest,
+  WorkflowWithUIResponse,
+} from "@/types/api";
 import { useM304IDs } from "@/hooks/m304ids-context";
+import { useNodesAndEdges } from "@/lib/nodes-and-edges-store";
+import { createWorkflowWithUIRequest } from "@/features/workflow/create-workflow-req";
 
 export function SelectToolbar() {
   return (
@@ -44,8 +50,42 @@ export function SelectToolbar() {
 }
 
 function SaveWorkflowButton() {
+  const nodes = useNodesAndEdges((state) => state.nodes);
+  const edges = useNodesAndEdges((state) => state.edges);
+
+  const [selectedData] = useSelectedData();
+  const [workflowInfo] = useWorkflowInfo();
+
+  const handleClick = () => {
+    const m304ID: number | null = selectedData.selectedM304ID;
+    let workflowID: number | undefined =
+      selectedData.selectedWorkflow?.workflow.id;
+
+    if (!m304ID) {
+      return;
+    }
+
+    if (!workflowID) {
+      workflowID = 0;
+    }
+
+    const deviceList: DeviceResponse[] | undefined =
+      workflowInfo.m304DeviceMap.get(m304ID);
+
+    if (!deviceList) {
+      return;
+    }
+
+    const workflowReq: WorkflowWithUIRequest | null =
+      createWorkflowWithUIRequest(workflowID, m304ID, deviceList, nodes, edges);
+
+    if (workflowReq) {
+      console.log(workflowReq);
+    }
+  };
+
   return (
-    <Button variant="contained" size="small">
+    <Button variant="contained" size="small" onClick={handleClick}>
       保存する
     </Button>
   );
