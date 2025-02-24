@@ -10,12 +10,13 @@ import {
 import { Edge, Node } from "@xyflow/react";
 
 export function createWorkflowWithUIRequest(
+  workflowID: number,
   m304ID: number,
   devicesList: DeviceResponse[],
   nodes: Node[],
   edges: Edge[]
 ): WorkflowWithUIRequest | null {
-  const workflow: Workflow | null = createWorkflow(m304ID, nodes);
+  const workflow: Workflow | null = createWorkflow(workflowID, m304ID, nodes);
   const workflowUI: WorkflowUIRequest | null = createWorkflowUIRequest(
     nodes,
     edges
@@ -71,7 +72,11 @@ function createWorkflowUIRequest(
   return workflowUIReq;
 }
 
-function createWorkflow(m304ID: number, nodes: Node[]): Workflow | null {
+function createWorkflow(
+  workflowID: number,
+  m304ID: number,
+  nodes: Node[]
+): Workflow | null {
   let workflowName: string = "";
 
   nodes.forEach((node) => {
@@ -81,7 +86,7 @@ function createWorkflow(m304ID: number, nodes: Node[]): Workflow | null {
   });
 
   const workflow: Workflow = {
-    id: 0,
+    id: workflowID,
     m304_id: m304ID,
     name: workflowName,
   };
