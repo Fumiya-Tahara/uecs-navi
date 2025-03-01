@@ -1,4 +1,4 @@
-import { ClimateData, Workflow } from "@/types/api";
+import { ClimateData, TimeScheduleResponse } from "@/types/api";
 import {
   createContext,
   useContext,
@@ -7,10 +7,10 @@ import {
   SetStateAction,
 } from "react";
 
-type timeScheduleInfoState = {
-  climate_data: ClimateData[];
-  m304WorkflowMap: Map<number, Workflow[]>;
-};
+export type timeScheduleInfoState = {
+  climateData: ClimateData[];
+  m304TimeScheduleMap: Map<number, TimeScheduleResponse>;
+} | null;
 
 type timeScheduleInfoContextType = [
   timeScheduleInfoState,
@@ -18,10 +18,7 @@ type timeScheduleInfoContextType = [
 ];
 
 const timeScheduleInfoContext = createContext<timeScheduleInfoContextType>([
-  {
-    climate_data: [],
-    m304WorkflowMap: new Map<number, Workflow[]>(),
-  },
+  null,
   () => {},
 ]);
 
@@ -31,10 +28,7 @@ export const TimeScheduleInfoProvider = ({
   children: React.ReactNode;
 }) => {
   const [timeScheduleInfo, setTimeScheduleInfo] =
-    useState<timeScheduleInfoState>({
-      climate_data: [],
-      m304WorkflowMap: new Map<number, Workflow[]>(),
-    });
+    useState<timeScheduleInfoState>(null);
 
   return (
     <timeScheduleInfoContext.Provider

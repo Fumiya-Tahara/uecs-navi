@@ -1,5 +1,10 @@
-import { TimeSchedule } from "@/components/time-schedule/time-schedule";
+import { TimeSchedule } from "@/pages/time-schedule/time-schedule";
+import { TimeScheduleInfoProvider } from "@/hooks/time-schedule-info-context";
 
 export default function SettingTimeSchedule() {
-  return <TimeSchedule />;
+  return (
+    <TimeScheduleInfoProvider>
+      <TimeSchedule />
+    </TimeScheduleInfoProvider>
+  );
 }

@@ -7,7 +7,7 @@ import {
 } from "react";
 
 type M304IDsState = {
-  m304IDs: number[];
+  m304IDs: number[] | null;
 };
 
 type m304IDsContextType = [
@@ -17,7 +17,7 @@ type m304IDsContextType = [
 
 const M304IDsContext = createContext<m304IDsContextType>([
   {
-    m304IDs: [],
+    m304IDs: null,
   },
   () => {},
 ]);
