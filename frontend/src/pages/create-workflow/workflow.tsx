@@ -25,6 +25,10 @@ function Workflow() {
       const m304DeviceMap = new Map<number, DeviceResponse[]>();
       const m304WorkflowMap = new Map<number, WorkflowWithUIResponse[]>();
 
+      if (!m304IDs.m304IDs) {
+        return;
+      }
+
       for (const m304ID of m304IDs.m304IDs) {
         const devicesRes: DeviceResponse[] | undefined = await getDevices(
           m304ID
