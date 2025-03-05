@@ -5,7 +5,7 @@ import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { WorkflowSelect } from "./select-workflow";
 import { EnvConditionForms } from "./env-condition-forms";
 import { Workflow, TimeScheduleRow } from "@/types/api";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface TimeTableRowProps {
   timeScheduleRow: TimeScheduleRow | null;
@@ -19,6 +19,11 @@ export function TimeTableRow(props: TimeTableRowProps) {
   const [, setSelectedWorkflowID] = useState<number>(
     timeScheduleRow?.selected_workflow_id || 0
   );
+  const [, forceRender] = useState(0);
+
+  useEffect(() => {
+    forceRender((prev) => prev + 1); // state を変更して強制リレンダリング
+  }, [timeScheduleRow]);
 
   const handleStartTimeChange = (value: string) => {
     if (value !== undefined) {
@@ -62,7 +67,9 @@ export function TimeTableRow(props: TimeTableRowProps) {
             ampm={false}
             value={
               timeScheduleRow?.start_time
-                ? dayjs(timeScheduleRow.start_time, "HH:mm")
+                ? dayjs(timeScheduleRow.start_time, "HH:mm").isValid()
+                  ? dayjs(timeScheduleRow.start_time, "HH:mm")
+                  : null
                 : null
             }
             onChange={(value) => {
@@ -92,7 +99,9 @@ export function TimeTableRow(props: TimeTableRowProps) {
             ampm={false}
             value={
               timeScheduleRow?.end_time
-                ? dayjs(timeScheduleRow.end_time, "HH:mm")
+                ? dayjs(timeScheduleRow.end_time, "HH:mm").isValid()
+                  ? dayjs(timeScheduleRow.end_time, "HH:mm")
+                  : null
                 : null
             }
             onChange={(value) => {
