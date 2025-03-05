@@ -10,7 +10,7 @@ import {
 export type timeScheduleInfoState = {
   climateData: ClimateData[];
   m304TimeScheduleMap: Map<number, TimeScheduleResponse>;
-} | null;
+};
 
 type timeScheduleInfoContextType = [
   timeScheduleInfoState,
@@ -18,7 +18,10 @@ type timeScheduleInfoContextType = [
 ];
 
 const timeScheduleInfoContext = createContext<timeScheduleInfoContextType>([
-  null,
+  {
+    climateData: [],
+    m304TimeScheduleMap: new Map<number, TimeScheduleResponse>(),
+  },
   () => {},
 ]);
 
@@ -28,7 +31,10 @@ export const TimeScheduleInfoProvider = ({
   children: React.ReactNode;
 }) => {
   const [timeScheduleInfo, setTimeScheduleInfo] =
-    useState<timeScheduleInfoState>(null);
+    useState<timeScheduleInfoState>({
+      climateData: [],
+      m304TimeScheduleMap: new Map<number, TimeScheduleResponse>(),
+    });
 
   return (
     <timeScheduleInfoContext.Provider
