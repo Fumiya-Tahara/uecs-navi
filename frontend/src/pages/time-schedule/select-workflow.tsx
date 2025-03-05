@@ -43,7 +43,11 @@ export const WorkflowSelect = (props: WorkflowSelectProps) => {
       <Select
         labelId="workflow-select-label"
         id="workflow-select"
-        value={selectedWorkflow ? String(selectedWorkflow.id) : ""}
+        value={
+          selectedWorkflow && selectedWorkflow.id !== 0
+            ? String(selectedWorkflow.id)
+            : ""
+        }
         onChange={handleWorkflowChange}
         label="ワークフロー"
         notched

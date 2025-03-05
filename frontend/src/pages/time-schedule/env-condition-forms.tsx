@@ -88,7 +88,7 @@ export const EnvConditionForms = (props: EnvConditionFormsProps) => {
           <Select
             id="comp-ope"
             labelId="comp-ope-label"
-            value={selectedCmpOpe}
+            value={selectedCmpOpe != "0" ? selectedCmpOpe : ""}
             size="small"
             onChange={handleCmpOpeChange}
             sx={{ marginX: 1 }}
