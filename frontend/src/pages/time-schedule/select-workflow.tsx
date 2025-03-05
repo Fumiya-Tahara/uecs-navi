@@ -1,6 +1,6 @@
 import { Workflow } from "@/types/api";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SelectChangeEvent } from "@mui/material";
 
 interface WorkflowSelectProps {
@@ -17,6 +17,14 @@ export const WorkflowSelect = (props: WorkflowSelectProps) => {
   const [selectedWorkflow, setSelectedWorkflow] = useState<Workflow | null>(
     initialWorkflow
   );
+
+  useEffect(() => {
+    if (!initialWorkflow) {
+      return;
+    }
+
+    setSelectedWorkflow(initialWorkflow);
+  }, []);
 
   const handleWorkflowChange = (event: SelectChangeEvent) => {
     const workflowID = parseInt(event.target.value);

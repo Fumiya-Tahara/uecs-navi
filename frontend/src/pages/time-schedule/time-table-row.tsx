@@ -4,7 +4,7 @@ import dayjs from "dayjs";
 import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { WorkflowSelect } from "./select-workflow";
 import { EnvConditionForms } from "./env-condition-forms";
-import { Workflow, TimeScheduleRow } from "@/types/api";
+import { Workflow, TimeScheduleRow, Condition } from "@/types/api";
 import { useEffect, useState } from "react";
 
 interface TimeTableRowProps {
@@ -20,6 +20,11 @@ export function TimeTableRow(props: TimeTableRowProps) {
     timeScheduleRow?.selected_workflow_id || 0
   );
   const [, forceRender] = useState(0);
+  const [, setCondition] = useState<Condition | null>(null);
+
+  const selectedWorkflow: Workflow | undefined = workflows.find(
+    (workflow) => workflow.id === timeScheduleRow?.selected_workflow_id
+  );
 
   useEffect(() => {
     forceRender((prev) => prev + 1); // state を変更して強制リレンダリング
@@ -50,6 +55,11 @@ export function TimeTableRow(props: TimeTableRowProps) {
       const selectedWorkflowID: number = updatedData.id;
       setSelectedWorkflowID(selectedWorkflowID);
     }
+  };
+
+  const handleConditionChange = (updatedData: Condition) => {
+    const newCondition: Condition = updatedData;
+    setCondition(newCondition);
   };
 
   return (
@@ -126,14 +136,18 @@ export function TimeTableRow(props: TimeTableRowProps) {
       </TableCell>
       <TableCell>
         <WorkflowSelect
-          initialWorkflow={null}
-          index={0}
+          initialWorkflow={selectedWorkflow || null}
+          index={index}
           workflows={workflows}
           onSelectChange={handleSelectChange}
         />
       </TableCell>
       <TableCell>
-        <EnvConditionForms />
+        <EnvConditionForms
+          initialCondition={timeScheduleRow?.condition || null}
+          index={index}
+          onSelectChange={handleConditionChange}
+        />
       </TableCell>
     </TableRow>
   );

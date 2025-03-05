@@ -9,16 +9,42 @@ import {
   InputAdornment,
   SelectChangeEvent,
 } from "@mui/material";
-import { ClimateData } from "@/types/api";
-import { useState } from "react";
+import { ClimateData, Condition } from "@/types/api";
+import { useEffect, useState } from "react";
 
-export const EnvConditionForms = () => {
+interface EnvConditionFormsProps {
+  initialCondition: Condition | null;
+  index: number;
+  onSelectChange: (updatedData: Condition) => void;
+}
+
+export const EnvConditionForms = (props: EnvConditionFormsProps) => {
+  const { initialCondition } = props;
   const [timeScheduleInfo] = useTimeScheduleInfo();
   const [selectedClimateData, setSelectedClimateData] = useState<
     ClimateData | undefined
   >(undefined);
   const [selectedCmpOpe, setSelectedCmpOpe] = useState<string>("");
+  const [setPoint, setSetPoint] = useState<number>(0);
 
+  useEffect(() => {
+    if (!initialCondition) {
+      return;
+    }
+
+    const selectedClimateData: ClimateData | undefined =
+      timeScheduleInfo.climateData.find(
+        (climateData) =>
+          climateData.id === initialCondition.selected_climate_data_id
+      );
+
+    if (selectedClimateData) {
+      setSelectedClimateData(selectedClimateData);
+    }
+
+    setSelectedCmpOpe(String(initialCondition.selected_comparison_operator_id));
+    setSetPoint(initialCondition.set_point);
+  });
   const handleClimateDataChange = (event: SelectChangeEvent) => {
     const climateDataID = parseInt(event.target.value);
     const climateDataRec = timeScheduleInfo?.climateData.find(
@@ -79,6 +105,7 @@ export const EnvConditionForms = () => {
         <TextField
           type="number"
           size="small"
+          value={setPoint}
           slotProps={{
             input: {
               endAdornment: (

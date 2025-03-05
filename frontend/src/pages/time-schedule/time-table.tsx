@@ -78,6 +78,10 @@ export function TimeTable(props: TimeTableProps) {
     }
   };
 
+  const handleSave = () => {
+    console.log(timeSchedule);
+  };
+
   return (
     <Box>
       <TableContainer component={Paper}>
@@ -113,13 +117,20 @@ export function TimeTable(props: TimeTableProps) {
           </TableBody>
         </Table>
       </TableContainer>
-      <Box sx={{ mt: 1, display: "flex", gap: 1 }}>
-        <Button size="small" variant="contained" onClick={handleAddRow}>
-          行を追加
-        </Button>
-        <Button size="small" variant="outlined" onClick={handleRemoveRow}>
-          行を削除
-        </Button>
+      <Box sx={{ mt: 1, display: "flex", justifyContent: "space-between" }}>
+        <Box sx={{ display: "flex", gap: 1 }}>
+          <Button size="small" variant="contained" onClick={handleAddRow}>
+            行を追加
+          </Button>
+          <Button size="small" variant="outlined" onClick={handleRemoveRow}>
+            行を削除
+          </Button>
+        </Box>
+        <Box>
+          <Button size="small" variant="contained" onClick={handleSave}>
+            保存する
+          </Button>
+        </Box>
       </Box>
     </Box>
   );

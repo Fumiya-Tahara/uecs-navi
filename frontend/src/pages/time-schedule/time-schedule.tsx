@@ -88,7 +88,7 @@ export function TimeSchedule() {
           aria-label="basic tabs example"
         >
           {m304IDs.m304IDs?.map((m304ID, index) => (
-            <Tab key={index} label={m304ID} {...a11yProps(index)} />
+            <Tab key={index} label={`M304ID-${m304ID}`} {...a11yProps(index)} />
           ))}
         </Tabs>
       </Box>
