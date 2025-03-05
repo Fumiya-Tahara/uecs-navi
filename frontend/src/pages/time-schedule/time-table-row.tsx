@@ -16,11 +16,7 @@ interface TimeTableRowProps {
 
 export function TimeTableRow(props: TimeTableRowProps) {
   const { timeScheduleRow, workflows, index, onRowChange } = props;
-  const [, setSelectedWorkflowID] = useState<number>(
-    timeScheduleRow?.selected_workflow_id || 0
-  );
   const [, forceRender] = useState(0);
-  const [, setCondition] = useState<Condition | null>(null);
 
   const selectedWorkflow: Workflow | undefined = workflows.find(
     (workflow) => workflow.id === timeScheduleRow?.selected_workflow_id
@@ -53,13 +49,23 @@ export function TimeTableRow(props: TimeTableRowProps) {
   const handleSelectChange = (updatedData: Workflow) => {
     if (timeScheduleRow) {
       const selectedWorkflowID: number = updatedData.id;
-      setSelectedWorkflowID(selectedWorkflowID);
+      const newTimeScheduleRow: TimeScheduleRow = {
+        ...timeScheduleRow,
+        selected_workflow_id: selectedWorkflowID,
+      };
+      onRowChange(index, newTimeScheduleRow);
     }
   };
 
   const handleConditionChange = (updatedData: Condition) => {
-    const newCondition: Condition = updatedData;
-    setCondition(newCondition);
+    if (timeScheduleRow) {
+      const newCondition: Condition = updatedData;
+      const newTimeScheduleRow: TimeScheduleRow = {
+        ...timeScheduleRow,
+        condition: newCondition,
+      };
+      onRowChange(index, newTimeScheduleRow);
+    }
   };
 
   return (
@@ -145,8 +151,7 @@ export function TimeTableRow(props: TimeTableRowProps) {
       <TableCell>
         <EnvConditionForms
           initialCondition={timeScheduleRow?.condition || null}
-          index={index}
-          onSelectChange={handleConditionChange}
+          onFormsChange={handleConditionChange}
         />
       </TableCell>
     </TableRow>

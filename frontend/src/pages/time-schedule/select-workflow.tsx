@@ -11,7 +11,7 @@ interface WorkflowSelectProps {
 }
 
 export const WorkflowSelect = (props: WorkflowSelectProps) => {
-  const { initialWorkflow, workflows } = props;
+  const { initialWorkflow, workflows, onSelectChange } = props;
 
   const [options] = useState<Workflow[]>(workflows);
   const [selectedWorkflow, setSelectedWorkflow] = useState<Workflow | null>(
@@ -32,6 +32,7 @@ export const WorkflowSelect = (props: WorkflowSelectProps) => {
 
     if (workflowRec) {
       setSelectedWorkflow(workflowRec);
+      onSelectChange(workflowRec);
     }
   };
 
