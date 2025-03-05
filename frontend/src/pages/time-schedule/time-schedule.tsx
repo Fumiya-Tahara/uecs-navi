@@ -76,7 +76,6 @@ export function TimeSchedule() {
   }, [m304IDs, setTimeScheduleInfo]);
 
   const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
-    console.log(newValue);
     setSelectedTab(newValue);
   };
 
