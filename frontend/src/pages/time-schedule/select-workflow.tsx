@@ -1,21 +1,30 @@
-import { WorkflowResponse } from "@/types/api";
+import { Workflow } from "@/types/api";
 import { FormControl, InputLabel, Select, MenuItem } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SelectChangeEvent } from "@mui/material";
 
 interface WorkflowSelectProps {
-  initialWorkflow: WorkflowResponse | null;
-  workflows: WorkflowResponse[];
+  initialWorkflow: Workflow | null;
+  workflows: Workflow[];
   index: number;
-  onSelectChange: (index: number, updatedData: WorkflowResponse) => void;
+  onSelectChange: (updatedData: Workflow) => void;
 }
 
 export const WorkflowSelect = (props: WorkflowSelectProps) => {
-  const { initialWorkflow, workflows } = props;
+  const { initialWorkflow, workflows, onSelectChange } = props;
 
-  const [options] = useState<WorkflowResponse[]>(workflows);
-  const [selectedWorkflow, setSelectedWorkflow] =
-    useState<WorkflowResponse | null>(initialWorkflow);
+  const [options] = useState<Workflow[]>(workflows);
+  const [selectedWorkflow, setSelectedWorkflow] = useState<Workflow | null>(
+    initialWorkflow
+  );
+
+  useEffect(() => {
+    if (!initialWorkflow) {
+      return;
+    }
+
+    setSelectedWorkflow(initialWorkflow);
+  }, []);
 
   const handleWorkflowChange = (event: SelectChangeEvent) => {
     const workflowID = parseInt(event.target.value);
@@ -23,6 +32,7 @@ export const WorkflowSelect = (props: WorkflowSelectProps) => {
 
     if (workflowRec) {
       setSelectedWorkflow(workflowRec);
+      onSelectChange(workflowRec);
     }
   };
 
@@ -34,7 +44,11 @@ export const WorkflowSelect = (props: WorkflowSelectProps) => {
       <Select
         labelId="workflow-select-label"
         id="workflow-select"
-        value={selectedWorkflow ? String(selectedWorkflow.id) : ""}
+        value={
+          selectedWorkflow && selectedWorkflow.id !== 0
+            ? String(selectedWorkflow.id)
+            : ""
+        }
         onChange={handleWorkflowChange}
         label="ワークフロー"
         notched

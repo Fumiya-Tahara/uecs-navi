@@ -14,21 +14,14 @@ import {
 import "@xyflow/react/dist/style.css";
 import { useMemo, useEffect, useCallback, DragEvent } from "react";
 import { Sidebar } from "./sidebar";
-import { useDnD } from "@/hooks/dnd-context";
-import { useWorkflowInfo } from "@/hooks/workflow-info-context";
-import {
-  WorkflowNameNode,
-  WorkflowNameNodeData,
-} from "./custom-nodes/workflow-name";
-import { OperationNode, OperationNodeData } from "./custom-nodes/operation";
-
-type CustomNodeData = WorkflowNameNodeData | OperationNodeData;
-
-export type AddNodeFunction = (parentNodeId: string) => void;
-export type UpdateNodeFunction = (
-  id: string,
-  updatedData: CustomNodeData
-) => void;
+import { useDnD } from "@/pages/create-workflow/context/dnd-context";
+import { useWorkflowInfo } from "@/pages/create-workflow/context/workflow-info-context";
+import { WorkflowNameNode } from "./custom-nodes/workflow-name";
+import { OperationNode } from "./custom-nodes/operation";
+import { useSelectedData } from "./context/selected-data-context";
+import { WorkflowWithUIResponse } from "@/types/api";
+import { CustomNodeData } from "@/types/workflow";
+import { useNodesAndEdges } from "@/lib/nodes-and-edges-store";
 
 const nodeIdMap: Map<string, number> = new Map();
 const getId = (type: string) => {
@@ -37,11 +30,28 @@ const getId = (type: string) => {
   return `${type}_${currentId}`;
 };
 
-export function WorkflowEditor() {
+interface WorkflowEditorProps {
+  m304ID: number;
+}
+
+export function WorkflowEditor(props: WorkflowEditorProps) {
+  const { m304ID } = props;
+  const [selectedData] = useSelectedData();
   const [nodes, setNodes, onNodesChange] = useNodesState<Node>([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([]);
   const [type] = useDnD();
   const [workflowInfo] = useWorkflowInfo();
+
+  const setGlobalNodes = useNodesAndEdges((state) => state.setNodes);
+  const setGlobalEdges = useNodesAndEdges((state) => state.setEdges);
+
+  useEffect(() => {
+    setGlobalNodes(nodes);
+  }, [nodes, setGlobalNodes]);
+
+  useEffect(() => {
+    setGlobalEdges(edges);
+  }, [edges, setGlobalEdges]);
 
   const nodeTypes = useMemo(
     () => ({
@@ -52,80 +62,76 @@ export function WorkflowEditor() {
   );
 
   useEffect(() => {
-    // if (workflowID) {
-    //   const workflow: WorkflowWithUIResponse = getWorkflows();
+    if (selectedData.selectedWorkflow) {
+      const workflow: WorkflowWithUIResponse = selectedData.selectedWorkflow;
 
-    //   workflow.workflow_ui.nodes.forEach((node) => {
-    //     const currentId = nodeIdMap.get(node.node_type) || 1;
-    //     nodeIdMap.set(node.node_type, currentId + 1);
-    //   });
+      workflow.workflow_ui.nodes.forEach((node) => {
+        const currentId = nodeIdMap.get(node.node_type) || 1;
+        nodeIdMap.set(node.node_type, currentId + 1);
+      });
 
-    //   const nodes = workflow.workflow_ui.nodes
-    //     .map((node): Node | undefined => {
-    //       if (node.node_type === "select_device") {
-    //         return {
-    //           id: node.workflow_node_id,
-    //           type: node.node_type,
-    //           position: { x: node.position_x, y: node.position_y },
-    //           data: {
-    //             ...(node.data as Record<string, unknown>),
-    //             devicesList: workflowInfo.devices,
-    //             updateNode: updateNodeData,
-    //           },
-    //         };
-    //       } else if (node.node_type === "condition") {
-    //         return {
-    //           id: node.workflow_node_id,
-    //           type: node.node_type,
-    //           position: { x: node.position_x, y: node.position_y },
-    //           data: {
-    //             ...(node.data as Record<string, unknown>),
-    //             climateDataList: workflowInfo.climate_data,
-    //             updateNode: updateNodeData,
-    //           },
-    //         };
-    //       } else if (node.node_type === "device_operation") {
-    //         return {
-    //           id: node.workflow_node_id,
-    //           type: node.node_type,
-    //           position: { x: node.position_x, y: node.position_y },
-    //           data: {
-    //             ...(node.data as Record<string, unknown>),
-    //             operationsList: workflowInfo.operations,
-    //             updateNode: updateNodeData,
-    //           },
-    //         };
-    //       }
+      const nodes = workflow.workflow_ui.nodes
+        .map((node): Node | undefined => {
+          switch (node.node_type) {
+            case "workflow_name":
+              return {
+                id: node.workflow_node_id,
+                type: node.node_type,
+                position: { x: node.position_x, y: node.position_y },
+                data: {
+                  ...(node.data as Record<string, unknown>),
+                  // 必要なデータ
+                },
+              };
+            case "operation":
+              if (selectedData.selectedM304ID) {
+                return {
+                  id: node.workflow_node_id,
+                  type: node.node_type,
+                  position: { x: node.position_x, y: node.position_y },
+                  data: {
+                    ...(node.data as Record<string, unknown>),
+                    // 必要なデータ
+                    updateNode: updateNodeData,
+                    devicesList: workflowInfo.m304DeviceMap.get(
+                      selectedData.selectedM304ID
+                    ),
+                  },
+                };
+              }
 
-    //       return undefined;
-    //     })
-    //     .filter((node): node is Node => node !== undefined);
+              return undefined;
+          }
 
-    //   const edges = workflow.workflow_ui.edges.map((edge) => ({
-    //     id: edge.id.toString(),
-    //     source: edge.source_node_id,
-    //     target: edge.target_node_id,
-    //     style: { strokeWidth: 4 },
-    //   }));
+          return undefined;
+        })
+        .filter((node): node is Node => node !== undefined);
 
-    //   setNodes(nodes);
-    //   setEdges(edges);
+      const edges = workflow.workflow_ui.edges.map((edge) => ({
+        id: edge.id.toString(),
+        source: edge.source_node_id,
+        target: edge.target_node_id,
+        style: { strokeWidth: 4 },
+      }));
 
-    //   return;
-    // }
+      setNodes(nodes);
+      setEdges(edges);
+
+      return;
+    }
 
     const initialNode: Node = {
       id: "workflow_name_1",
       type: "workflow_name",
       position: { x: 0, y: 300 },
       data: {
-        devicesList: workflowInfo.devices,
+        devicesList: workflowInfo.m304DeviceMap.get(m304ID),
         updateNode: updateNodeData,
       },
     };
 
     setNodes([initialNode]);
-  }, [workflowInfo]);
+  }, [selectedData.selectedWorkflow]);
 
   const { screenToFlowPosition } = useReactFlow();
 

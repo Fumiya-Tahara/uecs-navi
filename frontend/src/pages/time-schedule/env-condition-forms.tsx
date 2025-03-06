@@ -9,27 +9,101 @@ import {
   InputAdornment,
   SelectChangeEvent,
 } from "@mui/material";
-import { ClimateDataResponse } from "@/types/api";
-import { useState } from "react";
+import { ClimateData, Condition } from "@/types/api";
+import { ChangeEvent, useEffect, useState } from "react";
 
-export const EnvConditionForms = () => {
+interface EnvConditionFormsProps {
+  initialCondition: Condition | null;
+  onFormsChange: (updatedData: Condition) => void;
+}
+
+export const EnvConditionForms = (props: EnvConditionFormsProps) => {
+  const { initialCondition, onFormsChange } = props;
   const [timeScheduleInfo] = useTimeScheduleInfo();
   const [selectedClimateData, setSelectedClimateData] = useState<
-    ClimateDataResponse | undefined
+    ClimateData | undefined
   >(undefined);
   const [selectedCmpOpe, setSelectedCmpOpe] = useState<string>("");
+  const [setPoint, setSetPoint] = useState<string>("");
+  const [condition, setCondition] = useState<Condition | null>(
+    initialCondition
+  );
+
+  useEffect(() => {
+    if (!initialCondition) {
+      return;
+    }
+
+    const selectedClimateData: ClimateData | undefined =
+      timeScheduleInfo.climateData.find(
+        (climateData) =>
+          climateData.id === initialCondition.selected_climate_data_id
+      );
+
+    if (selectedClimateData) {
+      setSelectedClimateData(selectedClimateData);
+    }
+
+    setSelectedCmpOpe(String(initialCondition.selected_comparison_operator_id));
+    setSetPoint(String(initialCondition.set_point));
+  }, []);
 
   const handleClimateDataChange = (event: SelectChangeEvent) => {
     const climateDataID = parseInt(event.target.value);
-    const climateDataRec = timeScheduleInfo.climate_data.find(
+    const climateDataRec = timeScheduleInfo?.climateData.find(
       (data) => data.id === climateDataID
     );
 
+    if (!condition) {
+      return;
+    }
+
+    const newCondition: Condition = {
+      ...condition,
+      selected_climate_data_id: climateDataID,
+    };
+
     setSelectedClimateData(climateDataRec);
+    setCondition(newCondition);
+    onFormsChange(newCondition);
   };
 
   const handleCmpOpeChange = (event: SelectChangeEvent) => {
-    setSelectedCmpOpe(event.target.value as string);
+    const newCmpID: string = event.target.value;
+    const intNewCmpID: number = parseInt(newCmpID);
+
+    if (!condition) {
+      return;
+    }
+
+    const newCondition: Condition = {
+      ...condition,
+      selected_comparison_operator_id: intNewCmpID,
+    };
+    setSelectedCmpOpe(newCmpID);
+    setCondition(newCondition);
+    onFormsChange(newCondition);
+  };
+
+  const handleSetPointChange = (
+    event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const newValue: string = event.target.value;
+    const newSetPoint: number = parseInt(newValue);
+
+    if (!condition) {
+      return;
+    }
+
+    const newCondition: Condition = {
+      ...condition,
+      set_point: newSetPoint,
+    };
+
+    setSetPoint(newValue);
+    setSetPoint(newValue === "" ? "" : newValue);
+    setCondition(newCondition);
+    onFormsChange(newCondition);
   };
 
   return (
@@ -48,9 +122,9 @@ export const EnvConditionForms = () => {
             size="small"
             notched
           >
-            {timeScheduleInfo.climate_data.map((data) => (
+            {timeScheduleInfo?.climateData.map((data) => (
               <MenuItem key={data.id} value={data.id}>
-                {data.climate_data}
+                {data.name}
               </MenuItem>
             ))}
           </Select>
@@ -62,7 +136,7 @@ export const EnvConditionForms = () => {
           <Select
             id="comp-ope"
             labelId="comp-ope-label"
-            value={selectedCmpOpe}
+            value={selectedCmpOpe != "0" ? selectedCmpOpe : ""}
             size="small"
             onChange={handleCmpOpeChange}
             sx={{ marginX: 1 }}
@@ -79,6 +153,7 @@ export const EnvConditionForms = () => {
         <TextField
           type="number"
           size="small"
+          value={setPoint}
           slotProps={{
             input: {
               endAdornment: (
@@ -90,6 +165,7 @@ export const EnvConditionForms = () => {
           }}
           inputProps={{ step: "0.1" }}
           sx={{ marginRight: "8px", flex: 3 }}
+          onChange={handleSetPointChange}
         />
       </Box>
     </Box>

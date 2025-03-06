@@ -1,8 +1,4 @@
-import {
-  ClimateDataResponse,
-  DeviceResponse,
-  OperationResponse,
-} from "@/types/api";
+import { DeviceResponse, WorkflowWithUIResponse } from "@/types/api";
 import {
   createContext,
   useContext,
@@ -12,9 +8,8 @@ import {
 } from "react";
 
 type workflowInfoState = {
-  devices: DeviceResponse[];
-  climate_data: ClimateDataResponse[];
-  operations: OperationResponse[];
+  m304DeviceMap: Map<number, DeviceResponse[]>;
+  m304WorkflowMap: Map<number, WorkflowWithUIResponse[]>;
 };
 
 type workflowInfoContextType = [
@@ -24,9 +19,8 @@ type workflowInfoContextType = [
 
 const WorkflowInfoContext = createContext<workflowInfoContextType>([
   {
-    devices: [],
-    climate_data: [],
-    operations: [],
+    m304DeviceMap: new Map<number, DeviceResponse[]>(),
+    m304WorkflowMap: new Map<number, WorkflowWithUIResponse[]>(),
   },
   () => {},
 ]);
@@ -37,9 +31,8 @@ export const WorkflowInfoProvider = ({
   children: React.ReactNode;
 }) => {
   const [workflowInfo, setWorkflowInfo] = useState<workflowInfoState>({
-    devices: [],
-    climate_data: [],
-    operations: [],
+    m304DeviceMap: new Map<number, DeviceResponse[]>(),
+    m304WorkflowMap: new Map<number, WorkflowWithUIResponse[]>(),
   });
 
   return (

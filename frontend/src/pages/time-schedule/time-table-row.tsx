@@ -4,47 +4,67 @@ import dayjs from "dayjs";
 import { LocalizationProvider, TimePicker } from "@mui/x-date-pickers";
 import { WorkflowSelect } from "./select-workflow";
 import { EnvConditionForms } from "./env-condition-forms";
-import { WorkflowResponse, TimeScheduleResponse } from "@/types/api";
-import { useState } from "react";
+import { Workflow, TimeScheduleRow, Condition } from "@/types/api";
+import { useEffect, useState } from "react";
 
 interface TimeTableRowProps {
-  timeSchedule: TimeScheduleResponse | null;
-  workflows: WorkflowResponse[];
+  timeScheduleRow: TimeScheduleRow | null;
+  workflows: Workflow[];
   index: number;
-  onRowChange: (index: number, updatedData: TimeScheduleResponse) => void;
+  onRowChange: (index: number, updatedData: TimeScheduleRow) => void;
 }
 
 export function TimeTableRow(props: TimeTableRowProps) {
-  const { timeSchedule, workflows, index, onRowChange } = props;
-  const [, setSelectedWorkflows] = useState<WorkflowResponse[]>(
-    timeSchedule?.workflows || [{ id: 0, name: "" }]
+  const { timeScheduleRow, workflows, index, onRowChange } = props;
+  const [, forceRender] = useState(0);
+
+  const selectedWorkflow: Workflow | undefined = workflows.find(
+    (workflow) => workflow.id === timeScheduleRow?.selected_workflow_id
   );
+
+  useEffect(() => {
+    forceRender((prev) => prev + 1); // state を変更して強制リレンダリング
+  }, [timeScheduleRow]);
 
   const handleStartTimeChange = (value: string) => {
     if (value !== undefined) {
-      if (timeSchedule) {
-        timeSchedule.start_time = value;
+      if (timeScheduleRow) {
+        timeScheduleRow.start_time = value;
 
-        onRowChange(index, timeSchedule);
+        onRowChange(index, timeScheduleRow);
       }
     }
   };
 
   const handleEndTimeChange = (value: string) => {
     if (value !== undefined) {
-      if (timeSchedule) {
-        timeSchedule.end_time = value;
+      if (timeScheduleRow) {
+        timeScheduleRow.end_time = value;
 
-        onRowChange(index, timeSchedule);
+        onRowChange(index, timeScheduleRow);
       }
     }
   };
 
-  const handleSelectChange = (index: number, updatedData: WorkflowResponse) => {
-    if (timeSchedule) {
-      const newWorkflows = [...timeSchedule.workflows];
-      newWorkflows[index] = updatedData;
-      setSelectedWorkflows(newWorkflows);
+  const handleSelectChange = (updatedData: Workflow) => {
+    if (timeScheduleRow) {
+      const selectedWorkflowID: number = updatedData.id;
+      const newTimeScheduleRow: TimeScheduleRow = {
+        ...timeScheduleRow,
+        selected_workflow_id: selectedWorkflowID,
+      };
+      onRowChange(index, newTimeScheduleRow);
+    }
+  };
+
+  const handleConditionChange = (updatedData: Condition) => {
+    if (timeScheduleRow) {
+      const newCondition: Condition = updatedData;
+      const newTimeScheduleRow: TimeScheduleRow = {
+        ...timeScheduleRow,
+        condition: newCondition,
+      };
+      onRowChange(index, newTimeScheduleRow);
     }
   };
 
@@ -62,8 +82,10 @@ export function TimeTableRow(props: TimeTableRowProps) {
             label="開始時間"
             ampm={false}
             value={
-              timeSchedule?.start_time
-                ? dayjs(timeSchedule.start_time, "HH:mm")
+              timeScheduleRow?.start_time
+                ? dayjs(timeScheduleRow.start_time, "HH:mm").isValid()
+                  ? dayjs(timeScheduleRow.start_time, "HH:mm")
+                  : null
                 : null
             }
             onChange={(value) => {
@@ -92,8 +114,10 @@ export function TimeTableRow(props: TimeTableRowProps) {
             label="終了時間"
             ampm={false}
             value={
-              timeSchedule?.end_time
-                ? dayjs(timeSchedule.end_time, "HH:mm")
+              timeScheduleRow?.end_time
+                ? dayjs(timeScheduleRow.end_time, "HH:mm").isValid()
+                  ? dayjs(timeScheduleRow.end_time, "HH:mm")
+                  : null
                 : null
             }
             onChange={(value) => {
@@ -118,14 +142,17 @@ export function TimeTableRow(props: TimeTableRowProps) {
       </TableCell>
       <TableCell>
         <WorkflowSelect
-          initialWorkflow={null}
-          index={0}
+          initialWorkflow={selectedWorkflow || null}
+          index={index}
           workflows={workflows}
           onSelectChange={handleSelectChange}
         />
       </TableCell>
       <TableCell>
-        <EnvConditionForms />
+        <EnvConditionForms
+          initialCondition={timeScheduleRow?.condition || null}
+          onFormsChange={handleConditionChange}
+        />
       </TableCell>
     </TableRow>
   );
