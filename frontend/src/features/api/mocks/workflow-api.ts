@@ -130,7 +130,17 @@ export function getWorkflowsWithUI(
         name: "Mock Workflow2",
       },
       workflow_ui: {
-        nodes: [],
+        nodes: [
+          {
+            id: 4,
+            workflow_id: 2,
+            workflow_node_id: "workflow_name_2",
+            node_type: "workflow_name",
+            data: { name: "Mock Workflow2" },
+            position_x: 100,
+            position_y: 200,
+          },
+        ],
         edges: [],
       },
     },
@@ -144,7 +154,17 @@ export function getWorkflowsWithUI(
         name: "Mock Workflow3",
       },
       workflow_ui: {
-        nodes: [],
+        nodes: [
+          {
+            id: 5,
+            workflow_id: 3,
+            workflow_node_id: "workflow_name_3",
+            node_type: "workflow_name",
+            data: { name: "Mock Workflow3" },
+            position_x: 100,
+            position_y: 200,
+          },
+        ],
         edges: [],
       },
     },
@@ -158,7 +178,17 @@ export function getWorkflowsWithUI(
         name: "Mock Workflow4",
       },
       workflow_ui: {
-        nodes: [],
+        nodes: [
+          {
+            id: 6,
+            workflow_id: 4,
+            workflow_node_id: "workflow_name_4",
+            node_type: "workflow_name",
+            data: { name: "Mock Workflow5" },
+            position_x: 100,
+            position_y: 200,
+          },
+        ],
         edges: [],
       },
     },
