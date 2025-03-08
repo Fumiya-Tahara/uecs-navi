@@ -1,5 +1,4 @@
 import {
-  ClimateData,
   DeviceResponse,
   WorkflowWithUIRequest,
   WorkflowWithUIResponse,
@@ -50,17 +49,6 @@ export function getDevices(m304ID: number): DeviceResponse[] | undefined {
   map.set(3, devices3);
 
   return map.get(m304ID);
-}
-
-export function getClimateDatas(): ClimateData[] {
-  const climateDatas: ClimateData[] = [
-    { id: 1, name: "気温", unit: "℃" },
-    { id: 2, name: "湿度", unit: "%" },
-    { id: 3, name: "二酸化炭素量", unit: "ppm" },
-    { id: 4, name: "照度", unit: "lx" },
-  ];
-
-  return climateDatas;
 }
 
 export function getWorkflowsWithUI(

@@ -12,6 +12,8 @@ import {
 import { TimeTableRow } from "./time-table-row";
 import { TimeScheduleResponse, TimeScheduleRow, Workflow } from "@/types/api";
 import { useState } from "react";
+import { ConfirmButton } from "@/components/confirm-button";
+import { saveTimeSchedule } from "@/features/time-schedule/save-time-schedule";
 
 interface TimeTableProps {
   initialSchedules: TimeScheduleResponse | null;
@@ -79,7 +81,7 @@ export function TimeTable(props: TimeTableProps) {
   };
 
   const handleSave = () => {
-    console.log(timeSchedule);
+    saveTimeSchedule(timeSchedule);
   };
 
   return (
@@ -127,9 +129,11 @@ export function TimeTable(props: TimeTableProps) {
           </Button>
         </Box>
         <Box>
-          <Button size="small" variant="contained" onClick={handleSave}>
-            保存する
-          </Button>
+          <ConfirmButton
+            buttonLabel="保存する"
+            modalTitle="スケジュールを保存する"
+            onConfirm={handleSave}
+          />
         </Box>
       </Box>
     </Box>
