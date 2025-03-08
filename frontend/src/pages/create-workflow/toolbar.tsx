@@ -1,7 +1,6 @@
 import {
   AppBar,
   Box,
-  Button,
   FormControl,
   InputLabel,
   Select,
@@ -14,16 +13,39 @@ import { useSelectedData } from "./context/selected-data-context";
 import { SelectChangeEvent } from "@mui/material";
 import { useWorkflowInfo } from "./context/workflow-info-context";
 import { useEffect, useState } from "react";
-import {
-  DeviceResponse,
-  WorkflowWithUIRequest,
-  WorkflowWithUIResponse,
-} from "@/types/api";
+import { DeviceResponse, WorkflowWithUIResponse } from "@/types/api";
 import { useM304IDs } from "@/hooks/m304ids-context";
 import { useNodesAndEdges } from "@/lib/nodes-and-edges-store";
-import { createWorkflowWithUIRequest } from "@/features/workflow/create-workflow-req";
+import { ConfirmButton } from "@/components/confirm-button";
+import { saveWorkflow } from "@/features/workflow/save-workflow";
+import { deleteWorkflow } from "@/features/workflow/delete-workflow";
 
 export function SelectToolbar() {
+  const nodes = useNodesAndEdges((state) => state.nodes);
+  const edges = useNodesAndEdges((state) => state.edges);
+
+  const [selectedData] = useSelectedData();
+  const [workflowInfo] = useWorkflowInfo();
+
+  const m304ID: number | null = selectedData.selectedM304ID;
+  const workflowID: number | undefined =
+    selectedData.selectedWorkflow?.workflow.id;
+
+  let deviceList: DeviceResponse[] | undefined = undefined;
+  if (m304ID && workflowID) {
+    deviceList = workflowInfo.m304DeviceMap.get(m304ID);
+  }
+
+  const handleSaveWorkflow = () => {
+    saveWorkflow(m304ID, workflowID, deviceList, nodes, edges);
+  };
+
+  const handleDeleteWorkflow = () => {
+    if (workflowID) {
+      deleteWorkflow(workflowID);
+    }
+  };
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
@@ -39,55 +61,23 @@ export function SelectToolbar() {
               <SelectM304 />
               <SelectWorkflow />
             </Grid>
-            <Grid size={4}>
-              <SaveWorkflowButton />
+            <Grid size={4} sx={{ display: "flex", gap: 1 }}>
+              <ConfirmButton
+                buttonLabel="保存する"
+                modalTitle="ワークフローを保存する"
+                onConfirm={handleSaveWorkflow}
+              />
+              <ConfirmButton
+                buttonLabel="削除する"
+                modalTitle="ワークフローを削除する"
+                onConfirm={handleDeleteWorkflow}
+                buttonColor="error"
+              />
             </Grid>
           </Grid>
         </Toolbar>
       </AppBar>
     </Box>
-  );
-}
-
-function SaveWorkflowButton() {
-  const nodes = useNodesAndEdges((state) => state.nodes);
-  const edges = useNodesAndEdges((state) => state.edges);
-
-  const [selectedData] = useSelectedData();
-  const [workflowInfo] = useWorkflowInfo();
-
-  const handleClick = () => {
-    const m304ID: number | null = selectedData.selectedM304ID;
-    let workflowID: number | undefined =
-      selectedData.selectedWorkflow?.workflow.id;
-
-    if (!m304ID) {
-      return;
-    }
-
-    if (!workflowID) {
-      workflowID = 0;
-    }
-
-    const deviceList: DeviceResponse[] | undefined =
-      workflowInfo.m304DeviceMap.get(m304ID);
-
-    if (!deviceList) {
-      return;
-    }
-
-    const workflowReq: WorkflowWithUIRequest | null =
-      createWorkflowWithUIRequest(workflowID, m304ID, deviceList, nodes, edges);
-
-    if (workflowReq) {
-      console.log(workflowReq);
-    }
-  };
-
-  return (
-    <Button variant="contained" size="small" onClick={handleClick}>
-      保存する
-    </Button>
   );
 }
 
@@ -118,7 +108,7 @@ function SelectM304() {
         }
         onChange={handleSelectedM304Change}
       >
-        {m304IDs.m304IDs.map((m304ID, index) => (
+        {m304IDs.m304IDs?.map((m304ID, index) => (
           <MenuItem key={index} value={String(m304ID)}>
             M304 ID-{m304ID}
           </MenuItem>
