@@ -91,7 +91,7 @@ paths:
         "200":
           description: OK
 
-  /workflows-with-ui:
+  /workflows-with-ui/{m304-id}:
     get:
       operationId: getWorkflowsWithUI
       tags:
@@ -111,6 +111,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/WorkflowWithUIResponse"
+
+  /workflows-with-ui:
     post:
       operationId: createWorkflowWithUI
       tags:
@@ -149,7 +151,7 @@ paths:
         "200":
           description: OK
 
-  /time-schedule:
+  /time-schedule/{m304-id}:
     get:
       operationId: getTimeSchedules
       tags:
@@ -169,6 +171,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/TimeScheduleResponse"
+
+  /time-schedule:
     post:
       operationId: createAndBuildTimeSchedule
       tags:
