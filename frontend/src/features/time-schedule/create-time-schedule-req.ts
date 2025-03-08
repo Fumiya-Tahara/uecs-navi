@@ -1,10 +1,12 @@
 import { Condition, TimeScheduleRequest, TimeScheduleRow } from "@/types/api";
 
 export function createTimeScheduleReq(
+  timeScheduleID: number,
   m304ID: number,
   timeScheduleRows: TimeScheduleRow[]
 ): TimeScheduleRequest | null {
   const timeScheduleReq: TimeScheduleRequest = {
+    id: timeScheduleID,
     m304_id: m304ID,
     time_schedule: timeScheduleRows,
   };
