@@ -2,6 +2,10 @@ import { DeviceResponse } from "@/types/api";
 import { WorkflowWithUIRequest } from "@/types/api";
 import { createWorkflowWithUIRequest } from "./create-workflow-req";
 import { Node, Edge } from "@xyflow/react";
+import {
+  createWorkflowWithUI,
+  updateWorkflowWithUI,
+} from "../api/mocks/workflow-api";
 
 export function saveWorkflow(
   m304ID: number | null,
@@ -31,7 +35,15 @@ export function saveWorkflow(
     edges
   );
 
-  if (workflowReq) {
-    console.log(workflowReq);
+  if (!workflowReq) {
+    return;
+  }
+
+  console.log(workflowReq);
+
+  if (workflowReq?.workflow.id == 0) {
+    createWorkflowWithUI(workflowReq);
+  } else {
+    updateWorkflowWithUI(workflowReq);
   }
 }

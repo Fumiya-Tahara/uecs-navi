@@ -1,6 +1,7 @@
 import {
   ClimateData,
   DeviceResponse,
+  WorkflowWithUIRequest,
   WorkflowWithUIResponse,
 } from "@/types/api";
 
@@ -199,6 +200,14 @@ export function getWorkflowsWithUI(
   map.set(3, workflowWithUIRes3);
 
   return map.get(m304ID);
+}
+
+export function createWorkflowWithUI(workflow: WorkflowWithUIRequest) {
+  console.log("Created: ", workflow);
+}
+
+export function updateWorkflowWithUI(workflow: WorkflowWithUIRequest) {
+  console.log("Updated: ", workflow);
 }
 
 export function deleteWorkflowWithUI(workflowID: number) {

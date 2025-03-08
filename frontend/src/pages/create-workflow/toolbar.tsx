@@ -32,11 +32,16 @@ export function SelectToolbar() {
     selectedData.selectedWorkflow?.workflow.id;
 
   let deviceList: DeviceResponse[] | undefined = undefined;
-  if (m304ID && workflowID) {
+  if (m304ID) {
     deviceList = workflowInfo.m304DeviceMap.get(m304ID);
   }
 
   const handleSaveWorkflow = () => {
+    if (!selectedData.selectedWorkflow) {
+      console.error("ワークフローが選択されていません。");
+
+      return;
+    }
     saveWorkflow(m304ID, workflowID, deviceList, nodes, edges);
   };
 
@@ -121,6 +126,9 @@ function SelectM304() {
 function SelectWorkflow() {
   const [workflowInfo] = useWorkflowInfo();
   const [selectedData, setSelectedData] = useSelectedData();
+  const [selectedWorkflowID, setSelectedWorkflowID] = useState<string | null>(
+    null
+  );
   const [workflows, setWorkflows] = useState<WorkflowWithUIResponse[]>([]);
 
   useEffect(() => {
@@ -138,15 +146,36 @@ function SelectWorkflow() {
 
   const handleSelectedWorkflowChange = (event: SelectChangeEvent) => {
     const workflowID = parseInt(event.target.value);
-    const selectedWorkflow = workflows.find(
-      (workflow) => workflow.workflow.id === workflowID
-    );
-
-    if (selectedWorkflow) {
+    if (workflowID === 0) {
       setSelectedData((prev) => ({
         ...prev,
-        selectedWorkflow,
+        selectedWorkflow: {
+          workflow: {
+            id: 0,
+            m304_id: 0,
+            name: "",
+          },
+          workflow_ui: {
+            nodes: [],
+            edges: [],
+          },
+        },
       }));
+
+      setSelectedWorkflowID("0");
+    } else {
+      const selectedWorkflow = workflows.find(
+        (workflow) => workflow.workflow.id === workflowID
+      );
+
+      if (selectedWorkflow) {
+        setSelectedData((prev) => ({
+          ...prev,
+          selectedWorkflow,
+        }));
+
+        setSelectedWorkflowID(String(selectedWorkflow.workflow.id));
+      }
     }
   };
 
@@ -157,15 +186,11 @@ function SelectWorkflow() {
         labelId="demo-simple-select-label"
         id="demo-simple-select"
         label="ワークフロー"
-        value={
-          selectedData.selectedWorkflow == null
-            ? ""
-            : String(selectedData.selectedWorkflow.workflow.id)
-        }
+        value={selectedWorkflowID != null ? selectedWorkflowID : ""}
         onChange={handleSelectedWorkflowChange}
       >
         <MenuItem value={String(0)} sx={{ color: "green" }}>
-          ＋新規作成
+          {"＋新規作成"}
         </MenuItem>
         {workflows.map((workflow, index) => (
           <MenuItem key={index} value={String(workflow.workflow.id)}>
