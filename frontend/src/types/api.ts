@@ -72,6 +72,7 @@ export interface WorkflowWithUIRequest {
 }
 
 export interface TimeScheduleRequest {
+  id: number;
   m304_id: number;
   time_schedule: TimeScheduleRow[];
 }
