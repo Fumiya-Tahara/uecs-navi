@@ -200,3 +200,7 @@ export function getWorkflowsWithUI(
 
   return map.get(m304ID);
 }
+
+export function deleteWorkflowWithUI(workflowID: number) {
+  console.log("Deleted: ", workflowID);
+}
