@@ -1,4 +1,4 @@
-import { TimeScheduleResponse, ClimateData } from "@/types/api";
+import { TimeScheduleRequest, TimeScheduleResponse } from "@/types/api";
 
 export function getTimeSchedules(m304ID: number): TimeScheduleResponse | null {
   const schedule1: TimeScheduleResponse = {
@@ -180,13 +180,10 @@ export function getTimeSchedules(m304ID: number): TimeScheduleResponse | null {
   return result;
 }
 
-export function getClimateDatas(): ClimateData[] {
-  const climateDatas: ClimateData[] = [
-    { id: 1, name: "気温", unit: "℃" },
-    { id: 2, name: "湿度", unit: "%" },
-    { id: 3, name: "二酸化炭素量", unit: "ppm" },
-    { id: 4, name: "照度", unit: "lx" },
-  ];
+export function createTimeSchedule(timeSchedule: TimeScheduleRequest) {
+  console.log("Created: ", timeSchedule);
+}
 
-  return climateDatas;
+export function updateTimeSchedule(timeSchedule: TimeScheduleRequest) {
+  console.log("Updated: ", timeSchedule);
 }
