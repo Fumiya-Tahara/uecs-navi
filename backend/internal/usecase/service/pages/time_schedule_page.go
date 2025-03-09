@@ -26,11 +26,13 @@ func (tsps TimeSchedulePageService) GetTimeSchedule(m304ID int) (*domain.TimeSch
 	timeSchedule, err := tsps.timeScheduleRepository.GetTimeScheduleFromM304(m304ID)
 	if err != nil {
 		log.Printf("Error getting time schedule: %v", err)
+		return nil, err
 	}
 
 	timeScheduleRows, err := tsps.timeScheduleRowRepository.GetTimeScheduleRowsFromTimeSchedule(timeSchedule.ID)
 	if err != nil {
 		log.Printf("Error getting time schedule rows: %v", err)
+		return nil, err
 	}
 
 	timeSchedule.Rows = *timeScheduleRows
@@ -42,12 +44,16 @@ func (tsps TimeSchedulePageService) CreateAndBuildTimeSchedule(timeSchedule doma
 	_, err := tsps.timeScheduleRepository.CreateTimeSchedule(timeSchedule.M304ID)
 	if err != nil {
 		log.Printf("Error creating time schedule: %v", err)
+		return err
 	}
 
 	for _, v := range timeSchedule.Rows {
 		_, err := tsps.timeScheduleRowRepository.CreateTimeScheduleRow(v)
 		if err != nil {
 			log.Printf("Error creating time schedule row: %v", err)
+
+			// エラーハンドリング要修正
+			return err
 		}
 	}
 
@@ -58,6 +64,7 @@ func (tsps TimeSchedulePageService) GetWorkflows(m304ID int) (*[]domain.Workflow
 	workflows, err := tsps.workflowRepository.GetWorkflowsFromM304(m304ID)
 	if err != nil {
 		log.Printf("Error getting workflows: %v", err)
+		return nil, err
 	}
 
 	return workflows, nil
