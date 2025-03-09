@@ -118,3 +118,13 @@ func (wps WorkflowPageService) UpdateWorkflowWithUI(workflow *domain.Workflow) e
 
 	return nil
 }
+
+func (wps WorkflowPageService) DeleteWorkflowWithUI(workflowID int) error {
+	if err := wps.workflowRepository.DeleteWorkflow(workflowID); err != nil {
+		log.Printf("Error deleting workflow: %v", err)
+
+		return err
+	}
+
+	return nil
+}
