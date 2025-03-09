@@ -52,3 +52,29 @@ func (wr WorkflowRepository) GetWorkflowsFromM304(m304ID int) (*[]domain.Workflo
 
 	return &workflows, nil
 }
+
+func (wr WorkflowRepository) UpdateWorkflow(workflow domain.Workflow) error {
+	ctx := context.Background()
+
+	arg := mysqlc.UpdateWorkflowParams{
+		M304ID: int32(workflow.M304ID),
+		Name:   workflow.Name,
+		ID:     int32(workflow.ID),
+	}
+
+	if err := wr.queries.UpdateWorkflow(ctx, arg); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (wr WorkflowRepository) DeleteWorkflow(workflowID int) error {
+	ctx := context.Background()
+
+	if err := wr.queries.DeleteWorkflow(ctx, int32(workflowID)); err != nil {
+		return err
+	}
+
+	return nil
+}

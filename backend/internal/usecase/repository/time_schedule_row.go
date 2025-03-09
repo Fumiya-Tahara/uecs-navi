@@ -58,3 +58,21 @@ func (tsrr TimeScheduleRowRepository) GetTimeScheduleRowsFromTimeSchedule(timeSc
 
 	return &timeScheduleRows, nil
 }
+
+func (tsrr TimeScheduleRowRepository) UpdateTimeScheduleRow(timeScheduleRow domain.TimeScheduleRow) error {
+	ctx := context.Background()
+
+	arg := mysqlc.UpdateTimeScheduleRowParams{
+		TimeScheduleID: int32(timeScheduleRow.TimeScheduleID),
+		StartTime:      timeScheduleRow.StartTime,
+		EndTime:        timeScheduleRow.EndTime,
+		WorkflowID:     int32(timeScheduleRow.WorkflowID),
+		ID:             int32(timeScheduleRow.ID),
+	}
+
+	if err := tsrr.queries.UpdateTimeScheduleRow(ctx, arg); err != nil {
+		return err
+	}
+
+	return nil
+}

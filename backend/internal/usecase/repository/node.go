@@ -69,3 +69,22 @@ func (nr NodeRepository) GetNodesFromWorkflow(workflowID int) (*[]domain.Node, e
 
 	return &nodes, nil
 }
+
+func (nr NodeRepository) UpdateNode(node domain.Node) error {
+	ctx := context.Background()
+
+	arg := mysqlc.UpdateNodeParams{
+		WorkflowID:     int32(node.WorkflowID),
+		WorkflowNodeID: node.NodeID,
+		Type:           node.Type,
+		PositionX:      node.Position.X,
+		PositionY:      node.Position.Y,
+		ID:             int32(node.ID),
+	}
+
+	if err := nr.queries.UpdateNode(ctx, arg); err != nil {
+		return err
+	}
+
+	return nil
+}

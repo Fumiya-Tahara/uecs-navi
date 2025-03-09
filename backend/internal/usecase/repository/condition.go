@@ -53,3 +53,21 @@ func (cr ConditionRepository) GetConditionFromTimeScheduleRow(timeScheduleRowID 
 
 	return condition, nil
 }
+
+func (cr ConditionRepository) UpdateCondition(condition domain.Condition) error {
+	ctx := context.Background()
+
+	arg := mysqlc.UpdateConditionParams{
+		ClimateDataID:        int32(condition.ClimateDataID),
+		TimeScheduleRowID:    int32(condition.TimeScheduleRowID),
+		ComparisonOperatorID: int32(condition.ComparisonOperatorID),
+		SetPoint:             float64(condition.SetPoint),
+		ID:                   int32(condition.ID),
+	}
+
+	if err := cr.queries.UpdateCondition(ctx, arg); err != nil {
+		return err
+	}
+
+	return nil
+}
