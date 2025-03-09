@@ -21,11 +21,14 @@ func InitHandler() (*Handler, error) {
 	er := repository.NewEdgeRepository(query)
 	tsr := repository.NewTimeScheduleRepository(query)
 	tsrr := repository.NewTimeScheduleRowRepository(query)
+	mr := repository.NewM304Repository(query)
+	cdr := repository.NewClimateDataRepository(query)
 
 	wps := pages.NewWorkflowPageService(wr, wor, nr, er)
 	tsps := pages.NewTimeSchedulePageService(tsr, tsrr, wr)
+	pus := pages.NewPageUtilitiesService(mr, cdr)
 
-	h := NewHandler(*wps, *tsps)
+	h := NewHandler(*wps, *tsps, *pus)
 
 	return h, nil
 }
