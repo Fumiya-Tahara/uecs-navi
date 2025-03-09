@@ -81,3 +81,38 @@ func (q *Queries) GetWorkflowOperationsFromWorkflow(ctx context.Context, workflo
 	)
 	return i, err
 }
+
+const updateWorkflowOperation = `-- name: UpdateWorkflowOperation :exec
+UPDATE workflow_operations
+SET workflow_id = ?, relay_1 = ?, relay_2 = ?, relay_3 = ?, relay_4 = ?, relay_5 = ?, relay_6 = ?, relay_7 = ?, relay_8 = ?
+WHERE id = ?
+`
+
+type UpdateWorkflowOperationParams struct {
+	WorkflowID int32
+	Relay1     sql.NullBool
+	Relay2     sql.NullBool
+	Relay3     sql.NullBool
+	Relay4     sql.NullBool
+	Relay5     sql.NullBool
+	Relay6     sql.NullBool
+	Relay7     sql.NullBool
+	Relay8     sql.NullBool
+	ID         int32
+}
+
+func (q *Queries) UpdateWorkflowOperation(ctx context.Context, arg UpdateWorkflowOperationParams) error {
+	_, err := q.db.ExecContext(ctx, updateWorkflowOperation,
+		arg.WorkflowID,
+		arg.Relay1,
+		arg.Relay2,
+		arg.Relay3,
+		arg.Relay4,
+		arg.Relay5,
+		arg.Relay6,
+		arg.Relay7,
+		arg.Relay8,
+		arg.ID,
+	)
+	return err
+}

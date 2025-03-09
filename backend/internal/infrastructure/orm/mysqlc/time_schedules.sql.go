@@ -39,3 +39,19 @@ func (q *Queries) GetTimeScheduleFromM304(ctx context.Context, m304ID int32) (Ge
 	err := row.Scan(&i.ID, &i.M304ID)
 	return i, err
 }
+
+const updateTimeSchedule = `-- name: UpdateTimeSchedule :exec
+UPDATE time_schedules
+SET m304_id = ?
+WHERE id = ?
+`
+
+type UpdateTimeScheduleParams struct {
+	M304ID int32
+	ID     int32
+}
+
+func (q *Queries) UpdateTimeSchedule(ctx context.Context, arg UpdateTimeScheduleParams) error {
+	_, err := q.db.ExecContext(ctx, updateTimeSchedule, arg.M304ID, arg.ID)
+	return err
+}

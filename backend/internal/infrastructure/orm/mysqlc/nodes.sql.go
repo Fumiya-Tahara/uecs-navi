@@ -86,3 +86,30 @@ func (q *Queries) GetNodesFromWorkflow(ctx context.Context, workflowID int32) ([
 	}
 	return items, nil
 }
+
+const updateNode = `-- name: UpdateNode :exec
+UPDATE nodes
+SET workflow_id = ?, workflow_node_id = ?, type = ?, position_x = ?, position_y = ?
+WHERE id = ?
+`
+
+type UpdateNodeParams struct {
+	WorkflowID     int32
+	WorkflowNodeID string
+	Type           string
+	PositionX      float64
+	PositionY      float64
+	ID             int32
+}
+
+func (q *Queries) UpdateNode(ctx context.Context, arg UpdateNodeParams) error {
+	_, err := q.db.ExecContext(ctx, updateNode,
+		arg.WorkflowID,
+		arg.WorkflowNodeID,
+		arg.Type,
+		arg.PositionX,
+		arg.PositionY,
+		arg.ID,
+	)
+	return err
+}

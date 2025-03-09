@@ -60,3 +60,28 @@ func (q *Queries) GetConditionFromTimeScheduleRow(ctx context.Context, timeSched
 	)
 	return i, err
 }
+
+const updateCondition = `-- name: UpdateCondition :exec
+UPDATE conditions
+SET climate_data_id = ?, time_schedule_row_id = ?, comparison_operator_id = ?, set_point = ?
+WHERE id = ?
+`
+
+type UpdateConditionParams struct {
+	ClimateDataID        int32
+	TimeScheduleRowID    int32
+	ComparisonOperatorID int32
+	SetPoint             float64
+	ID                   int32
+}
+
+func (q *Queries) UpdateCondition(ctx context.Context, arg UpdateConditionParams) error {
+	_, err := q.db.ExecContext(ctx, updateCondition,
+		arg.ClimateDataID,
+		arg.TimeScheduleRowID,
+		arg.ComparisonOperatorID,
+		arg.SetPoint,
+		arg.ID,
+	)
+	return err
+}

@@ -27,6 +27,16 @@ func (q *Queries) CreateWorkflow(ctx context.Context, arg CreateWorkflowParams) 
 	return result.LastInsertId()
 }
 
+const deleteWorkflow = `-- name: DeleteWorkflow :exec
+DELETE FROM workflows
+WHERE id = ?
+`
+
+func (q *Queries) DeleteWorkflow(ctx context.Context, id int32) error {
+	_, err := q.db.ExecContext(ctx, deleteWorkflow, id)
+	return err
+}
+
 const getWorkflowsFromM304 = `-- name: GetWorkflowsFromM304 :many
 SELECT id, m304_id, name
 FROM workflows
@@ -60,4 +70,21 @@ func (q *Queries) GetWorkflowsFromM304(ctx context.Context, m304ID int32) ([]Get
 		return nil, err
 	}
 	return items, nil
+}
+
+const updateWorkflow = `-- name: UpdateWorkflow :exec
+UPDATE workflows
+SET m304_id = ?, name = ?
+WHERE id = ?
+`
+
+type UpdateWorkflowParams struct {
+	M304ID int32
+	Name   string
+	ID     int32
+}
+
+func (q *Queries) UpdateWorkflow(ctx context.Context, arg UpdateWorkflowParams) error {
+	_, err := q.db.ExecContext(ctx, updateWorkflow, arg.M304ID, arg.Name, arg.ID)
+	return err
 }

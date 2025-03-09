@@ -6,3 +6,8 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
 SELECT id, workflow_id, relay_1, relay_2, relay_3, relay_4, relay_5, relay_6, relay_7, relay_8
 FROM workflow_operations
 WHERE workflow_id = ?;
+
+-- name: UpdateWorkflowOperation :exec
+UPDATE workflow_operations
+SET workflow_id = ?, relay_1 = ?, relay_2 = ?, relay_3 = ?, relay_4 = ?, relay_5 = ?, relay_6 = ?, relay_7 = ?, relay_8 = ?
+WHERE id = ?;

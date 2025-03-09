@@ -6,3 +6,8 @@ VALUES (?, ?, ?, ?);
 SELECT id, time_schedule_id, start_time, end_time, workflow_id
 FROM time_schedule_rows
 WHERE time_schedule_id = ?;
+
+-- name: UpdateTimeScheduleRow :exec
+UPDATE time_schedule_rows
+SET time_schedule_id = ?, start_time = ?, end_time = ?, workflow_id = ?
+WHERE id = ?;

@@ -69,3 +69,26 @@ func (q *Queries) GetEdgesFromWorkflow(ctx context.Context, workflowID int32) ([
 	}
 	return items, nil
 }
+
+const updateEdge = `-- name: UpdateEdge :exec
+UPDATE edges
+SET workflow_id = ?, source_node_id = ?, target_node_id = ?
+WHERE id = ?
+`
+
+type UpdateEdgeParams struct {
+	WorkflowID   int32
+	SourceNodeID string
+	TargetNodeID string
+	ID           int32
+}
+
+func (q *Queries) UpdateEdge(ctx context.Context, arg UpdateEdgeParams) error {
+	_, err := q.db.ExecContext(ctx, updateEdge,
+		arg.WorkflowID,
+		arg.SourceNodeID,
+		arg.TargetNodeID,
+		arg.ID,
+	)
+	return err
+}

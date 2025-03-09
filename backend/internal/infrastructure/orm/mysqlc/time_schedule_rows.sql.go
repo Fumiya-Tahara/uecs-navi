@@ -77,3 +77,28 @@ func (q *Queries) GetTimeScheduleRowsFromTimeSchedule(ctx context.Context, timeS
 	}
 	return items, nil
 }
+
+const updateTimeScheduleRow = `-- name: UpdateTimeScheduleRow :exec
+UPDATE time_schedule_rows
+SET time_schedule_id = ?, start_time = ?, end_time = ?, workflow_id = ?
+WHERE id = ?
+`
+
+type UpdateTimeScheduleRowParams struct {
+	TimeScheduleID int32
+	StartTime      time.Time
+	EndTime        time.Time
+	WorkflowID     int32
+	ID             int32
+}
+
+func (q *Queries) UpdateTimeScheduleRow(ctx context.Context, arg UpdateTimeScheduleRowParams) error {
+	_, err := q.db.ExecContext(ctx, updateTimeScheduleRow,
+		arg.TimeScheduleID,
+		arg.StartTime,
+		arg.EndTime,
+		arg.WorkflowID,
+		arg.ID,
+	)
+	return err
+}
