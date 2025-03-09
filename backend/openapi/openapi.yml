@@ -92,16 +92,13 @@ paths:
           description: OK
 
   /workflows-with-ui/{m304-id}:
+    parameters:
+    - $ref: "#/components/parameters/m304-id"
     get:
       operationId: getWorkflowsWithUI
       tags:
         - CreateWorkflowPage
       summary: Get workflows with the state of React Flow.
-      requestBody:
-          content:
-            application/json:
-              schema:
-                 $ref: "#/components/schemas/M304IDRequest"
       responses:
         "200":
           description: OK
@@ -152,8 +149,10 @@ paths:
           description: OK
 
   /time-schedule/{m304-id}:
+    parameters:
+      - $ref: "#/components/parameters/m304-id"
     get:
-      operationId: getTimeSchedules
+      operationId: getTimeSchedule
       tags:
         - TimeSchedulePage
       summary: Get time schedule
@@ -161,7 +160,7 @@ paths:
           content:
             application/json:
               schema:
-                type: integer
+                 $ref: "#/components/schemas/M304IDRequest"
       responses:
         "200":
           description: OK
@@ -215,7 +214,7 @@ components:
       schema:
         type: integer
     workflow-id:
-      name: m304-id
+      name: workflow-id
       in: path
       required: true
       schema:
