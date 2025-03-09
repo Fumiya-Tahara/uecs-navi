@@ -38,6 +38,7 @@ type (
 
 	M304RepositoryInterface interface {
 		CreateM304(newM304 domain.M304) (int, error)
+		GetAllM304s() (*[]domain.M304, error)
 		GetM304FromID(ID int) (*domain.M304, error)
 	}
 
