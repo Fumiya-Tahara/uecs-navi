@@ -11,5 +11,5 @@ CREATE TABLE workflow_operations (
     relay_8 BOOLEAN,
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (workflow_id) REFERENCES workflows(id) ON DELETE RESTRICT
+    FOREIGN KEY (workflow_id) REFERENCES workflows(id) ON DELETE CASCADE
 );
