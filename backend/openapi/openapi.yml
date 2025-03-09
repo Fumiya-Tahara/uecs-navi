@@ -232,7 +232,7 @@ components:
         unit:
           type: string
 
-    Relays:
+    WorkflowOperations:
       type: object
       properties:
         relay_1:
@@ -357,7 +357,7 @@ components:
           $ref: "#/components/schemas/WorkflowUIRequest"
         relays:
           $ref:
-            "#/components/schemas/Relays"
+            "#/components/schemas/WorkflowOperations"
 
     TimeScheduleRequest:
       type: object

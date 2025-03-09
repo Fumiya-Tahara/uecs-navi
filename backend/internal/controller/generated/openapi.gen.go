@@ -88,18 +88,6 @@ type NodeResponse struct {
 	WorkflowNodeId *string                 `json:"workflow_node_id,omitempty"`
 }
 
-// Relays defines model for Relays.
-type Relays struct {
-	Relay1 *bool `json:"relay_1,omitempty"`
-	Relay2 *bool `json:"relay_2,omitempty"`
-	Relay3 *bool `json:"relay_3,omitempty"`
-	Relay4 *bool `json:"relay_4,omitempty"`
-	Relay5 *bool `json:"relay_5,omitempty"`
-	Relay6 *bool `json:"relay_6,omitempty"`
-	Relay7 *bool `json:"relay_7,omitempty"`
-	Relay8 *bool `json:"relay_8,omitempty"`
-}
-
 // TimeScheduleRequest defines model for TimeScheduleRequest.
 type TimeScheduleRequest struct {
 	M304Id       *int               `json:"m304_id,omitempty"`
@@ -133,6 +121,18 @@ type Workflow struct {
 	Name   *string `json:"name,omitempty"`
 }
 
+// WorkflowOperations defines model for WorkflowOperations.
+type WorkflowOperations struct {
+	Relay1 *bool `json:"relay_1,omitempty"`
+	Relay2 *bool `json:"relay_2,omitempty"`
+	Relay3 *bool `json:"relay_3,omitempty"`
+	Relay4 *bool `json:"relay_4,omitempty"`
+	Relay5 *bool `json:"relay_5,omitempty"`
+	Relay6 *bool `json:"relay_6,omitempty"`
+	Relay7 *bool `json:"relay_7,omitempty"`
+	Relay8 *bool `json:"relay_8,omitempty"`
+}
+
 // WorkflowUIRequest defines model for WorkflowUIRequest.
 type WorkflowUIRequest struct {
 	Edges *[]EdgeRequest `json:"edges,omitempty"`
@@ -147,9 +147,9 @@ type WorkflowUIResponse struct {
 
 // WorkflowWithUIRequest defines model for WorkflowWithUIRequest.
 type WorkflowWithUIRequest struct {
-	Relays     *Relays            `json:"relays,omitempty"`
-	Workflow   *Workflow          `json:"workflow,omitempty"`
-	WorkflowUI *WorkflowUIRequest `json:"workflowUI,omitempty"`
+	Relays     *WorkflowOperations `json:"relays,omitempty"`
+	Workflow   *Workflow           `json:"workflow,omitempty"`
+	WorkflowUI *WorkflowUIRequest  `json:"workflowUI,omitempty"`
 }
 
 // WorkflowWithUIResponse defines model for WorkflowWithUIResponse.
