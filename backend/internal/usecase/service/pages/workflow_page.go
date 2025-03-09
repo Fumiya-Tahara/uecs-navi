@@ -83,3 +83,38 @@ func (wps WorkflowPageService) CreateWorkflowWithUI(workflow *domain.Workflow) e
 
 	return nil
 }
+
+func (wps WorkflowPageService) UpdateWorkflowWithUI(workflow *domain.Workflow) error {
+	if err := wps.workflowRepository.UpdateWorkflow(*workflow); err != nil {
+		log.Printf("Error updating workflow: %v", err)
+
+		return err
+	}
+
+	workflowOperation := workflow.Operations
+	if err := wps.workflowOperationRepository.UpdateWorkflowOperation(workflowOperation); err != nil {
+		log.Printf("Error updating workflow operation: %v", err)
+
+		return err
+	}
+
+	nodes := workflow.Node
+	for _, node := range nodes {
+		if err := wps.nodeRepository.UpdateNode(node); err != nil {
+			log.Printf("Error updating node: %v", err)
+
+			return err
+		}
+	}
+
+	edges := workflow.Edge
+	for _, edge := range edges {
+		if err := wps.edgeRepository.UpdateEdge(edge); err != nil {
+			log.Printf("Error updating edge: %v", err)
+
+			return err
+		}
+	}
+
+	return nil
+}

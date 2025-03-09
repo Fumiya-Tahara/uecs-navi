@@ -8,6 +8,7 @@ import (
 )
 
 type TimeSchedulePageService struct {
+	conditionRepository       interfaces.ConditionRepositoryInterface
 	timeScheduleRepository    interfaces.TimeScheduleRepositoryInterface
 	timeScheduleRowRepository interfaces.TimeScheduleRowRepositoryInterface
 	workflowRepository        interfaces.WorkflowRepositoryInterface
@@ -55,7 +56,16 @@ func (tsps TimeSchedulePageService) CreateAndBuildTimeSchedule(timeSchedule doma
 			// エラーハンドリング要修正
 			return err
 		}
+
+		_, err = tsps.conditionRepository.CreateCondition(&v.Condition)
+		if err != nil {
+			log.Printf("Error creating condition: %v", err)
+
+			return err
+		}
 	}
+
+	// buildするときの処理を追加
 
 	return nil
 }
@@ -68,4 +78,30 @@ func (tsps TimeSchedulePageService) GetWorkflows(m304ID int) (*[]domain.Workflow
 	}
 
 	return workflows, nil
+}
+
+func (tsps TimeSchedulePageService) UpdateAndBuildTimeSchedule(timeSchedule domain.TimeSchedule) error {
+	if err := tsps.timeScheduleRepository.UpdateTimeSchedule(timeSchedule); err != nil {
+		log.Printf("Error updating time schedule: %v", err)
+		return err
+	}
+
+	timeScheduleRows := timeSchedule.Rows
+	for _, timeScheduleRow := range timeScheduleRows {
+		if err := tsps.timeScheduleRowRepository.UpdateTimeScheduleRow(timeScheduleRow); err != nil {
+			log.Printf("Error updating time schedule row: %v", err)
+
+			return err
+		}
+
+		if err := tsps.conditionRepository.UpdateCondition(timeScheduleRow.Condition); err != nil {
+			log.Printf("Error updating condition: %v", err)
+
+			return err
+		}
+	}
+
+	// buildするときの処理を追加
+
+	return nil
 }
