@@ -55,19 +55,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/HousesResponse"
-    post:
-      operationId: createHouse
-      tags:
-        - DeviceSettingPage
-      summary: Create a house
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/HouseRequest"
-      responses:
-        "200":
-          description: OK
+
   /houses/{house-id}:
     parameters:
       - $ref: "#/components/parameters/house-id"
@@ -85,6 +73,7 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/DeviceResponse"
+                  
   /houses/{house-id}/devices:
     parameters:
       - $ref: "#/components/parameters/house-id"
@@ -102,17 +91,14 @@ paths:
         "200":
           description: OK
 
-  /workflows-with-ui:
+  /workflows-with-ui/{m304-id}:
+    parameters:
+    - $ref: "#/components/parameters/m304-id"
     get:
       operationId: getWorkflowsWithUI
       tags:
         - CreateWorkflowPage
       summary: Get workflows with the state of React Flow.
-      requestBody:
-          content:
-            application/json:
-              schema:
-                 $ref: "#/components/schemas/M304IDRequest"
       responses:
         "200":
           description: OK
@@ -122,6 +108,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/WorkflowWithUIResponse"
+
+  /workflows-with-ui:
     post:
       operationId: createWorkflowWithUI
       tags:
@@ -135,10 +123,36 @@ paths:
       responses:
         "200":
           description: OK
+    put:
+      operationId: updateWorkflowWithUI
+      tags:
+        - CreateWorkflowPage
+      summary: Update a workflow with UI
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WorkflowWithUIRequest"
+      responses:
+        "200":
+          description: OK
+  /workflow-with-ui/{workflow-id}:
+    parameters:
+      - $ref: "#/components/parameters/workflow-id"
+    delete:
+      operationId: deleteWorkflowWithUI
+      tags:
+        - CreateWorkflowPage
+      summary: Delete a workflow with UI
+      responses:
+        "200":
+          description: OK
 
-  /time-schedule:
+  /time-schedule/{m304-id}:
+    parameters:
+      - $ref: "#/components/parameters/m304-id"
     get:
-      operationId: getTimeSchedules
+      operationId: getTimeSchedule
       tags:
         - TimeSchedulePage
       summary: Get time schedule
@@ -146,7 +160,7 @@ paths:
           content:
             application/json:
               schema:
-                type: integer
+                 $ref: "#/components/schemas/M304IDRequest"
       responses:
         "200":
           description: OK
@@ -156,6 +170,8 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/TimeScheduleResponse"
+
+  /time-schedule:
     post:
       operationId: createAndBuildTimeSchedule
       tags:
@@ -169,6 +185,19 @@ paths:
       responses:
         "200":
           description: OK
+    put: 
+      operationId: updateAndBuildTimeSchedule
+      tags:
+        - TimeSchedulePage
+      summary: Update and build time schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TimeScheduleRequest"
+      responses:
+        "200": 
+          description: OK
 
 components:
   parameters:
@@ -180,6 +209,12 @@ components:
         type: integer
     m304-id:
       name: m304-id
+      in: path
+      required: true
+      schema:
+        type: integer
+    workflow-id:
+      name: workflow-id
       in: path
       required: true
       schema:
@@ -197,7 +232,7 @@ components:
         unit:
           type: string
 
-    Relays:
+    WorkflowOperations:
       type: object
       properties:
         relay_1:
@@ -322,7 +357,7 @@ components:
           $ref: "#/components/schemas/WorkflowUIRequest"
         relays:
           $ref:
-            "#/components/schemas/Relays"
+            "#/components/schemas/WorkflowOperations"
 
     TimeScheduleRequest:
       type: object

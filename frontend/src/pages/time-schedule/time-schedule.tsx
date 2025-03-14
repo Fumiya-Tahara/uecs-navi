@@ -3,10 +3,8 @@ import { TimeTable } from "./time-table";
 import { Navigation } from "@/layouts/navigation";
 import { useState, useEffect } from "react";
 import { ClimateData, TimeScheduleResponse } from "@/types/api";
-import {
-  getClimateDatas,
-  getTimeSchedules,
-} from "@/features/api/mocks/setting-time-schedule-api";
+import { getTimeSchedules } from "@/features/api/mocks/setting-time-schedule-api";
+import { getClimateDatas } from "@/features/api/mocks/utility-api";
 import { useTimeScheduleInfo } from "@/hooks/time-schedule-info-context";
 import { useM304IDs } from "@/hooks/m304ids-context";
 

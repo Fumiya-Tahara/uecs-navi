@@ -40,6 +40,22 @@ func (mr M304Repository) CreateM304(newM304 domain.M304) (int, error) {
 	return int(id), nil
 }
 
+func (mr M304Repository) GetAllM304s() (*[]domain.M304, error) {
+	ctx := context.Background()
+
+	m304sRow, err := mr.queries.GetAllM304s(ctx)
+	if err != nil {
+		return nil, err
+	}
+
+	m304s := make([]domain.M304, len(m304sRow))
+	for i, m304 := range m304sRow {
+		m304s[i] = *domain.NewM304WithID(int(m304.ID), int(m304.HouseID), m304.MacAddr, m304.DhcpFlg, &m304.IpAddr.String, &m304.NetMask.String, &m304.Defgw.String, &m304.Dns.String, m304.VenderName, &m304.NodeName.String)
+	}
+
+	return &m304s, nil
+}
+
 func (mr M304Repository) GetM304FromID(ID int) (*domain.M304, error) {
 	ctx := context.Background()
 

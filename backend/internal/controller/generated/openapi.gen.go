@@ -27,21 +27,19 @@ type Condition struct {
 
 // DeviceRequest defines model for DeviceRequest.
 type DeviceRequest struct {
-	ClimateDataId *int     `json:"climate_data_id,omitempty"`
-	DeviceName    *string  `json:"device_name,omitempty"`
-	Duration      *int     `json:"duration"`
-	SetPoint      *float32 `json:"set_point,omitempty"`
-	Unit          *string  `json:"unit,omitempty"`
+	ClimateDataId *int    `json:"climate_data_id,omitempty"`
+	M304Id        *int    `json:"m304_id,omitempty"`
+	Name          *string `json:"name,omitempty"`
+	Rly           *int    `json:"rly,omitempty"`
 }
 
 // DeviceResponse defines model for DeviceResponse.
 type DeviceResponse struct {
-	ClimateData *string  `json:"climate_data,omitempty"`
-	DeviceName  *string  `json:"device_name,omitempty"`
-	Duration    *int     `json:"duration,omitempty"`
-	Id          *int     `json:"id,omitempty"`
-	SetPoint    *float64 `json:"set_point,omitempty"`
-	Unit        *string  `json:"unit,omitempty"`
+	ClimateDataId *int    `json:"climate_data_id,omitempty"`
+	Id            *int    `json:"id,omitempty"`
+	M304Id        *int    `json:"m304_id,omitempty"`
+	Name          *string `json:"name,omitempty"`
+	Rly           *int    `json:"rly,omitempty"`
 }
 
 // EdgeRequest defines model for EdgeRequest.
@@ -58,14 +56,14 @@ type EdgeResponse struct {
 	WorkflowId   *int    `json:"workflow_id,omitempty"`
 }
 
-// HouseRequest defines model for HouseRequest.
-type HouseRequest = string
-
 // HousesResponse defines model for HousesResponse.
 type HousesResponse struct {
 	Id   *int    `json:"id,omitempty"`
 	Name *string `json:"name,omitempty"`
 }
+
+// M304ID defines model for M304ID.
+type M304ID = int
 
 // M304IDRequest defines model for M304IDRequest.
 type M304IDRequest = int
@@ -88,18 +86,6 @@ type NodeResponse struct {
 	Type           *string                 `json:"type,omitempty"`
 	WorkflowId     *int                    `json:"workflow_id,omitempty"`
 	WorkflowNodeId *string                 `json:"workflow_node_id,omitempty"`
-}
-
-// Relays defines model for Relays.
-type Relays struct {
-	Relay1 *bool `json:"relay_1,omitempty"`
-	Relay2 *bool `json:"relay_2,omitempty"`
-	Relay3 *bool `json:"relay_3,omitempty"`
-	Relay4 *bool `json:"relay_4,omitempty"`
-	Relay5 *bool `json:"relay_5,omitempty"`
-	Relay6 *bool `json:"relay_6,omitempty"`
-	Relay7 *bool `json:"relay_7,omitempty"`
-	Relay8 *bool `json:"relay_8,omitempty"`
 }
 
 // TimeScheduleRequest defines model for TimeScheduleRequest.
@@ -135,6 +121,18 @@ type Workflow struct {
 	Name   *string `json:"name,omitempty"`
 }
 
+// WorkflowOperations defines model for WorkflowOperations.
+type WorkflowOperations struct {
+	Relay1 *bool `json:"relay_1,omitempty"`
+	Relay2 *bool `json:"relay_2,omitempty"`
+	Relay3 *bool `json:"relay_3,omitempty"`
+	Relay4 *bool `json:"relay_4,omitempty"`
+	Relay5 *bool `json:"relay_5,omitempty"`
+	Relay6 *bool `json:"relay_6,omitempty"`
+	Relay7 *bool `json:"relay_7,omitempty"`
+	Relay8 *bool `json:"relay_8,omitempty"`
+}
+
 // WorkflowUIRequest defines model for WorkflowUIRequest.
 type WorkflowUIRequest struct {
 	Edges *[]EdgeRequest `json:"edges,omitempty"`
@@ -149,9 +147,9 @@ type WorkflowUIResponse struct {
 
 // WorkflowWithUIRequest defines model for WorkflowWithUIRequest.
 type WorkflowWithUIRequest struct {
-	Relays     *Relays            `json:"relays,omitempty"`
-	Workflow   *Workflow          `json:"workflow,omitempty"`
-	WorkflowUI *WorkflowUIRequest `json:"workflowUI,omitempty"`
+	Relays     *WorkflowOperations `json:"relays,omitempty"`
+	Workflow   *Workflow           `json:"workflow,omitempty"`
+	WorkflowUI *WorkflowUIRequest  `json:"workflowUI,omitempty"`
 }
 
 // WorkflowWithUIResponse defines model for WorkflowWithUIResponse.
@@ -163,26 +161,29 @@ type WorkflowWithUIResponse struct {
 // HouseId defines model for house-id.
 type HouseId = int
 
-// GetTimeSchedulesJSONBody defines parameters for GetTimeSchedules.
-type GetTimeSchedulesJSONBody = int
+// M304Id defines model for m304-id.
+type M304Id = int
 
-// CreateHouseJSONRequestBody defines body for CreateHouse for application/json ContentType.
-type CreateHouseJSONRequestBody = HouseRequest
+// WorkflowId defines model for workflow-id.
+type WorkflowId = int
 
 // CreateDeviceJSONRequestBody defines body for CreateDevice for application/json ContentType.
 type CreateDeviceJSONRequestBody = DeviceRequest
 
-// GetTimeSchedulesJSONRequestBody defines body for GetTimeSchedules for application/json ContentType.
-type GetTimeSchedulesJSONRequestBody = GetTimeSchedulesJSONBody
-
 // CreateAndBuildTimeScheduleJSONRequestBody defines body for CreateAndBuildTimeSchedule for application/json ContentType.
 type CreateAndBuildTimeScheduleJSONRequestBody = TimeScheduleRequest
 
-// GetWorkflowsWithUIJSONRequestBody defines body for GetWorkflowsWithUI for application/json ContentType.
-type GetWorkflowsWithUIJSONRequestBody = M304IDRequest
+// UpdateAndBuildTimeScheduleJSONRequestBody defines body for UpdateAndBuildTimeSchedule for application/json ContentType.
+type UpdateAndBuildTimeScheduleJSONRequestBody = TimeScheduleRequest
+
+// GetTimeScheduleJSONRequestBody defines body for GetTimeSchedule for application/json ContentType.
+type GetTimeScheduleJSONRequestBody = M304IDRequest
 
 // CreateWorkflowWithUIJSONRequestBody defines body for CreateWorkflowWithUI for application/json ContentType.
 type CreateWorkflowWithUIJSONRequestBody = WorkflowWithUIRequest
+
+// UpdateWorkflowWithUIJSONRequestBody defines body for UpdateWorkflowWithUI for application/json ContentType.
+type UpdateWorkflowWithUIJSONRequestBody = WorkflowWithUIRequest
 
 // ServerInterface represents all server handlers.
 type ServerInterface interface {
@@ -192,27 +193,36 @@ type ServerInterface interface {
 	// Get houses list
 	// (GET /houses)
 	GetHouses(c *gin.Context)
-	// Create a house
-	// (POST /houses)
-	CreateHouse(c *gin.Context)
 	// Get devices list
 	// (GET /houses/{house-id})
 	GetDevice(c *gin.Context, houseId HouseId)
 	// Create device
 	// (POST /houses/{house-id}/devices)
 	CreateDevice(c *gin.Context, houseId HouseId)
-	// Get time schedule
-	// (GET /time-schedule)
-	GetTimeSchedules(c *gin.Context)
+	// Get M304 ID list
+	// (GET /m304s)
+	GetM304s(c *gin.Context)
 	// Create and build time schedule
 	// (POST /time-schedule)
 	CreateAndBuildTimeSchedule(c *gin.Context)
-	// Get workflows with the state of React Flow.
-	// (GET /workflows-with-ui)
-	GetWorkflowsWithUI(c *gin.Context)
+	// Update and build time schedule
+	// (PUT /time-schedule)
+	UpdateAndBuildTimeSchedule(c *gin.Context)
+	// Get time schedule
+	// (GET /time-schedule/{m304-id})
+	GetTimeSchedule(c *gin.Context, m304Id M304Id)
+	// Delete a workflow with UI
+	// (DELETE /workflow-with-ui/{workflow-id})
+	DeleteWorkflowWithUI(c *gin.Context, workflowId WorkflowId)
 	// Create a workflow with UI
 	// (POST /workflows-with-ui)
 	CreateWorkflowWithUI(c *gin.Context)
+	// Update a workflow with UI
+	// (PUT /workflows-with-ui)
+	UpdateWorkflowWithUI(c *gin.Context)
+	// Get workflows with the state of React Flow.
+	// (GET /workflows-with-ui/{m304-id})
+	GetWorkflowsWithUI(c *gin.Context, m304Id M304Id)
 }
 
 // ServerInterfaceWrapper converts contexts to parameters.
@@ -248,19 +258,6 @@ func (siw *ServerInterfaceWrapper) GetHouses(c *gin.Context) {
 	}
 
 	siw.Handler.GetHouses(c)
-}
-
-// CreateHouse operation middleware
-func (siw *ServerInterfaceWrapper) CreateHouse(c *gin.Context) {
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		middleware(c)
-		if c.IsAborted() {
-			return
-		}
-	}
-
-	siw.Handler.CreateHouse(c)
 }
 
 // GetDevice operation middleware
@@ -311,8 +308,8 @@ func (siw *ServerInterfaceWrapper) CreateDevice(c *gin.Context) {
 	siw.Handler.CreateDevice(c, houseId)
 }
 
-// GetTimeSchedules operation middleware
-func (siw *ServerInterfaceWrapper) GetTimeSchedules(c *gin.Context) {
+// GetM304s operation middleware
+func (siw *ServerInterfaceWrapper) GetM304s(c *gin.Context) {
 
 	for _, middleware := range siw.HandlerMiddlewares {
 		middleware(c)
@@ -321,7 +318,7 @@ func (siw *ServerInterfaceWrapper) GetTimeSchedules(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.GetTimeSchedules(c)
+	siw.Handler.GetM304s(c)
 }
 
 // CreateAndBuildTimeSchedule operation middleware
@@ -337,8 +334,8 @@ func (siw *ServerInterfaceWrapper) CreateAndBuildTimeSchedule(c *gin.Context) {
 	siw.Handler.CreateAndBuildTimeSchedule(c)
 }
 
-// GetWorkflowsWithUI operation middleware
-func (siw *ServerInterfaceWrapper) GetWorkflowsWithUI(c *gin.Context) {
+// UpdateAndBuildTimeSchedule operation middleware
+func (siw *ServerInterfaceWrapper) UpdateAndBuildTimeSchedule(c *gin.Context) {
 
 	for _, middleware := range siw.HandlerMiddlewares {
 		middleware(c)
@@ -347,7 +344,55 @@ func (siw *ServerInterfaceWrapper) GetWorkflowsWithUI(c *gin.Context) {
 		}
 	}
 
-	siw.Handler.GetWorkflowsWithUI(c)
+	siw.Handler.UpdateAndBuildTimeSchedule(c)
+}
+
+// GetTimeSchedule operation middleware
+func (siw *ServerInterfaceWrapper) GetTimeSchedule(c *gin.Context) {
+
+	var err error
+
+	// ------------- Path parameter "m304-id" -------------
+	var m304Id M304Id
+
+	err = runtime.BindStyledParameterWithOptions("simple", "m304-id", c.Param("m304-id"), &m304Id, runtime.BindStyledParameterOptions{Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter m304-id: %w", err), http.StatusBadRequest)
+		return
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+		if c.IsAborted() {
+			return
+		}
+	}
+
+	siw.Handler.GetTimeSchedule(c, m304Id)
+}
+
+// DeleteWorkflowWithUI operation middleware
+func (siw *ServerInterfaceWrapper) DeleteWorkflowWithUI(c *gin.Context) {
+
+	var err error
+
+	// ------------- Path parameter "workflow-id" -------------
+	var workflowId WorkflowId
+
+	err = runtime.BindStyledParameterWithOptions("simple", "workflow-id", c.Param("workflow-id"), &workflowId, runtime.BindStyledParameterOptions{Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter workflow-id: %w", err), http.StatusBadRequest)
+		return
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+		if c.IsAborted() {
+			return
+		}
+	}
+
+	siw.Handler.DeleteWorkflowWithUI(c, workflowId)
 }
 
 // CreateWorkflowWithUI operation middleware
@@ -361,6 +406,43 @@ func (siw *ServerInterfaceWrapper) CreateWorkflowWithUI(c *gin.Context) {
 	}
 
 	siw.Handler.CreateWorkflowWithUI(c)
+}
+
+// UpdateWorkflowWithUI operation middleware
+func (siw *ServerInterfaceWrapper) UpdateWorkflowWithUI(c *gin.Context) {
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+		if c.IsAborted() {
+			return
+		}
+	}
+
+	siw.Handler.UpdateWorkflowWithUI(c)
+}
+
+// GetWorkflowsWithUI operation middleware
+func (siw *ServerInterfaceWrapper) GetWorkflowsWithUI(c *gin.Context) {
+
+	var err error
+
+	// ------------- Path parameter "m304-id" -------------
+	var m304Id M304Id
+
+	err = runtime.BindStyledParameterWithOptions("simple", "m304-id", c.Param("m304-id"), &m304Id, runtime.BindStyledParameterOptions{Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter m304-id: %w", err), http.StatusBadRequest)
+		return
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+		if c.IsAborted() {
+			return
+		}
+	}
+
+	siw.Handler.GetWorkflowsWithUI(c, m304Id)
 }
 
 // GinServerOptions provides options for the Gin server.
@@ -392,11 +474,14 @@ func RegisterHandlersWithOptions(router gin.IRouter, si ServerInterface, options
 
 	router.GET(options.BaseURL+"/climate-datas", wrapper.GetClimateData)
 	router.GET(options.BaseURL+"/houses", wrapper.GetHouses)
-	router.POST(options.BaseURL+"/houses", wrapper.CreateHouse)
 	router.GET(options.BaseURL+"/houses/:house-id", wrapper.GetDevice)
 	router.POST(options.BaseURL+"/houses/:house-id/devices", wrapper.CreateDevice)
-	router.GET(options.BaseURL+"/time-schedule", wrapper.GetTimeSchedules)
+	router.GET(options.BaseURL+"/m304s", wrapper.GetM304s)
 	router.POST(options.BaseURL+"/time-schedule", wrapper.CreateAndBuildTimeSchedule)
-	router.GET(options.BaseURL+"/workflows-with-ui", wrapper.GetWorkflowsWithUI)
+	router.PUT(options.BaseURL+"/time-schedule", wrapper.UpdateAndBuildTimeSchedule)
+	router.GET(options.BaseURL+"/time-schedule/:m304-id", wrapper.GetTimeSchedule)
+	router.DELETE(options.BaseURL+"/workflow-with-ui/:workflow-id", wrapper.DeleteWorkflowWithUI)
 	router.POST(options.BaseURL+"/workflows-with-ui", wrapper.CreateWorkflowWithUI)
+	router.PUT(options.BaseURL+"/workflows-with-ui", wrapper.UpdateWorkflowWithUI)
+	router.GET(options.BaseURL+"/workflows-with-ui/:m304-id", wrapper.GetWorkflowsWithUI)
 }

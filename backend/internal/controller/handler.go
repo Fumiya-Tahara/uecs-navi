@@ -6,6 +6,7 @@ import (
 
 	"github.com/Fumiya-Tahara/uecs-navi.git/internal/controller/converter"
 	"github.com/Fumiya-Tahara/uecs-navi.git/internal/controller/dto"
+	"github.com/Fumiya-Tahara/uecs-navi.git/internal/controller/generated"
 	"github.com/Fumiya-Tahara/uecs-navi.git/internal/usecase/service/pages"
 	"github.com/gin-gonic/gin"
 )
@@ -13,17 +14,25 @@ import (
 type Handler struct {
 	workflowPageService     pages.WorkflowPageService
 	timeSchedulePageService pages.TimeSchedulePageService
+	pageUtilitiesService    pages.PageUtilitiesService
 }
 
-func NewHandler(wps pages.WorkflowPageService, tsps pages.TimeSchedulePageService) *Handler {
+func NewHandler(wps pages.WorkflowPageService, tsps pages.TimeSchedulePageService, pus pages.PageUtilitiesService) *Handler {
 	return &Handler{
 		workflowPageService:     wps,
 		timeSchedulePageService: tsps,
+		pageUtilitiesService:    pus,
 	}
 }
 
 func (h Handler) GetClimateData(c *gin.Context) {
+	climateData, err := h.pageUtilitiesService.GetClimateData()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "InternalServerError"})
+		return
+	}
 
+	c.JSON(http.StatusOK, climateData)
 }
 
 func (h Handler) GetHouses(c *gin.Context) {
@@ -42,7 +51,17 @@ func (h Handler) CreateDevice(c *gin.Context, houseId int) {
 
 }
 
-func (h Handler) GetTimeSchedules(c *gin.Context) {
+func (h Handler) GetM304s(c *gin.Context) {
+	m304IDs, err := h.pageUtilitiesService.GetM304IDs()
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "InternalServerError"})
+		return
+	}
+
+	c.JSON(http.StatusOK, m304IDs)
+}
+
+func (h Handler) GetTimeSchedule(c *gin.Context, m304Id generated.M304ID) {
 	var req dto.M304IDRequest
 	if err := c.BindJSON(&req); err != nil {
 		log.Printf("Error binding json: %v", err)
@@ -88,7 +107,26 @@ func (h Handler) CreateAndBuildTimeSchedule(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Workflow created successfully"})
 }
 
-func (h Handler) GetWorkflowsWithUI(c *gin.Context) {
+func (h Handler) UpdateAndBuildTimeSchedule(c *gin.Context) {
+	var req dto.TimeScheduleRequest
+	if err := c.BindJSON(&req); err != nil {
+		log.Printf("Error binding json: %v", err)
+		c.JSON(http.StatusBadRequest, gin.H{"status": "BadRequest"})
+		return
+	}
+
+	newTimeSchedule := converter.ToDomainTimeSchedule(req)
+	err := h.timeSchedulePageService.UpdateAndBuildTimeSchedule(*newTimeSchedule)
+	if err != nil {
+		log.Printf("Error creating workflow: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "InternalServerError"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Workflow created successfully"})
+}
+
+func (h Handler) GetWorkflowsWithUI(c *gin.Context, m304Id generated.M304ID) {
 	var m304ID int
 	if err := c.BindJSON(&m304ID); err != nil {
 		log.Printf("Error binding JSON: %v", err)
@@ -125,4 +163,34 @@ func (h Handler) CreateWorkflowWithUI(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Workflow created successfully"})
+}
+
+func (h Handler) UpdateWorkflowWithUI(c *gin.Context) {
+	var req dto.WorkflowWithUIRequest
+	if err := c.BindJSON(&req); err != nil {
+		log.Printf("Error binding json: %v", err)
+		c.JSON(http.StatusBadRequest, gin.H{"status": "BadRequest"})
+		return
+	}
+
+	newWorkflow := converter.ToDomainWorkflow(req)
+	err := h.workflowPageService.UpdateWorkflowWithUI(newWorkflow)
+	if err != nil {
+		log.Printf("Error creating workflow: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "InternalServerError"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Workflow created successfully"})
+}
+
+func (h Handler) DeleteWorkflowWithUI(c *gin.Context, workflowId generated.WorkflowId) {
+	if err := h.workflowPageService.DeleteWorkflowWithUI(workflowId); err != nil {
+		log.Printf("Error deleting workflow: %v", err)
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "InternalServerError"})
+
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"message": "Workflow deleted successfully"})
 }

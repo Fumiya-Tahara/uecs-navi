@@ -1,7 +1,7 @@
-import { WorkflowResponse } from "@/types/api";
+import { Workflow } from "@/types/api";
 import { apiClient } from "@/lib/api-client";
 
-export async function getWorkflows(): Promise<WorkflowResponse[]> {
+export async function getWorkflows(): Promise<Workflow[]> {
   try {
     const response = await apiClient.get(`/workflows`);
     return response.data;

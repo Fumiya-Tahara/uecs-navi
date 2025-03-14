@@ -8,3 +8,7 @@ SELECT
 FROM nodes
 WHERE workflow_id = ?;
 
+-- name: UpdateNode :exec
+UPDATE nodes
+SET workflow_id = ?, workflow_node_id = ?, type = ?, position_x = ?, position_y = ?
+WHERE id = ?;

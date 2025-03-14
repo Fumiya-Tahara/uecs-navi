@@ -45,3 +45,18 @@ func (tsr TimeScheduleRepository) GetTimeScheduleFromM304(m304ID int) (*domain.T
 
 	return timeSchedule, nil
 }
+
+func (tsr TimeScheduleRepository) UpdateTimeSchedule(timeSchedule domain.TimeSchedule) error {
+	ctx := context.Background()
+
+	arg := mysqlc.UpdateTimeScheduleParams{
+		M304ID: int32(timeSchedule.M304ID),
+		ID:     int32(timeSchedule.ID),
+	}
+
+	if err := tsr.queries.UpdateTimeSchedule(ctx, arg); err != nil {
+		return err
+	}
+
+	return nil
+}

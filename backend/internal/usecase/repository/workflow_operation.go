@@ -64,3 +64,25 @@ func (wor WorkflowOperationRepository) GetWorkflowOperationsFromWorkflow(workflo
 
 	return workflowOperations, nil
 }
+
+func (wor WorkflowOperationRepository) UpdateWorkflowOperation(workflowOperation domain.WorkflowOperation) error {
+	ctx := context.Background()
+
+	arg := mysqlc.UpdateWorkflowOperationParams{
+		WorkflowID: int32(workflowOperation.ID),
+		Relay1:     utils.PointerToNullBool(workflowOperation.Relay1),
+		Relay2:     utils.PointerToNullBool(workflowOperation.Relay2),
+		Relay3:     utils.PointerToNullBool(workflowOperation.Relay3),
+		Relay4:     utils.PointerToNullBool(workflowOperation.Relay4),
+		Relay5:     utils.PointerToNullBool(workflowOperation.Relay5),
+		Relay6:     utils.PointerToNullBool(workflowOperation.Relay6),
+		Relay7:     utils.PointerToNullBool(workflowOperation.Relay7),
+		Relay8:     utils.PointerToNullBool(workflowOperation.Relay8),
+	}
+
+	if err := wor.queries.UpdateWorkflowOperation(ctx, arg); err != nil {
+		return err
+	}
+
+	return nil
+}

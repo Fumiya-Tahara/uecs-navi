@@ -54,3 +54,20 @@ func (er EdgeRepository) GetEdgesFromWorkflow(workflowID int) (*[]domain.Edge, e
 
 	return &edges, nil
 }
+
+func (er EdgeRepository) UpdateEdge(edge domain.Edge) error {
+	ctx := context.Background()
+
+	arg := mysqlc.UpdateEdgeParams{
+		WorkflowID:   int32(edge.WorkflowID),
+		SourceNodeID: edge.SourceNodeID,
+		TargetNodeID: edge.TargetNodeID,
+		ID:           int32(edge.ID),
+	}
+
+	if err := er.queries.UpdateEdge(ctx, arg); err != nil {
+		return err
+	}
+
+	return nil
+}

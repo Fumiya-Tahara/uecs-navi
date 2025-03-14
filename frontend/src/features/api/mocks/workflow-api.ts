@@ -1,6 +1,6 @@
 import {
-  ClimateData,
   DeviceResponse,
+  WorkflowWithUIRequest,
   WorkflowWithUIResponse,
 } from "@/types/api";
 
@@ -49,17 +49,6 @@ export function getDevices(m304ID: number): DeviceResponse[] | undefined {
   map.set(3, devices3);
 
   return map.get(m304ID);
-}
-
-export function getClimateDatas(): ClimateData[] {
-  const climateDatas: ClimateData[] = [
-    { id: 1, name: "気温", unit: "℃" },
-    { id: 2, name: "湿度", unit: "%" },
-    { id: 3, name: "二酸化炭素量", unit: "ppm" },
-    { id: 4, name: "照度", unit: "lx" },
-  ];
-
-  return climateDatas;
 }
 
 export function getWorkflowsWithUI(
@@ -130,7 +119,17 @@ export function getWorkflowsWithUI(
         name: "Mock Workflow2",
       },
       workflow_ui: {
-        nodes: [],
+        nodes: [
+          {
+            id: 4,
+            workflow_id: 2,
+            workflow_node_id: "workflow_name_2",
+            node_type: "workflow_name",
+            data: { name: "Mock Workflow2" },
+            position_x: 100,
+            position_y: 200,
+          },
+        ],
         edges: [],
       },
     },
@@ -144,7 +143,17 @@ export function getWorkflowsWithUI(
         name: "Mock Workflow3",
       },
       workflow_ui: {
-        nodes: [],
+        nodes: [
+          {
+            id: 5,
+            workflow_id: 3,
+            workflow_node_id: "workflow_name_3",
+            node_type: "workflow_name",
+            data: { name: "Mock Workflow3" },
+            position_x: 100,
+            position_y: 200,
+          },
+        ],
         edges: [],
       },
     },
@@ -158,7 +167,17 @@ export function getWorkflowsWithUI(
         name: "Mock Workflow4",
       },
       workflow_ui: {
-        nodes: [],
+        nodes: [
+          {
+            id: 6,
+            workflow_id: 4,
+            workflow_node_id: "workflow_name_4",
+            node_type: "workflow_name",
+            data: { name: "Mock Workflow5" },
+            position_x: 100,
+            position_y: 200,
+          },
+        ],
         edges: [],
       },
     },
@@ -169,4 +188,16 @@ export function getWorkflowsWithUI(
   map.set(3, workflowWithUIRes3);
 
   return map.get(m304ID);
+}
+
+export function createWorkflowWithUI(workflow: WorkflowWithUIRequest) {
+  console.log("Created: ", workflow);
+}
+
+export function updateWorkflowWithUI(workflow: WorkflowWithUIRequest) {
+  console.log("Updated: ", workflow);
+}
+
+export function deleteWorkflowWithUI(workflowID: number) {
+  console.log("Deleted: ", workflowID);
 }
