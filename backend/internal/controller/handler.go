@@ -61,22 +61,15 @@ func (h Handler) GetM304s(c *gin.Context) {
 	c.JSON(http.StatusOK, m304IDs)
 }
 
-func (h Handler) GetTimeSchedule(c *gin.Context, m304Id generated.M304ID) {
-	var req dto.M304IDRequest
-	if err := c.BindJSON(&req); err != nil {
-		log.Printf("Error binding json: %v", err)
-		c.JSON(http.StatusBadRequest, gin.H{"status": "BadRequest"})
-		return
-	}
-
-	timeSchedule, err := h.timeSchedulePageService.GetTimeSchedule(int(req))
+func (h Handler) GetTimeSchedule(c *gin.Context, m304ID generated.M304ID) {
+	timeSchedule, err := h.timeSchedulePageService.GetTimeSchedule(int(m304ID))
 	if err != nil {
 		log.Printf("Error getting time schedule: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "InternalServerError"})
 		return
 	}
 
-	workflows, err := h.timeSchedulePageService.GetWorkflows(int(req))
+	workflows, err := h.timeSchedulePageService.GetWorkflows(int(m304ID))
 	if err != nil {
 		log.Printf("Error getting workflows: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"status": "InternalServerError"})
@@ -126,14 +119,7 @@ func (h Handler) UpdateAndBuildTimeSchedule(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{"message": "Workflow created successfully"})
 }
 
-func (h Handler) GetWorkflowsWithUI(c *gin.Context, m304Id generated.M304ID) {
-	var m304ID int
-	if err := c.BindJSON(&m304ID); err != nil {
-		log.Printf("Error binding JSON: %v", err)
-		c.JSON(http.StatusBadRequest, gin.H{"status": "BadRequest", "error": "Invalid request body"})
-		return
-	}
-
+func (h Handler) GetWorkflowsWithUI(c *gin.Context, m304ID generated.M304ID) {
 	workflows, err := h.workflowPageService.GetWorkflowsWithUI(m304ID)
 	if err != nil {
 		log.Printf("Error getting workflows with UI: %v", err)

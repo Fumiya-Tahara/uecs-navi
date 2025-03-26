@@ -17,7 +17,7 @@ services:
       - "8080:8080"
 
   uecs-navi-dev-db:
-    container_name: uecs-navi-mysql
+    container_name: uecs_navi_test_db
     image: mysql:latest
     restart: unless-stopped
     volumes:
