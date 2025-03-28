@@ -11,7 +11,6 @@ import {
 import DevicesIcon from "@mui/icons-material/Devices";
 import { Handle, Position, Node, NodeProps } from "@xyflow/react";
 import { useCallback, useState } from "react";
-import { useNodeInfo } from "@/pages/create-workflow/context/node-info-context";
 import { OperationNodeData } from "@/types/workflow";
 
 type OperationNodePropsType = Node<OperationNodeData>;
@@ -23,14 +22,11 @@ export const OperationNode = ({ id, data }: OperationNodeProps) => {
   const [selectedDevice, setSelectedDevice] = useState<string>(
     data.deviceID ? String(data.deviceID) : ""
   );
-  const [nodeInfo, setNodeInfo] = useNodeInfo();
   const handleSelectedDeviceChange = useCallback(
     (event: SelectChangeEvent) => {
       const selectedDeviceID: number = parseInt(event.target.value, 10);
-      nodeInfo.deviceID = selectedDeviceID;
 
       setSelectedDevice(event.target.value);
-      setNodeInfo(nodeInfo);
       updateNode(id, { ...data, deviceID: selectedDeviceID });
     },
     [id, updateNode, data, setSelectedDevice]
