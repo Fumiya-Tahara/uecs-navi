@@ -2,12 +2,17 @@ openapi: 3.0.3
 info:
   title: "UECS Navi API"
   version: "1.0.0"
+tags:
+  - name: Utilities
+  - name: DeviceSettingPage
+  - name: CreateWorkflowPage
+  - name: TimeSchedulePage
 paths:
   /climate-datas:
     get:
       operationId: getClimateData
       tags:
-        - private
+        - Utilities
       summary: Get climate data list
       responses:
         "200":
@@ -17,12 +22,29 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/ClimateDatasResponse"
+                  $ref: "#/components/schemas/ClimateData"
+
+  /m304s:
+    get:
+      operationId: getM304s
+      tags:
+        - Utilities
+      summary: Get M304 ID list
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/M304ID"
+
   /houses:
     get:
       operationId: getHouses
       tags:
-        - private
+        - DeviceSettingPage
       summary: Get houses list
       responses:
         "200":
@@ -33,19 +55,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/HousesResponse"
-    post:
-      operationId: createHouse
-      tags:
-        - private
-      summary: Create a house
-      requestBody:
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/HousesRequest"
-      responses:
-        "200":
-          description: OK
 
   /houses/{house-id}:
     parameters:
@@ -53,7 +62,7 @@ paths:
     get:
       operationId: getDevice
       tags:
-        - private
+        - DeviceSettingPage
       summary: Get devices list
       responses:
         "200":
@@ -64,14 +73,14 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/DeviceResponse"
-
+                  
   /houses/{house-id}/devices:
     parameters:
       - $ref: "#/components/parameters/house-id"
     post:
       operationId: createDevice
       tags:
-        - private
+        - DeviceSettingPage
       summary: Create device
       requestBody:
         content:
@@ -82,12 +91,14 @@ paths:
         "200":
           description: OK
 
-  /workflows-with-ui:
+  /workflows-with-ui/{m304-id}:
+    parameters:
+    - $ref: "#/components/parameters/m304-id"
     get:
       operationId: getWorkflowsWithUI
       tags:
-        - private
-      summary: Get workflows with ui
+        - CreateWorkflowPage
+      summary: Get workflows with the state of React Flow.
       responses:
         "200":
           description: OK
@@ -98,10 +109,11 @@ paths:
                 items:
                   $ref: "#/components/schemas/WorkflowWithUIResponse"
 
+  /workflows-with-ui:
     post:
       operationId: createWorkflowWithUI
       tags:
-        - private
+        - CreateWorkflowPage
       summary: Create a workflow with UI
       requestBody:
         content:
@@ -111,42 +123,59 @@ paths:
       responses:
         "200":
           description: OK
-
-
-  /workflows:
-    get:
-        operationId: getWorkflows
-        tags:
-          - private
-        summary: Get workflows list
-        responses:
-          "200":
-            description: OK
-            content:
-              application/json:
-                schema:
-                  type: array
-                  items:
-                    $ref: "#/components/schemas/WorkflowResponse"
-    post:
-      operationId: createWorkflow
+    put:
+      operationId: updateWorkflowWithUI
       tags:
-        - private
-      summary: Create a workflow
+        - CreateWorkflowPage
+      summary: Update a workflow with UI
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/WorkflowRequest"
+              $ref: "#/components/schemas/WorkflowWithUIRequest"
       responses:
         "200":
           description: OK
+  /workflow-with-ui/{workflow-id}:
+    parameters:
+      - $ref: "#/components/parameters/workflow-id"
+    delete:
+      operationId: deleteWorkflowWithUI
+      tags:
+        - CreateWorkflowPage
+      summary: Delete a workflow with UI
+      responses:
+        "200":
+          description: OK
+
+  /time-schedule/{m304-id}:
+    parameters:
+      - $ref: "#/components/parameters/m304-id"
+    get:
+      operationId: getTimeSchedule
+      tags:
+        - TimeSchedulePage
+      summary: Get time schedule
+      requestBody:
+          content:
+            application/json:
+              schema:
+                 $ref: "#/components/schemas/M304IDRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TimeScheduleResponse"
 
   /time-schedule:
     post:
       operationId: createAndBuildTimeSchedule
       tags:
-      - private
+      - TimeSchedulePage
       summary: Create and build time schedule
       requestBody:
         content:
@@ -155,6 +184,19 @@ paths:
               $ref: "#/components/schemas/TimeScheduleRequest"
       responses:
         "200":
+          description: OK
+    put: 
+      operationId: updateAndBuildTimeSchedule
+      tags:
+        - TimeSchedulePage
+      summary: Update and build time schedule
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/TimeScheduleRequest"
+      responses:
+        "200": 
           description: OK
 
 components:
@@ -171,27 +213,103 @@ components:
       required: true
       schema:
         type: integer
+    workflow-id:
+      name: workflow-id
+      in: path
+      required: true
+      schema:
+        type: integer
 
   schemas:
+    # General schemas
+    ClimateData:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        unit:
+          type: string
+
+    WorkflowOperations:
+      type: object
+      properties:
+        relay_1:
+          type: boolean
+        relay_2: 
+          type: boolean
+        relay_3: 
+          type: boolean
+        relay_4: 
+          type: boolean
+        relay_5: 
+          type: boolean
+        relay_6: 
+          type: boolean
+        relay_7: 
+          type: boolean
+        relay_8: 
+          type: boolean
+    
+    Workflow:
+      type: object
+      properties:
+        id:
+          type: integer
+        m304_id:
+          type: integer
+        name:
+          type: string
+    
+    Condition:
+      type: object
+      properties:
+        selected_climate_data_id:
+          type: integer
+        selected_comparison_operator_id:
+          type: integer
+        set_point:
+          type: number
+          format: float
+    
+    TimeScheduleRow:
+      type: object
+      properties:
+        start_time:
+          type: string
+          pattern: "^([01]?[0-9]|2[0-3]):[0-5][0-9]$"
+          description: "開始時刻（HH:mm形式）"
+        end_time:
+          type: string
+          pattern: "^([01]?[0-9]|2[0-3]):[0-5][0-9]$"
+          description: "終了時刻（HH:mm形式）"
+        selected_workflow_id:
+          type: integer
+        condition:
+            $ref: "#/components/schemas/Condition"
+
+    M304ID: 
+      type: integer
+
     # Requests
     HousesRequest:
       type: string
+    
+    M304IDRequest:
+      type: integer
 
     DeviceRequest:
       type: object
       properties:
-        device_name:
-          type: string
         climate_data_id:
           type: integer
-        unit:
-          type: string
-        set_point:
-          type: number
-          format: double
-        duration:
+        m304_id:
           type: integer
-          nullable: true
+        name:
+          type: string
+        rly:
+          type: integer
 
     NodeRequest: 
       type: object
@@ -230,59 +348,28 @@ components:
               items:
                 $ref: "#/components/schemas/EdgeRequest"
 
-    WorkflowRequest:
-      type: object
-      properties:
-        name:
-          type: string
-        device_id:
-          type: integer
-
-
     WorkflowWithUIRequest:
       type: object
       properties:
         workflow:
-          $ref: "#/components/schemas/WorkflowRequest"
+          $ref: "#/components/schemas/Workflow"
         workflowUI:
           $ref: "#/components/schemas/WorkflowUIRequest"
-
-    TimeSchedule:
-      type: object
-      properties:
-        start_time:
-          type: string
-          pattern: "^([01]?[0-9]|2[0-3]):[0-5][0-9]$"
-          description: "開始時刻（HH:mm形式）"
-        end_time:
-          type: string
-          pattern: "^([01]?[0-9]|2[0-3]):[0-5][0-9]$"
-          description: "終了時刻（HH:mm形式）"
-        workflows:
-          type: array
-          items: 
-            $ref: "#/components/schemas/WorkflowRequest"
+        relays:
+          $ref:
+            "#/components/schemas/WorkflowOperations"
 
     TimeScheduleRequest:
       type: object
       properties:
+        m304_id:
+          type: integer
         time_schedule:
           type: array
           items: 
-            $ref: "#/components/schemas/TimeSchedule"
-        ip_address:
-          type: string
+            $ref: "#/components/schemas/TimeScheduleRow"
 
-    # Responses
-    ClimateDatasResponse:
-      type: object
-      properties:
-        id:
-          type: integer
-        climate_data:
-          type: string
-        unit:
-          type: string
+    # Response schemas
     HousesResponse:
       type: object
       properties:
@@ -295,25 +382,14 @@ components:
       properties:
         id:
           type: integer
-        device_name:
-          type: string
-        climate_data:
-          type: string
-        unit:
-          type: string
-        set_point:
-          type: number
-          format: double
-        duration:
+        climate_data_id:
           type: integer
-
-    WorkflowResponse:
-      type: object
-      properties:
-        id:
+        m304_id:
           type: integer
         name:
           type: string
+        rly:
+          type: integer
 
     NodeResponse: 
       type: object
@@ -364,7 +440,22 @@ components:
       type: object
       properties:
         workflow:
-          $ref: "#/components/schemas/WorkflowResponse"
+          $ref: "#/components/schemas/Workflow"
         workflowUI:
           $ref: "#/components/schemas/WorkflowUIResponse"
 
+    TimeScheduleResponse:
+      type: object
+      properties:
+        id: 
+          type: integer
+        m304_id:
+          type: integer
+        workflows:
+          type: array
+          items:
+            $ref: "#/components/schemas/Workflow"
+        time_schedules:
+          type: array
+          items:
+            $ref: "#/components/schemas/TimeScheduleRow"

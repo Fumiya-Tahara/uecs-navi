@@ -17,57 +17,46 @@ func NewTimeScheduleRepository(queries *mysqlc.Queries) *TimeScheduleRepository 
 	}
 }
 
-func (tsr TimeScheduleRepository) CreateTimeSchedule(newTimeSchedule domain.TimeSchedule) (int64, error) {
+func (tsr TimeScheduleRepository) CreateTimeSchedule(m304ID int) (int, error) {
 	ctx := context.Background()
 
-	arg := mysqlc.CreateTimeScheduleParams{
-		DeviceConditionID: int32(newTimeSchedule.DeviceConditionID),
-		StartTime:         newTimeSchedule.StartTime,
-		EndTime:           newTimeSchedule.EndTime,
-	}
-
-	id, err := tsr.queries.CreateTimeSchedule(ctx, arg)
+	id, err := tsr.queries.CreateTimeSchedule(ctx, int32(m304ID))
 	if err != nil {
 		return 0, err
 	}
-	return id, nil
+
+	return int(id), nil
 }
 
-func (tsr TimeScheduleRepository) GetTimeScheduleFromID(ID int) (*domain.TimeSchedule, error) {
+func (tsr TimeScheduleRepository) GetTimeScheduleFromM304(m304ID int) (*domain.TimeSchedule, error) {
 	ctx := context.Background()
 
-	timeSchedule, err := tsr.queries.GetTimeScheduleFromID(ctx, int32(ID))
+	timeScheduleRow, err := tsr.queries.GetTimeScheduleFromM304(ctx, int32(m304ID))
 	if err != nil {
 		return nil, err
 	}
 
-	getTimeSchedule := domain.NewTimeSchedule(
-		int(timeSchedule.ID),
-		int(timeSchedule.DeviceConditionID),
-		timeSchedule.StartTime,
-		timeSchedule.EndTime,
+	emptyRows := []domain.TimeScheduleRow{}
+
+	timeSchedule := domain.NewTimeSchedule(
+		int(timeScheduleRow.M304ID),
+		emptyRows,
 	)
 
-	return getTimeSchedule, nil
+	return timeSchedule, nil
 }
 
-func (tsr TimeScheduleRepository) GetTimeSchedulesFromDeviceCondition(deviceConditionID int) ([]*domain.TimeSchedule, error) {
+func (tsr TimeScheduleRepository) UpdateTimeSchedule(timeSchedule domain.TimeSchedule) error {
 	ctx := context.Background()
 
-	timeSchedulesRow, err := tsr.queries.GetTimeSchedulesFromDeviceCondition(ctx, int32(deviceConditionID))
-	if err != nil {
-		return nil, err
+	arg := mysqlc.UpdateTimeScheduleParams{
+		M304ID: int32(timeSchedule.M304ID),
+		ID:     int32(timeSchedule.ID),
 	}
 
-	timeSchedules := make([]*domain.TimeSchedule, len(timeSchedulesRow))
-	for i, v := range timeSchedulesRow {
-		timeSchedules[i] = domain.NewTimeSchedule(
-			int(v.ID),
-			int(v.DeviceConditionID),
-			v.StartTime,
-			v.EndTime,
-		)
+	if err := tsr.queries.UpdateTimeSchedule(ctx, arg); err != nil {
+		return err
 	}
 
-	return timeSchedules, nil
+	return nil
 }

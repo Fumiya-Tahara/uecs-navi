@@ -3,3 +3,5 @@ generate:
   gin-server: true
   models: true
 output: ../internal/controller/generated/openapi.gen.go
+
+# oapi-codegen --config=config.yml ./openapi.yml

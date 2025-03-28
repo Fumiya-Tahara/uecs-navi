@@ -9,7 +9,7 @@ export async function createWorkflowWithUI(
     const response = await apiClient.post(`/workflows-with-ui`, data);
     return response.data;
   } catch (error) {
-    console.error("Error creating device:", error);
+    console.error("Error creating workflow:", error);
     throw error;
   }
 }

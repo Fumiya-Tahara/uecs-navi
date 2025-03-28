@@ -1,51 +1,51 @@
-// Request
-export interface HouseResponse {
+export interface ClimateData {
   id: number;
   name: string;
-}
-
-export interface DeviceResponse {
-  id: number;
-  device_name: string;
-}
-
-export interface JoinedDeviceResponse {
-  id: number;
-  name: string;
-  house_id: number;
-  set_point?: number;
-  duration?: number;
-  climate_data: string;
   unit: string;
 }
 
-export interface ClimateDataResponse {
-  id: number;
-  climate_data: string;
-  unit: string;
+export interface Relays {
+  relay_1: boolean;
+  relay_2: boolean;
+  relay_3: boolean;
+  relay_4: boolean;
+  relay_5: boolean;
+  relay_6: boolean;
+  relay_7: boolean;
+  relay_8: boolean;
 }
 
-export interface CreateDeviceRequest {
-  device_name: string;
+export interface Workflow {
+  id: number;
+  m304_id: number;
+  name: string;
+}
+
+export interface Condition {
+  selected_climate_data_id: number;
+  selected_comparison_operator_id: number;
+  set_point: number;
+}
+
+export interface TimeScheduleRow {
+  start_time: string;
+  end_time: string;
+  selected_workflow_id: number;
+  condition: Condition;
+}
+
+export type M304ID = number;
+
+// Request Interfaces
+
+export type HouseRequest = string;
+
+export interface DeviceRequest {
   climate_data_id: number;
-  set_point?: number;
-  duration?: number;
-}
-
-export interface CreateHouseRequest {
+  m304_id: number;
   name: string;
+  rly: number;
 }
-
-// export interface WorkflowRequest {
-//   device_id: number;
-//   house_id: number;
-//   climate_data_id: number;
-//   uecs_device_id: number;
-//   valid: boolean;
-//   set_point: number;
-//   duration: number;
-//   operator: number;
-// }
 
 export interface NodeRequest {
   workflow_node_id: string;
@@ -60,24 +60,36 @@ export interface EdgeRequest {
   target_node_id: string;
 }
 
-export type WorkflowRequest = string;
-
 export interface WorkflowUIRequest {
   nodes: NodeRequest[];
   edges: EdgeRequest[];
 }
 
 export interface WorkflowWithUIRequest {
-  workflow: WorkflowRequest;
+  workflow: Workflow;
   workflow_ui: WorkflowUIRequest;
+  relays: Relays;
 }
 
-// Response
-export interface OperationResponse {
+export interface TimeScheduleRequest {
   id: number;
-  device_id: number;
+  m304_id: number;
+  time_schedule: TimeScheduleRow[];
+}
+
+// Response Interfaces
+
+export interface HousesResponse {
+  id: number;
   name: string;
-  rly_on: number;
+}
+
+export interface DeviceResponse {
+  id: number;
+  climate_data_id: number;
+  m304_id: number;
+  name: string;
+  rly: number;
 }
 
 export interface NodeResponse {
@@ -97,23 +109,19 @@ export interface EdgeResponse {
   target_node_id: string;
 }
 
-export interface WorkflowResponse {
-  id: number;
-  name: string;
-}
-
 export interface WorkflowUIResponse {
   nodes: NodeResponse[];
   edges: EdgeResponse[];
 }
 
 export interface WorkflowWithUIResponse {
-  workflow: WorkflowResponse;
+  workflow: Workflow;
   workflow_ui: WorkflowUIResponse;
 }
 
 export interface TimeScheduleResponse {
-  start_time: string;
-  end_time: string;
-  workflows: WorkflowResponse[];
+  id: number;
+  m304_id: number;
+  workflows: Workflow[];
+  time_schedules: TimeScheduleRow[];
 }
