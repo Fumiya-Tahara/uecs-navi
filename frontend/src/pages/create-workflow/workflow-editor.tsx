@@ -80,7 +80,6 @@ export function WorkflowEditor(props: WorkflowEditorProps) {
                 position: { x: node.position_x, y: node.position_y },
                 data: {
                   ...(node.data as Record<string, unknown>),
-                  // 必要なデータ
                 },
               };
             case "operation":
@@ -91,7 +90,6 @@ export function WorkflowEditor(props: WorkflowEditorProps) {
                   position: { x: node.position_x, y: node.position_y },
                   data: {
                     ...(node.data as Record<string, unknown>),
-                    // 必要なデータ
                     updateNode: updateNodeData,
                     devicesList: workflowInfo.m304DeviceMap.get(
                       selectedData.selectedM304ID
@@ -135,7 +133,6 @@ export function WorkflowEditor(props: WorkflowEditorProps) {
 
   const { screenToFlowPosition } = useReactFlow();
 
-  // イベントハンドラー
   const onConnect = useCallback(
     (params: Connection) => {
       const newEdge = {
@@ -196,7 +193,6 @@ export function WorkflowEditor(props: WorkflowEditorProps) {
     [screenToFlowPosition, type]
   );
 
-  // 画面の大きさ調節
   interface Viewport {
     x: number;
     y: number;
@@ -213,8 +209,6 @@ export function WorkflowEditor(props: WorkflowEditorProps) {
             edges={edges}
             nodesDraggable={true} // ノードのドラッグを無効化
             edgesReconnectable={true} // エッジの更新を無効化
-            // panOnDrag={false} // 画面全体のドラッグを無効化
-            // zoomOnScroll={false} // マウスホイールでのズームを無効化
             zoomOnPinch={false} // ピンチ操作でのズームを無効化
             zoomOnDoubleClick={false} // ダブルクリックでのズームを無効化
             defaultViewport={defaultViewport} // 初期配置と大きさを設定

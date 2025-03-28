@@ -149,17 +149,7 @@ function SelectWorkflow() {
     if (workflowID === 0) {
       setSelectedData((prev) => ({
         ...prev,
-        selectedWorkflow: {
-          workflow: {
-            id: 0,
-            m304_id: 0,
-            name: "",
-          },
-          workflow_ui: {
-            nodes: [],
-            edges: [],
-          },
-        },
+        selectedWorkflow: null,
       }));
 
       setSelectedWorkflowID("0");
