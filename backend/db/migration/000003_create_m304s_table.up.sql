@@ -1,5 +1,6 @@
 CREATE TABLE m304s (
     id INT AUTO_INCREMENT PRIMARY KEY,
+    uecs_id VARCHAR(255) UNIQUE,
     house_id INT NOT NULL,
     mac_addr VARCHAR(255) NOT NULL,
     dhcp_flg BOOLEAN NOT NULL,
