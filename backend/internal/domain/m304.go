@@ -32,6 +32,7 @@ func NewM304(uecsID string, houseID int, macAddr string, dhcpFlg bool, ipAddr *s
 func NewM304WithID(id int, uecsID string, houseID int, macAddr string, dhcpFlg bool, ipAddr *string, netMask *string, defgw *string, dns *string, venderName string, nodeName *string) *M304 {
 	return &M304{
 		ID:         id,
+		UecsID:     uecsID,
 		HouseID:    houseID,
 		MacAddr:    macAddr,
 		DhcpFlg:    dhcpFlg,
