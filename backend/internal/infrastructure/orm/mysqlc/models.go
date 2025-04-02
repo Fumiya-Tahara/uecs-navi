@@ -61,6 +61,7 @@ type House struct {
 
 type M304 struct {
 	ID         int32
+	UecsID     sql.NullString
 	HouseID    int32
 	MacAddr    string
 	DhcpFlg    bool

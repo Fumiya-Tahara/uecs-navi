@@ -2,6 +2,7 @@ package domain
 
 type M304 struct {
 	ID         int
+	UecsID     string
 	HouseID    int
 	MacAddr    string
 	DhcpFlg    bool
@@ -13,8 +14,9 @@ type M304 struct {
 	NodeName   *string
 }
 
-func NewM304(houseID int, macAddr string, dhcpFlg bool, ipAddr *string, netMask *string, defgw *string, dns *string, venderName string, nodeName *string) *M304 {
+func NewM304(uecsID string, houseID int, macAddr string, dhcpFlg bool, ipAddr *string, netMask *string, defgw *string, dns *string, venderName string, nodeName *string) *M304 {
 	return &M304{
+		UecsID:     uecsID,
 		HouseID:    houseID,
 		MacAddr:    macAddr,
 		DhcpFlg:    dhcpFlg,
@@ -27,9 +29,10 @@ func NewM304(houseID int, macAddr string, dhcpFlg bool, ipAddr *string, netMask 
 	}
 }
 
-func NewM304WithID(id int, houseID int, macAddr string, dhcpFlg bool, ipAddr *string, netMask *string, defgw *string, dns *string, venderName string, nodeName *string) *M304 {
+func NewM304WithID(id int, uecsID string, houseID int, macAddr string, dhcpFlg bool, ipAddr *string, netMask *string, defgw *string, dns *string, venderName string, nodeName *string) *M304 {
 	return &M304{
 		ID:         id,
+		UecsID:     uecsID,
 		HouseID:    houseID,
 		MacAddr:    macAddr,
 		DhcpFlg:    dhcpFlg,
