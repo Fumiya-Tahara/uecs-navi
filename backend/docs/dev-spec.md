@@ -38,10 +38,10 @@ backend
 .envファイルを作成し、環境変数を設定する。
 #### テーブル作成
 コンテナを起動してgolang-migrateでのマイグレーション実行コマンドを実行する。
-```
+```sh
 migrate -source file://db/migration -database "mysql://user名:パスワード@tcp(コンテナ名:3306)/DB名" up
 ```
 #### seeding
-```
+```sh
 go run cmd/seeding/seeding.go
 ```
