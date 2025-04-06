@@ -4,7 +4,7 @@
 	"name": "Go",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"dockerComposeFile": "docker-compose.yml",
-    "service": "uecs-navi-dev",
+    "service": "uecs-navi-dev-backend",
     "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}"
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
