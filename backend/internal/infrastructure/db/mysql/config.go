@@ -6,6 +6,11 @@ import (
 	"github.com/spf13/viper"
 )
 
+var (
+	DevEnvPath             = "./"
+	IntegrationTestEnvPath = "./../"
+)
+
 type Config struct {
 	Host     string
 	Port     string
@@ -14,10 +19,10 @@ type Config struct {
 	DBName   string
 }
 
-func NewConfig() *Config {
+func NewConfig(envPath string) *Config {
 	viper.SetConfigName(".env")
 	viper.SetConfigType("env")
-	viper.AddConfigPath("./")
+	viper.AddConfigPath(envPath)
 
 	err := viper.ReadInConfig()
 	if err != nil {

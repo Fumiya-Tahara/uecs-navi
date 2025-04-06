@@ -13,7 +13,8 @@ import (
 var sqlFilePath = "db/seeds"
 
 func main() {
-	db, err := mysql.ConnectDB()
+	cfg := mysql.NewConfig(mysql.IntegrationTestEnvPath)
+	db, err := mysql.ConnectDB(*cfg)
 	if err != nil {
 		log.Printf("error connecting to the database: %v", err)
 		return

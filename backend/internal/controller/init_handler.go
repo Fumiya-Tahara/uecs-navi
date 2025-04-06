@@ -8,7 +8,8 @@ import (
 )
 
 func InitHandler() (*Handler, error) {
-	db, err := mysql.ConnectDB()
+	cfg := mysql.NewConfig(mysql.IntegrationTestEnvPath)
+	db, err := mysql.ConnectDB(*cfg)
 	if err != nil {
 		return nil, err
 	}
