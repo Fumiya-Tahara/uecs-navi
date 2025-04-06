@@ -3,8 +3,10 @@ import { TimeTable } from "./time-table";
 import { Navigation } from "@/layouts/navigation";
 import { useState, useEffect } from "react";
 import { ClimateData, TimeScheduleResponse } from "@/types/api";
-import { getTimeSchedules } from "@/features/api/mocks/setting-time-schedule-api";
-import { getClimateDatas } from "@/features/api/mocks/utility-api";
+// import { getTimeSchedule } from "@/features/api/mocks/setting-time-schedule-api";
+// import { getClimateDatas } from "@/features/api/mocks/utility-api";
+import { getTimeSchedule } from "@/features/api/time-schedule/get-time-schedule";
+import { getClimateDatas } from "@/features/api/climate-data/get-climate-data";
 import { useTimeScheduleInfo } from "@/hooks/time-schedule-info-context";
 import { useM304IDs } from "@/hooks/m304ids-context";
 
@@ -47,7 +49,7 @@ export function TimeSchedule() {
   useEffect(() => {
     const fetchInitData = async () => {
       setLoading(true);
-      const climateData: ClimateData[] = getClimateDatas();
+      const climateData: ClimateData[] = await getClimateDatas();
       const timeScheduleMap: Map<number, TimeScheduleResponse> = new Map();
 
       if (!m304IDs.m304IDs) {
@@ -57,7 +59,7 @@ export function TimeSchedule() {
 
       for (const m304ID of m304IDs.m304IDs) {
         const timeScheduleRes: TimeScheduleResponse | null =
-          await getTimeSchedules(m304ID);
+          await getTimeSchedule(m304ID);
         if (timeScheduleRes) {
           timeScheduleMap.set(m304ID, timeScheduleRes);
         }

@@ -1,9 +1,9 @@
-import { WorkflowWithUIResponse } from "@/types/api";
+import { TimeScheduleResponse } from "@/types/api";
 import { apiClient } from "@/lib/api-client";
 
 export async function getTimeSchedule(
   m304ID: number
-): Promise<WorkflowWithUIResponse[]> {
+): Promise<TimeScheduleResponse> {
   try {
     const response = await apiClient.get(`/time-schedule/${m304ID}`);
     return response.data;

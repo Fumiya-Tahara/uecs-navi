@@ -4,13 +4,14 @@ import { WorkflowInfoProvider } from "@/pages/create-workflow/context/workflow-i
 import { useWorkflowInfo } from "@/pages/create-workflow/context/workflow-info-context";
 import { useEffect } from "react";
 import { DeviceResponse, WorkflowWithUIResponse } from "@/types/api";
-import {
-  getDevices,
-  getWorkflowsWithUI,
-} from "@/features/api/mocks/workflow-api";
+// import {
+//   getDevices,
+//   getWorkflowsWithUI,
+// } from "@/features/api/mocks/workflow-api";
+import { getDevices } from "@/features/api/device/get-device";
+import { getWorkflowsWithUI } from "@/features/api/workflow/get-workflow-with-ui";
 import { WorkflowEditor } from "./workflow-editor";
 import { ReactFlowProvider } from "@xyflow/react";
-import { NodeInfoProvider } from "@/pages/create-workflow/context/node-info-context";
 import { DnDProvider } from "@/pages/create-workflow/context/dnd-context";
 import { SelectedDataProvider } from "./context/selected-data-context";
 import { SelectToolbar } from "./toolbar";
@@ -67,13 +68,11 @@ export default function WorkflowWrapper() {
   return (
     <WorkflowInfoProvider>
       <ReactFlowProvider>
-        <NodeInfoProvider>
-          <DnDProvider>
-            <SelectedDataProvider>
-              <Workflow />
-            </SelectedDataProvider>
-          </DnDProvider>
-        </NodeInfoProvider>
+        <DnDProvider>
+          <SelectedDataProvider>
+            <Workflow />
+          </SelectedDataProvider>
+        </DnDProvider>
       </ReactFlowProvider>
     </WorkflowInfoProvider>
   );

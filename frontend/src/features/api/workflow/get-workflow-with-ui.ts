@@ -1,7 +1,7 @@
 import { WorkflowWithUIResponse } from "@/types/api";
 import { apiClient } from "@/lib/api-client";
 
-export async function getWorkflows(
+export async function getWorkflowsWithUI(
   m304ID: number
 ): Promise<WorkflowWithUIResponse[]> {
   try {

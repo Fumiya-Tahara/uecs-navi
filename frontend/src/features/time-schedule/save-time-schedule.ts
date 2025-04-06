@@ -1,11 +1,15 @@
 import { TimeScheduleRequest, TimeScheduleResponse } from "@/types/api";
 import { createTimeScheduleReq } from "./create-time-schedule-req";
-import {
-  createTimeSchedule,
-  updateTimeSchedule,
-} from "../api/mocks/setting-time-schedule-api";
+// import {
+//   createTimeSchedule,
+//   updateTimeSchedule,
+// } from "../api/mocks/setting-time-schedule-api";
+import { createTimeSchedule } from "../api/time-schedule/create-time-schedule";
+import { updateTimeSchedule } from "../api/time-schedule/update-time-schedule";
 
-export function saveTimeSchedule(timeSchedule: TimeScheduleResponse | null) {
+export async function saveTimeSchedule(
+  timeSchedule: TimeScheduleResponse | null
+) {
   if (!timeSchedule) {
     return;
   }
@@ -23,9 +27,13 @@ export function saveTimeSchedule(timeSchedule: TimeScheduleResponse | null) {
   console.log(timeScheduleReq);
 
   const timeScheduleID: number = timeScheduleReq.id;
-  if (timeScheduleID == 0) {
-    createTimeSchedule(timeScheduleReq);
-  } else {
-    updateTimeSchedule(timeScheduleReq);
+  try {
+    if (timeScheduleID === 0) {
+      await createTimeSchedule(timeScheduleReq);
+    } else {
+      await updateTimeSchedule(timeScheduleReq);
+    }
+  } catch (error) {
+    console.error("Failed to save time schedule:", error);
   }
 }

@@ -4,7 +4,8 @@ import { Box, Divider, Typography } from "@mui/material";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import { useState, useEffect } from "react";
 import { DeviceResponse } from "@/types/api";
-import { getDevices } from "@/features/api/mocks/workflow-api";
+// import { getDevices } from "@/features/api/mocks/workflow-api";
+import { getDevices } from "@/features/api/device/get-device";
 import { useSelectedData } from "./context/selected-data-context";
 
 export const Sidebar = () => {

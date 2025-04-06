@@ -2,12 +2,14 @@ import { DeviceResponse } from "@/types/api";
 import { WorkflowWithUIRequest } from "@/types/api";
 import { createWorkflowWithUIRequest } from "./create-workflow-req";
 import { Node, Edge } from "@xyflow/react";
-import {
-  createWorkflowWithUI,
-  updateWorkflowWithUI,
-} from "../api/mocks/workflow-api";
+// import {
+//   createWorkflowWithUI,
+//   updateWorkflowWithUI,
+// } from "../api/mocks/workflow-api";
+import { createWorkflowWithUI } from "../api/workflow/create-workflow";
+import { updateWorkflowWithUI } from "../api/workflow/update-workflow";
 
-export function saveWorkflow(
+export async function saveWorkflow(
   m304ID: number | null,
   workflowID: number | undefined,
   deviceList: DeviceResponse[] | undefined,
@@ -41,9 +43,13 @@ export function saveWorkflow(
 
   console.log(workflowReq);
 
-  if (workflowReq?.workflow.id == 0) {
-    createWorkflowWithUI(workflowReq);
-  } else {
-    updateWorkflowWithUI(workflowReq);
+  try {
+    if (workflowReq?.workflow.id == 0) {
+      await createWorkflowWithUI(workflowReq);
+    } else {
+      await updateWorkflowWithUI(workflowReq);
+    }
+  } catch (error) {
+    console.error("Failed to save workflow", error);
   }
 }

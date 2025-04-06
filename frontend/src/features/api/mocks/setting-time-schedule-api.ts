@@ -1,6 +1,6 @@
 import { TimeScheduleRequest, TimeScheduleResponse } from "@/types/api";
 
-export function getTimeSchedules(m304ID: number): TimeScheduleResponse | null {
+export function getTimeSchedule(m304ID: number): TimeScheduleResponse | null {
   const schedule1: TimeScheduleResponse = {
     id: 1,
     m304_id: 1,
