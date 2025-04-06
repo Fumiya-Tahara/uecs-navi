@@ -8,13 +8,14 @@ services:
     container_name: uecs_navi_test_go
     volumes:
       - ../backend:/backend
+      - ../.env:/.env
     ports:
       - "8080:8080"
     networks:
       - uecs-navi-network
     depends_on:
       - uecs_navi_test_db
-    command: sh -c "go run cmd/server/main.go"
+    command: sh -c "air -c .air.toml"
 
   uecs_navi_test_node:
     image: node:22-alpine
@@ -33,10 +34,8 @@ services:
   uecs_navi_test_db:
     image: mysql:latest
     container_name: uecs_navi_test_db
-    environment:
-      MYSQL_USER: mysql
-      MYSQL_PASSWORD: mysql
-      MYSQL_DATABASE: uecs_navi
+    env_file:
+      - ../.env
     volumes:
       - ./mysql:/var/lib/mysql
     ports:
