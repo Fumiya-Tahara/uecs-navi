@@ -1,6 +1,6 @@
 ### Issue へのリンク
 
-#xxx
+Closes #xxx
 
 ## 概要
 
