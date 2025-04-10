@@ -15,8 +15,9 @@ func TestGetM304IDs(t *testing.T) {
 
 	mr := mock_repository.NewMockM304RepositoryInterface(ctrl)
 	cdr := mock_repository.NewMockClimateDataRepositoryInterface(ctrl)
+	dr := mock_repository.NewMockDeviceRepositoryInterface(ctrl)
 
-	pus := NewPageUtilitiesService(mr, cdr)
+	pus := NewPageUtilitiesService(mr, cdr, dr)
 
 	m304s := testdata.GetTestM304s()
 	wantM304IDs := []int{1, 2, 3}
@@ -38,8 +39,9 @@ func TestGetClimateData(t *testing.T) {
 
 	mr := mock_repository.NewMockM304RepositoryInterface(ctrl)
 	cdr := mock_repository.NewMockClimateDataRepositoryInterface(ctrl)
+	dr := mock_repository.NewMockDeviceRepositoryInterface(ctrl)
 
-	pus := NewPageUtilitiesService(mr, cdr)
+	pus := NewPageUtilitiesService(mr, cdr, dr)
 
 	climateData := testdata.GetTestClimateData()
 
@@ -52,4 +54,28 @@ func TestGetClimateData(t *testing.T) {
 		assert.Equal(t, climateData, *got, "Expected data %d, got %d", climateData, *got)
 	})
 
+}
+
+func TestGetDevices(t *testing.T) {
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+
+	mr := mock_repository.NewMockM304RepositoryInterface(ctrl)
+	cdr := mock_repository.NewMockClimateDataRepositoryInterface(ctrl)
+	dr := mock_repository.NewMockDeviceRepositoryInterface(ctrl)
+
+	pus := NewPageUtilitiesService(mr, cdr, dr)
+
+	deviceMap := testdata.GetDevicesMap()
+
+	t.Run("return devices connected to m304", func(t *testing.T) {
+		for k, v := range deviceMap {
+			dr.EXPECT().GetDevicesFromM304(k).Return(&v, nil)
+
+			got, err := pus.GetDevices(k)
+			assert.NoError(t, err, "Expected no error, got %v", err)
+			assert.Equal(t, deviceMap[k], *got, "Expected data %d, got %d", deviceMap[k], *got)
+
+		}
+	})
 }
