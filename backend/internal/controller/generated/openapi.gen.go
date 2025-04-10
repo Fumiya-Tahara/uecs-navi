@@ -33,6 +33,15 @@ type DeviceRequest struct {
 	Rly           *int    `json:"rly,omitempty"`
 }
 
+// DeviceResponse defines model for DeviceResponse.
+type DeviceResponse struct {
+	ClimateDataId *int    `json:"climate_data_id,omitempty"`
+	Id            *int    `json:"id,omitempty"`
+	M304Id        *int    `json:"m304_id,omitempty"`
+	Name          *string `json:"name,omitempty"`
+	Rly           *int    `json:"rly,omitempty"`
+}
+
 // EdgeRequest defines model for EdgeRequest.
 type EdgeRequest struct {
 	SourceNodeId *string `json:"source_node_id,omitempty"`

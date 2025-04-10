@@ -48,7 +48,7 @@ paths:
       tags:
         - Utilities
       summary: Get devices connected to M304
-      response:
+      responses:
         "200":
           description: OK
           content:
