@@ -43,8 +43,14 @@ func (h Handler) CreateHouse(c *gin.Context) {
 
 }
 
-func (h Handler) GetDevice(c *gin.Context, houseId int) {
+func (h Handler) GetDevices(c *gin.Context, m304Id generated.M304ID) {
+	devices, err := h.pageUtilitiesService.GetDevices(m304Id)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"status": "InternalServerError"})
+		return
+	}
 
+	c.JSON(http.StatusOK, devices)
 }
 
 func (h Handler) CreateDevice(c *gin.Context, houseId int) {

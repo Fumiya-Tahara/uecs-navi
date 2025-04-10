@@ -193,15 +193,15 @@ type ServerInterface interface {
 	// Get houses list
 	// (GET /houses)
 	GetHouses(c *gin.Context)
-	// Get devices list
-	// (GET /houses/{house-id})
-	GetDevice(c *gin.Context, houseId HouseId)
 	// Create device
 	// (POST /houses/{house-id}/devices)
 	CreateDevice(c *gin.Context, houseId HouseId)
 	// Get M304 ID list
 	// (GET /m304s)
 	GetM304s(c *gin.Context)
+	// Get devices connected to M304
+	// (GET /m304s/{m304-id}/devices)
+	GetDevices(c *gin.Context, m304Id M304Id)
 	// Create and build time schedule
 	// (POST /time-schedule)
 	CreateAndBuildTimeSchedule(c *gin.Context)
@@ -260,30 +260,6 @@ func (siw *ServerInterfaceWrapper) GetHouses(c *gin.Context) {
 	siw.Handler.GetHouses(c)
 }
 
-// GetDevice operation middleware
-func (siw *ServerInterfaceWrapper) GetDevice(c *gin.Context) {
-
-	var err error
-
-	// ------------- Path parameter "house-id" -------------
-	var houseId HouseId
-
-	err = runtime.BindStyledParameterWithOptions("simple", "house-id", c.Param("house-id"), &houseId, runtime.BindStyledParameterOptions{Explode: false, Required: true})
-	if err != nil {
-		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter house-id: %w", err), http.StatusBadRequest)
-		return
-	}
-
-	for _, middleware := range siw.HandlerMiddlewares {
-		middleware(c)
-		if c.IsAborted() {
-			return
-		}
-	}
-
-	siw.Handler.GetDevice(c, houseId)
-}
-
 // CreateDevice operation middleware
 func (siw *ServerInterfaceWrapper) CreateDevice(c *gin.Context) {
 
@@ -319,6 +295,30 @@ func (siw *ServerInterfaceWrapper) GetM304s(c *gin.Context) {
 	}
 
 	siw.Handler.GetM304s(c)
+}
+
+// GetDevices operation middleware
+func (siw *ServerInterfaceWrapper) GetDevices(c *gin.Context) {
+
+	var err error
+
+	// ------------- Path parameter "m304-id" -------------
+	var m304Id M304Id
+
+	err = runtime.BindStyledParameterWithOptions("simple", "m304-id", c.Param("m304-id"), &m304Id, runtime.BindStyledParameterOptions{Explode: false, Required: true})
+	if err != nil {
+		siw.ErrorHandler(c, fmt.Errorf("Invalid format for parameter m304-id: %w", err), http.StatusBadRequest)
+		return
+	}
+
+	for _, middleware := range siw.HandlerMiddlewares {
+		middleware(c)
+		if c.IsAborted() {
+			return
+		}
+	}
+
+	siw.Handler.GetDevices(c, m304Id)
 }
 
 // CreateAndBuildTimeSchedule operation middleware
@@ -474,9 +474,9 @@ func RegisterHandlersWithOptions(router gin.IRouter, si ServerInterface, options
 
 	router.GET(options.BaseURL+"/climate-datas", wrapper.GetClimateData)
 	router.GET(options.BaseURL+"/houses", wrapper.GetHouses)
-	router.GET(options.BaseURL+"/houses/:house-id", wrapper.GetDevice)
 	router.POST(options.BaseURL+"/houses/:house-id/devices", wrapper.CreateDevice)
 	router.GET(options.BaseURL+"/m304s", wrapper.GetM304s)
+	router.GET(options.BaseURL+"/m304s/:m304-id/devices", wrapper.GetDevices)
 	router.POST(options.BaseURL+"/time-schedule", wrapper.CreateAndBuildTimeSchedule)
 	router.PUT(options.BaseURL+"/time-schedule", wrapper.UpdateAndBuildTimeSchedule)
 	router.GET(options.BaseURL+"/time-schedule/:m304-id", wrapper.GetTimeSchedule)

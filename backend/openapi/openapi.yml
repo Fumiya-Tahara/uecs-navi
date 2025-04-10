@@ -40,6 +40,24 @@ paths:
                 items:
                   $ref: "#/components/schemas/M304ID"
 
+  /m304s/{m304-id}/devices:
+    parameters:
+      - $ref: "#/components/parameters/m304-id"
+    get:
+      operationId: getDevices
+      tags:
+        - Utilities
+      summary: Get devices connected to M304
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DeviceResponse"
+
   /houses:
     get:
       operationId: getHouses
@@ -55,24 +73,6 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/HousesResponse"
-
-  /houses/{house-id}:
-    parameters:
-      - $ref: "#/components/parameters/house-id"
-    get:
-      operationId: getDevice
-      tags:
-        - DeviceSettingPage
-      summary: Get devices list
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/DeviceResponse"
                   
   /houses/{house-id}/devices:
     parameters:
@@ -377,6 +377,7 @@ components:
           type: integer
         name:
           type: string
+
     DeviceResponse:
       type: object
       properties:

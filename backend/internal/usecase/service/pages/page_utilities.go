@@ -10,12 +10,14 @@ import (
 type PageUtilitiesService struct {
 	m304Repository        interfaces.M304RepositoryInterface
 	climateDataRepository interfaces.ClimateDataRepositoryInterface
+	deviceRepository      interfaces.DeviceRepositoryInterface
 }
 
-func NewPageUtilitiesService(mr interfaces.M304RepositoryInterface, cdr interfaces.ClimateDataRepositoryInterface) *PageUtilitiesService {
+func NewPageUtilitiesService(mr interfaces.M304RepositoryInterface, cdr interfaces.ClimateDataRepositoryInterface, dr interfaces.DeviceRepositoryInterface) *PageUtilitiesService {
 	return &PageUtilitiesService{
 		m304Repository:        mr,
 		climateDataRepository: cdr,
+		deviceRepository:      dr,
 	}
 }
 
@@ -42,4 +44,14 @@ func (pus PageUtilitiesService) GetClimateData() (*[]domain.ClimateData, error) 
 	}
 
 	return climateData, nil
+}
+
+func (pus PageUtilitiesService) GetDevices(m304ID int) (*[]domain.Device, error) {
+	devices, err := pus.deviceRepository.GetDevicesFromM304(m304ID)
+	if err != nil {
+		log.Println(err)
+		return nil, err
+	}
+
+	return devices, nil
 }

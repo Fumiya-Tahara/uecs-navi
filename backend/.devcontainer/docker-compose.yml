@@ -1,8 +1,8 @@
 version: "3.8"
 
 services:
-  uecs-navi-dev:
-    container_name: uecs-navi-backend
+  uecs-navi-dev-backend:
+    container_name: uecs-navi-dev-backend
     build:
       context: .
       dockerfile: Dockerfile
@@ -17,7 +17,7 @@ services:
       - "8080:8080"
 
   uecs-navi-dev-db:
-    container_name: uecs_navi_test_db
+    container_name: uecs-navi-dev-db
     image: mysql:latest
     restart: unless-stopped
     volumes:
