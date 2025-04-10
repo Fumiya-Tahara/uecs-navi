@@ -4,6 +4,7 @@ import "github.com/Fumiya-Tahara/uecs-navi.git/internal/domain"
 
 func GetTestM304s() []domain.M304 {
 	ID1 := 1
+	uecsID1 := "000000000001"
 	houseID1 := 1
 	macAddr1 := "00:11:22:33:44:55"
 	dhcpFlg1 := true
@@ -15,6 +16,7 @@ func GetTestM304s() []domain.M304 {
 	nodeName1 := "NodeA"
 
 	ID2 := 2
+	uecsID2 := "000000000002"
 	houseID2 := 2
 	macAddr2 := "00:11:22:33:44:66"
 	dhcpFlg2 := false
@@ -26,6 +28,7 @@ func GetTestM304s() []domain.M304 {
 	nodeName2 := "NodeB"
 
 	ID3 := 3
+	uecsID3 := "000000000003"
 	houseID3 := 3
 	macAddr3 := "00:11:22:33:44:77"
 	dhcpFlg3 := true
@@ -37,9 +40,9 @@ func GetTestM304s() []domain.M304 {
 	nodeName3 := "NodeC"
 
 	m304s := []domain.M304{
-		*domain.NewM304WithID(ID1, houseID1, macAddr1, dhcpFlg1, &ip1, &netmask1, &defgw1, &dns1, venderName1, &nodeName1),
-		*domain.NewM304WithID(ID2, houseID2, macAddr2, dhcpFlg2, &ip2, &netmask2, &defgw2, &dns2, venderName2, &nodeName2),
-		*domain.NewM304WithID(ID3, houseID3, macAddr3, dhcpFlg3, &ip3, &netmask3, &defgw3, &dns3, venderName3, &nodeName3),
+		*domain.NewM304WithID(ID1, uecsID1, houseID1, macAddr1, dhcpFlg1, &ip1, &netmask1, &defgw1, &dns1, venderName1, &nodeName1),
+		*domain.NewM304WithID(ID2, uecsID2, houseID2, macAddr2, dhcpFlg2, &ip2, &netmask2, &defgw2, &dns2, venderName2, &nodeName2),
+		*domain.NewM304WithID(ID3, uecsID3, houseID3, macAddr3, dhcpFlg3, &ip3, &netmask3, &defgw3, &dns3, venderName3, &nodeName3),
 	}
 
 	return m304s
