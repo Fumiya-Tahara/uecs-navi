@@ -23,10 +23,11 @@ func InitHandler() (*Handler, error) {
 	tsrr := repository.NewTimeScheduleRowRepository(query)
 	mr := repository.NewM304Repository(query)
 	cdr := repository.NewClimateDataRepository(query)
+	dr := repository.NewDeviceRepository(query)
 
 	wps := pages.NewWorkflowPageService(wr, wor, nr, er)
 	tsps := pages.NewTimeSchedulePageService(tsr, tsrr, wr)
-	pus := pages.NewPageUtilitiesService(mr, cdr)
+	pus := pages.NewPageUtilitiesService(mr, cdr, dr)
 
 	h := NewHandler(*wps, *tsps, *pus)
 
