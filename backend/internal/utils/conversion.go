@@ -106,3 +106,11 @@ func RawMessageToMap(raw json.RawMessage) (map[string]interface{}, error) {
 	}
 	return m, nil
 }
+
+func StringPtr(s string) *string {
+	return &s
+}
+
+func IntPtr(i int) *int {
+	return &i
+}
