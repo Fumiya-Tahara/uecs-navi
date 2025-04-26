@@ -1,3 +1,5 @@
+"use client";
+
 import { DeviceCard } from "@/components/setting-device/device-card";
 import { CreateDeviceButton } from "@/components/setting-device/create-button";
 import { Navigation } from "@/layouts/navigation";
