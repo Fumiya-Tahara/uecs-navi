@@ -45,10 +45,5 @@
   ],
   "exclude": [
     "./node_modules"
-  ],
-  "esModuleInterop": true,
-  "jsx": "preserve",
-  "allowJs": true,
-  "forceConsistentCasingInFileNames": true,
-  "incremental": true
+  ]
 }
