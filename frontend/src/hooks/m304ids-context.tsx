@@ -37,8 +37,9 @@ export const M304IDsProvider = ({
   useEffect(() => {
     const m304IDsList: number[] = getM304s();
 
-    m304IDs.m304IDs = m304IDsList;
-    setM304IDs(m304IDs);
+    setM304IDs({
+      m304IDs: m304IDsList,
+    });
   }, []);
 
   return (
