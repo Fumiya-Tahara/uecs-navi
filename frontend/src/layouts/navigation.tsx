@@ -9,8 +9,8 @@ export function Navigation({ children }: { children: React.ReactNode }) {
     <ThemeProvider theme={uecsTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        <Header></Header>
-        <Sidebar></Sidebar>
+        <Header />
+        <Sidebar />
         <Box component="main" sx={{ flexGrow: 1, padding: 3 }}>
           <Toolbar />
           {children}
