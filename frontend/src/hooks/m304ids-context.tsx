@@ -4,7 +4,10 @@ import {
   useState,
   Dispatch,
   SetStateAction,
+  useEffect,
 } from "react";
+// import { getM304s } from "@/features/api/mocks/utility-api";
+import { getM304s } from "@/features/api/mocks/utility-api";
 
 type M304IDsState = {
   m304IDs: number[] | null;
@@ -30,6 +33,14 @@ export const M304IDsProvider = ({
   const [m304IDs, setM304IDs] = useState<M304IDsState>({
     m304IDs: [],
   });
+
+  useEffect(() => {
+    const m304IDsList: number[] = getM304s();
+
+    setM304IDs({
+      m304IDs: m304IDsList,
+    });
+  }, []);
 
   return (
     <M304IDsContext.Provider value={[m304IDs, setM304IDs]}>

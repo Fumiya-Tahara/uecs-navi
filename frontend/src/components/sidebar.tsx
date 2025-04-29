@@ -33,12 +33,12 @@ const sidebarItems: SidebarItem[] = [
   },
   {
     title: "ワークフロー制御",
-    path: "/workflow",
+    path: "/workflows",
     icon: <TimelineIcon />,
   },
   {
     title: "スケジュール設定",
-    path: "/schedule",
+    path: "/schedules",
     icon: <AccessTimeIcon />,
   },
 ];

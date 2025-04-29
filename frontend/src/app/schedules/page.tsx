@@ -1,3 +1,5 @@
+"use client";
+
 import { TimeSchedule } from "@/pages/time-schedule/time-schedule";
 import { TimeScheduleInfoProvider } from "@/hooks/time-schedule-info-context";
 
