@@ -1,7 +1,7 @@
 "use client";
 
-import { DeviceCard } from "@/components/setting-device/device-card";
-import { CreateDeviceButton } from "@/components/setting-device/create-button";
+import { DeviceCard } from "@/features/setting-device/device-card";
+import { CreateDeviceButton } from "@/features/setting-device/create-button";
 import { Navigation } from "@/layouts/navigation";
 import { Box, Tabs, Tab } from "@mui/material";
 import Grid from "@mui/material/Grid2";

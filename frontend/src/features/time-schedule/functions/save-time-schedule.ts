@@ -3,7 +3,7 @@ import { createTimeScheduleReq } from "./create-time-schedule-req";
 import {
   createTimeSchedule,
   updateTimeSchedule,
-} from "../api/mocks/setting-time-schedule-api";
+} from "@/features/api/mocks/setting-time-schedule-api";
 
 export function saveTimeSchedule(timeSchedule: TimeScheduleResponse | null) {
   if (!timeSchedule) {

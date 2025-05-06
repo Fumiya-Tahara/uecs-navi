@@ -14,11 +14,11 @@ import {
 import "@xyflow/react/dist/style.css";
 import { useMemo, useEffect, useCallback, DragEvent } from "react";
 import { Sidebar } from "./sidebar";
-import { useDnD } from "@/pages/create-workflow/context/dnd-context";
-import { useWorkflowInfo } from "@/pages/create-workflow/context/workflow-info-context";
+import { useDnD } from "@/contexts/workflow/dnd-context";
+import { useWorkflowInfo } from "@/contexts/workflow/workflow-info-context";
 import { WorkflowNameNode } from "./custom-nodes/workflow-name";
 import { OperationNode } from "./custom-nodes/operation";
-import { useSelectedData } from "./context/selected-data-context";
+import { useSelectedData } from "../../contexts/workflow/selected-data-context";
 import { WorkflowWithUIResponse } from "@/types/api";
 import { CustomNodeData } from "@/types/workflow";
 import { useNodesAndEdges } from "@/lib/nodes-and-edges-store";

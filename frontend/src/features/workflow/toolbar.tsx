@@ -9,16 +9,16 @@ import {
 } from "@mui/material";
 import Grid from "@mui/material/Grid2";
 import { grey } from "@mui/material/colors";
-import { useSelectedData } from "./context/selected-data-context";
+import { useSelectedData } from "../../contexts/workflow/selected-data-context";
 import { SelectChangeEvent } from "@mui/material";
-import { useWorkflowInfo } from "./context/workflow-info-context";
+import { useWorkflowInfo } from "../../contexts/workflow/workflow-info-context";
 import { useEffect, useState } from "react";
 import { DeviceResponse, WorkflowWithUIResponse } from "@/types/api";
 import { useM304IDs } from "@/hooks/m304ids-context";
 import { useNodesAndEdges } from "@/lib/nodes-and-edges-store";
 import { ConfirmButton } from "@/components/confirm-button";
-import { saveWorkflow } from "@/features/workflow/save-workflow";
-import { deleteWorkflow } from "@/features/workflow/delete-workflow";
+import { saveWorkflow } from "@/features/workflow/functions/save-workflow";
+import { deleteWorkflow } from "@/features/workflow/functions/delete-workflow";
 
 export function SelectToolbar() {
   const nodes = useNodesAndEdges((state) => state.nodes);

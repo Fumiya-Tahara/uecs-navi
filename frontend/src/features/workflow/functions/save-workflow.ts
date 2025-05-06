@@ -5,7 +5,7 @@ import { Node, Edge } from "@xyflow/react";
 import {
   createWorkflowWithUI,
   updateWorkflowWithUI,
-} from "../api/mocks/workflow-api";
+} from "../../api/mocks/workflow-api";
 
 export function saveWorkflow(
   m304ID: number | null,

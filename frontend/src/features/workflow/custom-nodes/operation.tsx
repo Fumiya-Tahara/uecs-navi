@@ -11,7 +11,7 @@ import {
 import DevicesIcon from "@mui/icons-material/Devices";
 import { Handle, Position, Node, NodeProps } from "@xyflow/react";
 import { useCallback, useState } from "react";
-import { useNodeInfo } from "@/pages/create-workflow/context/node-info-context";
+import { useNodeInfo } from "@/contexts/workflow/node-info-context";
 import { OperationNodeData } from "@/types/workflow";
 
 type OperationNodePropsType = Node<OperationNodeData>;

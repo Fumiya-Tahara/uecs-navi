@@ -1,6 +1,6 @@
 "use client";
 
-import { TimeSchedule } from "@/pages/time-schedule/time-schedule";
+import { TimeSchedule } from "@/features/time-schedule/time-schedule";
 import { TimeScheduleInfoProvider } from "@/hooks/time-schedule-info-context";
 
 export default function SettingTimeSchedule() {

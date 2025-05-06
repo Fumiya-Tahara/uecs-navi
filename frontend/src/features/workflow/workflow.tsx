@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import { Navigation } from "@/layouts/navigation";
-import { WorkflowInfoProvider } from "@/pages/create-workflow/context/workflow-info-context";
-import { useWorkflowInfo } from "@/pages/create-workflow/context/workflow-info-context";
+import { WorkflowInfoProvider } from "@/contexts/workflow/workflow-info-context";
+import { useWorkflowInfo } from "@/contexts/workflow/workflow-info-context";
 import { useEffect } from "react";
 import { DeviceResponse, WorkflowWithUIResponse } from "@/types/api";
 import {
@@ -10,9 +10,9 @@ import {
 } from "@/features/api/mocks/workflow-api";
 import { WorkflowEditor } from "./workflow-editor";
 import { ReactFlowProvider } from "@xyflow/react";
-import { NodeInfoProvider } from "@/pages/create-workflow/context/node-info-context";
-import { DnDProvider } from "@/pages/create-workflow/context/dnd-context";
-import { SelectedDataProvider } from "./context/selected-data-context";
+import { NodeInfoProvider } from "@/contexts/workflow/node-info-context";
+import { DnDProvider } from "@/contexts/workflow/dnd-context";
+import { SelectedDataProvider } from "../../contexts/workflow/selected-data-context";
 import { SelectToolbar } from "./toolbar";
 import { useM304IDs } from "@/hooks/m304ids-context";
 
