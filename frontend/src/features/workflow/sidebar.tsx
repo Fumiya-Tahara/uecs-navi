@@ -1,11 +1,11 @@
-import { useDnD } from "@/pages/create-workflow/context/dnd-context";
+import { useDnD } from "@/contexts/workflow/dnd-context";
 import { DragEvent } from "react";
 import { Box, Divider, Typography } from "@mui/material";
 import PlayCircleIcon from "@mui/icons-material/PlayCircle";
 import { useState, useEffect } from "react";
 import { DeviceResponse } from "@/types/api";
 import { getDevices } from "@/features/api/mocks/workflow-api";
-import { useSelectedData } from "./context/selected-data-context";
+import { useSelectedData } from "../../contexts/workflow/selected-data-context";
 
 export const Sidebar = () => {
   const [, setType] = useDnD();

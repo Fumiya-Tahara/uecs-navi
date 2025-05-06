@@ -13,7 +13,7 @@ import { TimeTableRow } from "./time-table-row";
 import { TimeScheduleResponse, TimeScheduleRow, Workflow } from "@/types/api";
 import { useState } from "react";
 import { ConfirmButton } from "@/components/confirm-button";
-import { saveTimeSchedule } from "@/features/time-schedule/save-time-schedule";
+import { saveTimeSchedule } from "@/features/time-schedule/functions/save-time-schedule";
 
 interface TimeTableProps {
   initialSchedules: TimeScheduleResponse | null;
