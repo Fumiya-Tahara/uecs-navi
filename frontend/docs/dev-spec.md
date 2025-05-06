@@ -5,7 +5,7 @@ TypeScript
 ### フレームワーク
 Next.js
 ## 主要フォルダ
-```
+```plaintext
 frontend
 ├── .devcontainer/              # devcontainer設定
 ├── docs/                       # ドキュメント
