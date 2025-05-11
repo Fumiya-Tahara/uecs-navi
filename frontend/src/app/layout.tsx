@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Providers } from "@/hooks/providers";
 
 export const metadata: Metadata = {
-  title: "My App",
+  title: "UECS Navi",
   description: "",
 };
 
@@ -14,7 +14,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <title>My App</title>
+        <title>UECS Navi</title>
       </head>
       <body>
         <div id="root">

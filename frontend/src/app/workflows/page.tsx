@@ -1,6 +1,6 @@
 "use client";
 
-import WorkflowWrapper from "@/pages/create-workflow/workflow";
+import WorkflowWrapper from "@/features/workflow/workflow";
 
 export default function WorkflowControl() {
   return <WorkflowWrapper />;
