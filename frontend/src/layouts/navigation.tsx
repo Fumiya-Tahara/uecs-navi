@@ -1,7 +1,6 @@
 import { Box, Toolbar, CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/material/styles";
 import Header from "@/components/header";
-import Sidebar from "@/components/sidebar";
 import { uecsTheme } from "@/styles/theme";
 
 export function Navigation({ children }: { children: React.ReactNode }) {
@@ -10,8 +9,7 @@ export function Navigation({ children }: { children: React.ReactNode }) {
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <Header />
-        <Sidebar />
-        <Box component="main" sx={{ flexGrow: 1, padding: 3 }}>
+        <Box component="main" sx={{ flexGrow: 1, padding: 8 }}>
           <Toolbar />
           {children}
         </Box>
